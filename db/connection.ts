@@ -2,8 +2,8 @@ import sql from 'mssql';
 const config = {
     user: 'sa',
     password: 'Pemsa850827+',
-    server: 'localhost',
-    // server: 'pem-sa.ddns.me',
+    // server: 'localhost',
+    server: 'pem-sa.ddns.me',
     database: 'TECNICOS',
     port: 1433,
     options: {
