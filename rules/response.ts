@@ -14,6 +14,7 @@ export interface Service {
     exitDate: Date;
     accountMW: string;
     cron: string | null;
+    filesCron: string;
     isDelivered: boolean;
     isKeyCode: boolean;
     isOpCi: boolean;
