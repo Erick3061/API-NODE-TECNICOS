@@ -39,12 +39,12 @@ class Server {
         this.app = express();
         this.port = process.env.PORT || '3007';
         /*Para servdior seguro quitar comentarios */
-        // this.server = https.createServer({
-        //     key: fs.readFileSync('/home/serv-dp/Documentos/NODE/CERTIFICADO/pem-sa_ddns_me.key'),
-        //     cert: fs.readFileSync('/home/serv-dp/Documentos/NODE/CERTIFICADO/pem-sa_ddns_me.crt')
-        // }, this.app);
+        this.server = https.createServer({
+            key: fs.readFileSync('/home/serv-dp/Documentos/NODE/CERTIFICADO/pem-sa_ddns_me.key'),
+            cert: fs.readFileSync('/home/serv-dp/Documentos/NODE/CERTIFICADO/pem-sa_ddns_me.crt')
+        }, this.app);
 
-        this.server = http.createServer(this.app);
+        // this.server = http.createServer(this.app);
         this.middlewares();
         this.routes();
         this.connectDB(0);

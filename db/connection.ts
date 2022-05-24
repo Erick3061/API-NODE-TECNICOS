@@ -3,8 +3,8 @@ const config = {
     user: 'sa',
     // password: 'desarrollo',
     password: 'Pemsa850827+',
-    // server: 'localhost',
-    server: 'pem-sa.ddns.me',
+    server: 'localhost',
+    // server: 'pem-sa.ddns.me',
     database: 'TECNICOS',
     port: 1433,
     options: {
@@ -29,7 +29,9 @@ const configMWS = {
     user: "sa",
     password: 'siatecMexico2014=)(',
     server: 'comunicador-ip.ddns.net',
+    // server: '192.168.1.130',
     database: "C:\\SIATEC\\SIATECINFO\\SISTEMA",
+    // port: 1433,
     port: 1433,
     options: {
         encrypt: false,

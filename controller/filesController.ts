@@ -25,6 +25,23 @@ export const sendFile = async (req: Request, resp: Response) => {
     }
 }
 
+export const getImgs = async (req: Request, resp: Response) => {
+    const { id_service } = req.params;
+    const service = await GetActiveServices({ service: { id_service: `${id_service}`, selected: true } });
+    if (typeof (service) === 'string') return rError({ status: 404, msg: service, resp });
+    if (service.length === 0) return rError({ status: 404, msg: `Servicio no existe`, resp });
+    if (service[0].filesCron === 'deleted') return rError({ status: 400, msg: 'No existen Fotos ya han sido eliminadas de manera automatica', resp });
+    const directory: string = path.join(__dirname, '../uploads', service[0].id_service);
+    const files = await getFiles(directory)
+    if (typeof (files) === 'string') return rError({ status: 400, msg: (service[0].filesCron === 'standby') ? 'No se han subido fotos' : files, resp });
+    return resp.status(200).json({
+        status: true,
+        data: {
+            files
+        }
+    })
+}
+
 export const deleteFileToService = async (req: Request, resp: Response) => {
     const { id_service, file } = req.body;
     const service = await GetActiveServices({ service: { id_service } });
@@ -45,6 +62,7 @@ export const deleteFileToService = async (req: Request, resp: Response) => {
                 }
             })
         }
+
         if (files.includes(file)) {
             const isDeleted = await deleteFile(path.join(directory, file));
             if (typeof (isDeleted) === 'string') return rError({ status: 400, msg: 'Error al eliminar el directorio del servicio', resp });
