@@ -1,14 +1,16 @@
 import { Request, Response } from "express";
-import { administrator, Person } from '../rules/interfaces';
+import { account, administrator, Person, ResponseApi } from '../rules/interfaces';
 import { GetPersonGeneral, GetTechnicalInService, UpdatePerson } from '../querys/querysTecnicos';
 import { generarJWT, SECRETORPPRIVATEKEY } from '../helpers/generar-jwt';
 import { rError } from './errorController';
 import jwt from 'jsonwebtoken';
 import { Service } from '../rules/response';
 import { getDate } from '../functions/functions';
+import apiMW from "../api/apiMW";
 
 export const LogIn = async (req: Request, resp: Response) => {
     let Service: Service | undefined = undefined;
+    let AccountMW: account | undefined = undefined;
     const { acceso, password }: { acceso: string, password: string } = req.body;
     try {
         const date = getDate();
@@ -25,12 +27,19 @@ export const LogIn = async (req: Request, resp: Response) => {
         if (error) return rError({ status: 400, msg: `Error al generar el token`, location: 'LogIn', resp });
         if (Person.id_role === 1) {
             const resp = await GetTechnicalInService(Person.id_person);
-            if (typeof (resp) !== 'string') { Service = resp; };
+            if (typeof (resp) !== 'string') {
+                Service = resp;
+                const response = await apiMW(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
+                const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
+                if (status === true) {
+                    AccountMW = data?.account
+                }
+            };
         }
         const { password: p, ...rest } = Person;
         return resp.status(200).json({
             status: true,
-            data: { Person: rest, Service, token }
+            data: { Person: rest, Service, AccountMW, token }
         });
     } catch (error) {
         return rError({ status: 500, msg: `Error en el servidor Error: ${error}`, location: 'LogIn', resp });
@@ -39,6 +48,7 @@ export const LogIn = async (req: Request, resp: Response) => {
 
 export const tokenValido = async (req: Request, resp: Response) => {
     let Service: Service | undefined = undefined;
+    let AccountMW: account | undefined = undefined;
     const token: string | undefined = req.header('x-token') || '';
     const clave = SECRETORPPRIVATEKEY;
     const decode = jwt.verify(token, clave);
@@ -48,12 +58,19 @@ export const tokenValido = async (req: Request, resp: Response) => {
     if (Person === undefined) return rError({ status: 400, msg: 'error persona no existe', location: 'validarJWT', param: id_person, resp });
     if (Person.id_role === 1) {
         const resp = await GetTechnicalInService(Person.id_person);
-        if (typeof (resp) !== 'string') { Service = resp; }
+        if (typeof (resp) !== 'string') {
+            Service = resp;
+            const response = await apiMW(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
+            const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
+            if (status === true) {
+                AccountMW = data?.account
+            }
+        }
     }
     const { password: p, ...rest } = Person;
     return resp.status(200).json({
         status: true,
-        data: { Person: rest, Service, token }
+        data: { Person: rest, Service, AccountMW, token }
     });
 }
 

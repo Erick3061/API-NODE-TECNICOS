@@ -83,6 +83,8 @@ export const loadFile = async (req: Request, resp: Response) => {
     const service = await GetActiveServices({ service: { id_service } });
     if (typeof (service) === 'string') return rError({ status: 400, msg: service, resp });
     if (service.length === 0) return rError({ status: 500, msg: 'Servicio no existe', resp });
+    console.log(req.files);
+
     return await upLoadFile({ files: req.files, carpeta: service[0].id_service }).then(async response => {
         const data: { nameFile: string, directoryFile: string, fullDirectory: string } = JSON.parse(`${response}`);
         if (service[0].filesCron === 'standby') {
