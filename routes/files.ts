@@ -22,7 +22,7 @@ router.post('/deleteFileToService', [
     validarCampos
 ], deleteFileToService);
 
-router.post('/loadFile', [
+router.put('/loadFile/:id_service', [
     validarJWT,
     check('id_service').notEmpty().withMessage('Campo id requerido').bail(),
     validarCampos
