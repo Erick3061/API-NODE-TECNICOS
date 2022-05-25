@@ -29,12 +29,14 @@ export const LogIn = async (req: Request, resp: Response) => {
             const resp = await GetTechnicalInService(Person.id_person);
             if (typeof (resp) !== 'string') {
                 Service = resp;
-                const response = await apiMW(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
-                const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
-                if (status === true) {
-                    AccountMW = data?.account
+                if (Service) {
+                    const response = await apiMW(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
+                    const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
+                    if (status === true) {
+                        AccountMW = data?.account
+                    }
                 }
-            };
+            }
         }
         const { password: p, ...rest } = Person;
         return resp.status(200).json({
@@ -60,10 +62,12 @@ export const tokenValido = async (req: Request, resp: Response) => {
         const resp = await GetTechnicalInService(Person.id_person);
         if (typeof (resp) !== 'string') {
             Service = resp;
-            const response = await apiMW(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
-            const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
-            if (status === true) {
-                AccountMW = data?.account
+            if (Service) {
+                const response = await apiMW(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
+                const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
+                if (status === true) {
+                    AccountMW = data?.account
+                }
             }
         }
     }
