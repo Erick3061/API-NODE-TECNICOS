@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from 'express-validator';
-import { ChangePassword, LogIn, tokenValido } from "../controller/authController";
+import { ChangePassword, ForgetPassword, LogIn, tokenValido } from "../controller/authController";
 import { validarCampos } from "../middlewares/validar_campos";
 import { validarJWT } from '../middlewares/validar-jwt';
 const router = Router();
@@ -24,5 +24,11 @@ router.post('/changePassword', [
         .notEmpty().withMessage(`Campo contraseña requerido`).bail(),
     validarCampos
 ], ChangePassword);
+
+router.post('/resetPassword', [
+    check("acceso")
+        .notEmpty().withMessage('Campo usuario ó correo requerido').bail(),
+    validarCampos,
+], ForgetPassword)
 
 export default router;
