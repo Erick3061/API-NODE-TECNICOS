@@ -100,10 +100,10 @@ export const ChangePassword = async (req: Request, resp: Response) => {
     }
 }
 
-export const ForgetPassword = async (req: Request, Resp: Response) => {
+export const ForgetPassword = async (req: Request, resp: Response) => {
     try {
 
     } catch (error) {
-
+        return rError({ status: 500, msg: `${error}`, resp });
     }
 }

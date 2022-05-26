@@ -1,10 +1,10 @@
 import sql from 'mssql';
 const config = {
     user: 'sa',
-    password: 'desarrollo',
-    // password: 'Pemsa850827+',
-    server: 'localhost',
-    // server: 'pem-sa.ddns.me',
+    // password: 'desarrollo',
+    password: 'Pemsa850827+',
+    // server: 'localhost',
+    server: 'pem-sa.ddns.me',
     database: 'TECNICOS',
     port: 1433,
     options: {
@@ -28,11 +28,11 @@ const config = {
 const configMWS = {
     user: "sa",
     password: 'siatecMexico2014=)(',
-    // server: 'comunicador-ip.ddns.net',
-    server: '192.168.1.130',
+    server: 'comunicador-ip.ddns.net',
+    // server: '192.168.1.130',
     database: "C:\\SIATEC\\SIATECINFO\\SISTEMA",
-    port: 14333,
-    // port: 1433,
+    // port: 14333,
+    port: 1433,
     options: {
         encrypt: false,
         trustServerCertificate: true // change to true for local dev / self-signed certs
