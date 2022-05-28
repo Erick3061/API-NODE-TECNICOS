@@ -23,10 +23,11 @@ class Server {
 
     private app: Application;
     private port: string;
+    private mode: string;
     public Con1: boolean = false;
     public Con2: boolean = false;
     public Task: Task | undefined;
-    private server: http.Server;
+    private server: http.Server | https.Server;
 
     private apiPaths = {
         adminRoutes: '/api/admin',
@@ -38,13 +39,13 @@ class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT || '3007';
-        /*Para servdior seguro quitar comentarios */
-        // this.server = https.createServer({
-        //     key: fs.readFileSync('/home/serv-dp/Documentos/NODE/CERTIFICADO/pem-sa_ddns_me.key'),
-        //     cert: fs.readFileSync('/home/serv-dp/Documentos/NODE/CERTIFICADO/pem-sa_ddns_me.crt')
-        // }, this.app);
-
-        this.server = http.createServer(this.app);
+        this.mode = process.env.NODE_ENV || 'desarrollo';
+        this.server = (this.mode === 'desarrollo')
+            ? http.createServer(this.app)
+            : https.createServer({
+                key: fs.readFileSync('/home/serv-dp/Documentos/NODE/CERTIFICADO/pem-sa_ddns_me.key'),
+                cert: fs.readFileSync('/home/serv-dp/Documentos/NODE/CERTIFICADO/pem-sa_ddns_me.crt')
+            }, this.app);
         this.middlewares();
         this.routes();
         this.connectDB(0);
@@ -111,6 +112,7 @@ class Server {
     }
 
     listen() {
+        console.log(this.mode);
         this.server.listen(this.port, () => {
             console.log('Servidor corriendo en puerto ' + this.port);
         });

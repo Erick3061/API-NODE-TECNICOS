@@ -4,13 +4,13 @@ import { account, PropAddService, ResponseApi, PropsAddService, RespInsert, Prop
 import { getDate, getEnterpriceOfTechnicals, modDate } from '../functions/functions';
 import { v4 as uuidv4 } from 'uuid';
 import { rError } from './errorController';
-import { server } from "../app";
 import { pool1 } from '../db/connection';
 import { TYPES } from "mssql";
 import base64 from 'base-64';
 import apiMW from "../api/apiMW";
 import { SECRETORPPRIVATEKEY } from '../helpers/generar-jwt';
 import jwt from 'jsonwebtoken';
+import { server } from '../../app';
 /** @module SYSCONTROLLER */
 
 /**

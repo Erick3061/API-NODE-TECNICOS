@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, json } from 'express';
 import { account, administrator, Person, ResponseApi } from '../rules/interfaces';
 import { GetPersonGeneral, GetTechnicalInService, UpdatePerson } from '../querys/querysTecnicos';
 import { generarJWT, SECRETORPPRIVATEKEY } from '../helpers/generar-jwt';
@@ -102,7 +102,17 @@ export const ChangePassword = async (req: Request, resp: Response) => {
 
 export const ForgetPassword = async (req: Request, resp: Response) => {
     try {
-
+        const { access, name, lastName, employeeNumber } = req.body;
+        const Person = await GetPersonGeneral((access.includes('@')) ? { email: access } : { user: access });
+        if (typeof (Person) === 'string') return rError({ status: 500, msg: Person, location: 'LogIn', resp });
+        if (Person === undefined) return rError({ status: 400, msg: `${(access.includes('@')) ? `correo` : `usuario`} ${access} no registrado`, location: 'LogIn', resp });
+        if (Person.personName !== name || Person.lastname !== lastName || Person.employeeNumber !== employeeNumber) return rError({ status: 400, msg: 'Datos incorrectos', resp });
+        const passwordWasReset = await UpdatePerson({ id_person: Person.id_person, prop: `password = '${Person.employeeNumber}'` });
+        if (typeof passwordWasReset === 'string') return rError({ status: 500, msg: passwordWasReset, resp });
+        return resp.status(200).json({
+            status: true,
+            data: { passwordWasReset }
+        });
     } catch (error) {
         return rError({ status: 500, msg: `${error}`, resp });
     }

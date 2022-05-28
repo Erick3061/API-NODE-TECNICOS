@@ -48,6 +48,4 @@ export interface ServiceDetails {
     technicals: Array<Person>;
 }
 
-
-
 export interface Role { id_role: number; name: string }

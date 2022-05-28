@@ -3,8 +3,6 @@ import { pool1 } from '../db/connection';
 import { GetPersonGeneral, GetTypes, ExistTechnicalInService, GetRoles, UserAccess } from '../querys/querysTecnicos';
 import { BAPEnterprice, ExistPerson, optionsUpdateEnterprice, optionsUpdatePerson } from '../rules/interfaces';
 import moment from 'moment';
-
-interface PropsEnterpice { id: number; shortName: string; };
 interface PropsRole { id: number, name: string, user?: string };
 
 export const existEnterprice = async ({ id, shortName }: BAPEnterprice) => {
@@ -81,7 +79,10 @@ export const validateOptionUpdatePerson = (option: optionsUpdatePerson) => {
                     const params: Array<string> = ['name', 'lastname', 'email', 'password', 'phoneNumber', 'employeeNumber', 'enterprice', 'role'];
                     const keys = Object.keys(obj);
                     const props = params.filter(m => keys.find(f => f === m) === undefined);
-                    if (props.length > 0) throw new Error("Faltan propiedades");
+                    if (props.length > 0) {
+                        if (props.length === 1 && props[0] === 'password') return true;
+                        throw new Error("Faltan propiedades");
+                    }
                     return true;
                 }
                 throw new Error("Valores del objeto invalidos");

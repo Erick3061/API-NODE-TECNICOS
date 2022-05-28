@@ -1,9 +1,9 @@
 import { TYPES, IResult } from 'mssql';
-import { server } from '../app';
-import { pool1 } from '../db/connection';
+import { server } from '../../app';
 import { Person, PropsAddBinnacle, PropsAddComment, PropsAddPerson, PropsAddService, updatePersonProps, updateService, updateTechnical, bodyPerson, RespInsert, respGetServiceFiltered } from '../rules/interfaces';
 import { Role, Service, TypeService, Binnacle, Comment } from '../rules/response';
 import { v4 as uuidv4 } from 'uuid';
+import { pool1 } from '../db/connection';
 
 
 export const AddPerson = async (data: PropsAddPerson) => {
@@ -118,7 +118,7 @@ export const UserAccess = async (props: { id_user: string | null, insert?: { nam
     const { id_user, deleteUser, exist, existWithoutThisPerson, insert, update, personHaveUser } = props;
 
     if (exist) {
-        const { rowsAffected } = await pool1.request().query(`select * from UserAccess where nameUser='${exist.nameUser}'`);
+        const { rowsAffected } = await pool1.request().query(`select * from UserAccess where nameUser COLLATE SQL_Latin1_General_CP1_CS_AS = '${exist.nameUser}'`);
         if (rowsAffected[0] !== 0) return { error: { status: 400, msg: (exist.id_role === 2) ? `El usuario de monitorista: ${exist.nameUser} ya existe` : `El usuario: ${exist.nameUser} ya existe` } };
         return { isExist: false }
     }
@@ -126,7 +126,7 @@ export const UserAccess = async (props: { id_user: string | null, insert?: { nam
     if (existWithoutThisPerson) {
         const { rowsAffected: existUser } = await pool1.request()
             .input('id_user', TYPES.VarChar(40), id_user)
-            .query(`select id_user from UserAccess where nameUser='${existWithoutThisPerson.nameUser}' and id_user != @id_user`);
+            .query(`select id_user from UserAccess where nameUser COLLATE SQL_Latin1_General_CP1_CS_AS = '${existWithoutThisPerson.nameUser}' and id_user != @id_user`);
         if (existUser[0] !== 0) return { error: { status: 400, msg: `El usuario:${existWithoutThisPerson.nameUser} ya existe` } };
         return { isExist: false }//false significa que no existe el usuario
     }
@@ -219,30 +219,6 @@ export const DeleteTechnicaltoService = async (id_service: string, id_technical:
         .catch(err => ` ${err}`);
 }
 
-export const DeleteService = async (id_service: string) => {
-    try {
-        return pool1.request()
-            .input('id_service', TYPES.VarChar(40), id_service)
-            .query(`delete TechnicalService where id_service = @id_service`)
-            .then(() => {
-                return pool1.request()
-                    .input('id_service', TYPES.VarChar(40), id_service)
-                    .query(`delete Service where id_service = @id_service`)
-                    .then(() => {
-                        return true;
-                    })
-                    .catch(err => {
-                        return ` al eliminar el servicio, Ya se eliminaron los tecicos asociados`;
-                    })
-            })
-            .catch(err => {
-                return ` al eliminar los tecnicos que pertenecen a el servicio ${id_service}`;
-            })
-    } catch (error) {
-        return ` ${error}`;
-    }
-}
-
 export const ExistEployeeNumber = async ({ employeeNumber, id_enterprice, personExclude }: { id_enterprice: number, employeeNumber: string, personExclude?: string }) => {
     try {
         //true: existe el numero de empleado para esa empresa
@@ -254,15 +230,6 @@ export const ExistEployeeNumber = async ({ employeeNumber, id_enterprice, person
         return (rowsAffected[0] !== 0) ? true : false;
     } catch (error) {
         return `${error}`;
-    }
-}
-
-export const ExistIdService = async (id_service: string) => {
-    try {
-        const { rowsAffected }: IResult<Array<number>> = await pool1.request().query(`select * from Service where id_service='${id_service}'`);
-        return (rowsAffected[0] !== 0) ? true : false;
-    } catch (error) {
-        return (`${error}`);
     }
 }
 
@@ -320,7 +287,7 @@ export const GetPersonGeneral = async ({ id, role, email, user, inactive }: { id
                 ${(id) ? ` and P.id_person='${id}'` : ''}
                 ${(role) ? ` and P.id_role = ${role}` : ''}
                 ${(email) ? ` and P.email = '${email}'` : ''}
-                ${(user) ? ` and UA.nameUser ='${user}'` : ''}
+                ${(user) ? ` and UA.nameUser COLLATE SQL_Latin1_General_CP1_CS_AS ='${user}'` : ''}
             `
         );
         return Person[0];

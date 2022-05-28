@@ -43,51 +43,51 @@ export const deleteDirectory = async (folder: string) => {
     }
 }
 
-export const upLoadFile = async ({ files, validExtensions = ['png', 'jpg', 'jpeg', 'gif'], carpeta = '' }: { files: fileUpload.FileArray, validExtensions?: Array<string>, carpeta?: string }) => {
+export const upLoadFile = async ({ files, validExtensions = ['png', 'jpg', 'jpeg'], carpeta = '', id, type }: { files: fileUpload.FileArray, validExtensions?: Array<string>, type: 'Service' | 'Person' | 'Enterprice', id?: string, carpeta?: string }) => {
 
     return await new Promise(async (resolve: (value: unknown) => void, reject: (reason?: any) => void) => {
         const numberFiles: number = 3;
-        const uploads: string = path.join(__dirname, '../uploads/');
-        const folderService: string = path.join(uploads, carpeta);
         const { file } = files;
         if (Array.isArray(file)) return reject('Error de archivo...  revisar');
+        if (carpeta !== '' && id) return reject('No se puden combinar carperta y id');
+        if (id) carpeta = id;
+        const uploads: string = path.join(__dirname, `../../uploads`, type, carpeta);
         const cutName = file.name.split('.');
         const extension = cutName[cutName.length - 1];
         if (!validExtensions.includes(extension)) return reject(`La extensión ${extension} no es permitida - ${validExtensions}`);
-        const idFile = `${uuidv4()}.${extension}`;
+        const idFile = (type === 'Service') ? `${uuidv4()}.${extension}` : `photo.${extension}`;
 
         if (await existDirectory(uploads)) {
-            if (await existDirectory(folderService)) {
-                const files = await getFiles(folderService);
+            if (type === 'Service') {
+                const files = await getFiles(uploads);
                 if (typeof (files) === 'string') reject(files);
                 if (files.length < 3) {
-                    file.mv(path.join(folderService, idFile), (err) => {
+                    return file.mv(path.join(uploads, idFile), (err) => {
                         if (err) reject(`Error: ${err}`);
-                        resolve(JSON.stringify({ nameFile: idFile, directoryFile: folderService, fullDirectory: path.join(folderService, idFile) }));
+                        return resolve(JSON.stringify({ nameFile: idFile, directoryFile: uploads, fullDirectory: path.join(uploads, idFile) }));
                     });
                 } else {
-                    reject(`No puedes subir mas imágenes, Solo se permiten ${numberFiles} archivos por servicio`)
-                }
-            } else {
-                if (await createFolder(folderService)) {
-                    file.mv(path.join(folderService, idFile), (err) => {
-                        if (err) reject(`Error: ${err}`);
-                        resolve(JSON.stringify({ nameFile: idFile, directoryFile: folderService, fullDirectory: path.join(folderService, idFile) }));
-                    });
-                } else {
-                    reject(`Error al crear el directorio ${folderService}`)
+                    return reject(`No puedes subir mas imágenes, Solo se permiten ${numberFiles} archivos por servicio`)
                 }
             }
+            if (type === 'Person' || type === 'Enterprice') {
+                const isExist = await existDirectory(path.join(uploads, idFile));
+                if (isExist) {
+                    const isDeleted = await deleteFile(path.join(uploads, idFile));
+                    if (typeof (isDeleted) === 'string') return reject(`Error al eliminar la foto...`);
+                }
+                return file.mv(path.join(uploads, idFile), (err) => {
+                    if (err) reject(`Error: ${err}`);
+                    return resolve(JSON.stringify({ nameFile: idFile, directoryFile: uploads, fullDirectory: path.join(uploads, idFile) }));
+                });
+            }
+            return reject(`Propiedad no contemplada`);
         } else {
             if (await createFolder(uploads)) {
-                if (await createFolder(folderService)) {
-                    file.mv(path.join(folderService, idFile), (err) => {
-                        if (err) reject(`Error: ${err}`);
-                        resolve(JSON.stringify({ nameFile: idFile, directoryFile: folderService, fullDirectory: path.join(folderService, idFile) }));
-                    });
-                } else {
-                    reject(`Error al crear el directorio ${folderService}`)
-                }
+                file.mv(path.join(uploads, idFile), (err) => {
+                    if (err) reject(`Error: ${err}`);
+                    resolve(JSON.stringify({ nameFile: idFile, directoryFile: uploads, fullDirectory: path.join(uploads, idFile) }));
+                });
             } else {
                 reject(`Error al crear el directorio ${uploads}`);
             }

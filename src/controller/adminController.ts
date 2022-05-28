@@ -155,7 +155,7 @@ export const actionsPerson = async (req: Request, resp: Response) => {
             }
         }
 
-        const updated = await UpdatePerson({ id_person: person.id, data: { email, employeeNumber, lastname, password, personName: name, phoneNumber } });
+        const updated = await UpdatePerson({ id_person: person.id, data: { email, employeeNumber, lastname, password: password === undefined ? Person.password : password, personName: name, phoneNumber } });
         if (typeof (updated) === 'string') return rError({ status: 500, msg: updated, resp });
         return resp.status(200).json({
             status: true,

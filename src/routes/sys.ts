@@ -1,9 +1,10 @@
 import { Router } from "express";
-import { getAccountsMW, getPersons, addService, getDisponibleTechnicals, getInServiceTechnicals, getActiveServices, modTechnicalToAService, getTask, updateService, getEvents, verifyEventsService, updateTask, getServices, getService, geyVersionApp, verifyPassword } from '../controller/sysController';
 import { check } from 'express-validator';
-import { validarCampos } from '../middlewares/validar_campos';
-import { ExistPersonInDB, existRoleinDB, existTechnicals, existTypeService, isDate } from '../helpers/db-validators';
-import { validarJWT } from '../middlewares/validar-jwt';
+import { addService, getAccountsMW, getActiveServices, getDisponibleTechnicals, getEvents, getInServiceTechnicals, getPersons, getService, getServices, getTask, geyVersionApp, modTechnicalToAService, updateService, updateTask, verifyEventsService, verifyPassword } from "../controller/sysController";
+import { ExistPersonInDB, existRoleinDB, existTechnicals, existTypeService, isDate } from "../helpers/db-validators";
+import { validarJWT } from "../middlewares/validar-jwt";
+import { validarCampos } from "../middlewares/validar_campos";
+import { GetActiveServices } from "../querys/querysTecnicos";
 
 const router = Router();
 
@@ -64,7 +65,7 @@ router.get('/getServiceDetails/:id', [
     validarJWT,
     check('id').notEmpty().withMessage('Campo id requerido').bail(),
     validarCampos
-], getService);
+], GetActiveServices);
 
 router.get('/getServices/:start/:end', [
     validarJWT,

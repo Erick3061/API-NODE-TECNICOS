@@ -26,14 +26,14 @@ router.post('/changePassword', [
 ], ChangePassword);
 
 router.post('/resetPassword', [
-    check("acceso")
+    check("access")
         .notEmpty().withMessage('Campo usuario ó correo requerido').bail(),
     check("name")
-        .notEmpty().withMessage('Campo usuario ó correo requerido').bail(),
+        .notEmpty().withMessage('Campo Nombre requerido').bail(),
     check("lastName")
-        .notEmpty().withMessage('Campo usuario ó correo requerido').bail(),
+        .notEmpty().withMessage('Campo Apellidos requerido').bail(),
     check("employeeNumber")
-        .notEmpty().withMessage('Campo usuario ó correo requerido').bail(),
+        .notEmpty().withMessage('Campo Número de empleado requerido').bail(),
     validarCampos,
 ], ForgetPassword)
 
