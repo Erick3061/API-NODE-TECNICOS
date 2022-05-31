@@ -14,9 +14,10 @@ export const sendFile = async (req: Request, resp: Response) => {
     const directory: string = path.join(__dirname, '../../uploads', type, `${id}`, `${img}`);
     const isExist = await existDirectory(directory);
     if (isExist) {
+        console.log(directory);
         const files = await getFiles(directory);
-        console.log(files);
         if (files.includes(`${img}`)) {
+            console.log(files);
             resp.sendFile(directory);
         } else {
             return rError({ status: 404, msg: 'Error', resp });

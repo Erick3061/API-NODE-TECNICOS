@@ -4,6 +4,8 @@ import { actionEnterpriceProps, actionPersonProps, BAPEnterprice, bodyPerson } f
 import { addPersonBD, GetEnterprices, GetPersonGeneral, GetRoles, GetTechnicalsInServiceActive, GetTypes, UpdatePerson, ExistEployeeNumber, UserAccess } from '../querys/querysTecnicos';
 import { rError } from './errorController';
 import { TYPES } from 'mssql';
+import { existDirectory, deleteDirectory } from '../helpers/files';
+import path from 'path';
 
 export const actionsEnterprice = async (req: Request, resp: Response) => {
     const { enterprice, option }: actionEnterpriceProps = req.body;
@@ -68,7 +70,12 @@ export const actionsPerson = async (req: Request, resp: Response) => {
                 if (typeof (Technicals) === 'string') return rError({ status: 500, msg: Technicals, resp, location: 'GetTechnicalsInServiceActive' });
                 if (Technicals.find(f => f.id_person === Person.id_person)) return rError({ status: 400, msg: `Técnico: ${Person.personName} ${Person.lastname} esta en servicio`, resp, location: 'deletePerson' });
             }
-            return await pool1.request().query(`delete Person where id_person = '${Person.id_person}'`).then(() => {
+            return await pool1.request().query(`delete Person where id_person = '${Person.id_person}'`).then(async () => {
+                const isExistDirectory = await existDirectory(path.join(__dirname, '../../uploads/Person', Person.id_person));
+                if (isExistDirectory) {
+                    const isDeleted = await deleteDirectory(path.join(__dirname, '../../uploads/Person', Person.id_person));
+                    console.log(isDeleted);
+                }
                 return resp.status(200).json({ status: true, data: { isDeleted: true } });
             }).catch(err => rError({ status: 500, msg: `${err}`, resp, location: 'deletePerson' }));
         } else {

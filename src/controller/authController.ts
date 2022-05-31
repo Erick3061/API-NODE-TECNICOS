@@ -7,6 +7,8 @@ import jwt from 'jsonwebtoken';
 import { Service } from '../rules/response';
 import { getDate } from '../functions/functions';
 import apiMW from "../api/apiMW";
+import { existDirectory, getFiles } from '../helpers/files';
+import path from 'path';
 
 export const LogIn = async (req: Request, resp: Response) => {
     let Service: Service | undefined = undefined;
@@ -38,10 +40,11 @@ export const LogIn = async (req: Request, resp: Response) => {
                 }
             }
         }
+        const isExistDirectory = await existDirectory(path.join(__dirname, '../../uploads/Person', Person.id_person));
         const { password: p, ...rest } = Person;
         return resp.status(200).json({
             status: true,
-            data: { Person: rest, Service, AccountMW, token }
+            data: { Person: rest, Service, AccountMW, token, directory: (isExistDirectory) ? await getFiles(path.join(__dirname, '../../uploads/Person', Person.id_person)) : undefined }
         });
     } catch (error) {
         return rError({ status: 500, msg: `Error en el servidor Error: ${error}`, location: 'LogIn', resp });
@@ -72,9 +75,10 @@ export const tokenValido = async (req: Request, resp: Response) => {
         }
     }
     const { password: p, ...rest } = Person;
+    const isExistDirectory = await existDirectory(path.join(__dirname, '../../uploads/Person', Person.id_person));
     return resp.status(200).json({
         status: true,
-        data: { Person: rest, Service, AccountMW, token }
+        data: { Person: rest, Service, AccountMW, token, directory: (isExistDirectory) ? await getFiles(path.join(__dirname, '../../uploads/Person', Person.id_person)) : undefined }
     });
 }
 

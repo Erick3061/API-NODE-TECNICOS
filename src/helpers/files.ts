@@ -36,7 +36,7 @@ export const deleteFile = async (directoryFile: string) => {
 
 export const deleteDirectory = async (folder: string) => {
     try {
-        await rmdir(folder);
+        await rmdir(folder, { recursive: true });
         return true;
     } catch (error) {
         return `Error: ${error}`;
@@ -55,7 +55,7 @@ export const upLoadFile = async ({ files, validExtensions = ['png', 'jpg', 'jpeg
         const cutName = file.name.split('.');
         const extension = cutName[cutName.length - 1];
         if (!validExtensions.includes(extension)) return reject(`La extensión ${extension} no es permitida - ${validExtensions}`);
-        const idFile = (type === 'Service') ? `${uuidv4()}.${extension}` : `photo.${extension}`;
+        const idFile = `${uuidv4()}.${extension}`;
 
         if (await existDirectory(uploads)) {
             if (type === 'Service') {
@@ -71,10 +71,9 @@ export const upLoadFile = async ({ files, validExtensions = ['png', 'jpg', 'jpeg
                 }
             }
             if (type === 'Person' || type === 'Enterprice') {
-                const isExist = await existDirectory(path.join(uploads, idFile));
-                if (isExist) {
-                    const isDeleted = await deleteFile(path.join(uploads, idFile));
-                    if (typeof (isDeleted) === 'string') return reject(`Error al eliminar la foto...`);
+                const files = await getFiles(uploads);
+                if (Array.isArray(files)) {
+                    for (const file of files) { await deleteFile(path.join(uploads, file)); }
                 }
                 return file.mv(path.join(uploads, idFile), (err) => {
                     if (err) reject(`Error: ${err}`);
