@@ -4,7 +4,6 @@ import { addService, getAccountsMW, getActiveServices, getDisponibleTechnicals, 
 import { ExistPersonInDB, existRoleinDB, existTechnicals, existTypeService, isDate } from "../helpers/db-validators";
 import { validarJWT } from "../middlewares/validar-jwt";
 import { validarCampos } from "../middlewares/validar_campos";
-import { GetActiveServices } from "../querys/querysTecnicos";
 
 const router = Router();
 
@@ -65,7 +64,7 @@ router.get('/getServiceDetails/:id', [
     validarJWT,
     check('id').notEmpty().withMessage('Campo id requerido').bail(),
     validarCampos
-], GetActiveServices);
+], getService);
 
 router.get('/getServices/:start/:end', [
     validarJWT,

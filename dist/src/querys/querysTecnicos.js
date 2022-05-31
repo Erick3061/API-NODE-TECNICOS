@@ -410,7 +410,7 @@ const GetActiveServices = ({ service }) => __awaiter(void 0, void 0, void 0, fun
     const query = (service) ? `Select * from Service where id_service = '${service.id_service}' ${(service.selected) ? '' : ` and isActive = 'true'`} ` : `Select * from Service where isActive = 'true'`;
     try {
         const { recordset } = yield connection_1.pool1.request()
-            // .input('id_service', TYPES.VarChar(40), (service) ? service.selected : '')
+            .input('id_service', mssql_1.TYPES.VarChar(40), (service) ? service.selected : '')
             .query(query);
         return recordset;
     }

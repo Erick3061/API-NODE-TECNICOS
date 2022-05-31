@@ -385,7 +385,7 @@ export const GetActiveServices = async ({ service }: { service?: { id_service: s
     const query: string = (service) ? `Select * from Service where id_service = '${service.id_service}' ${(service.selected) ? '' : ` and isActive = 'true'`} ` : `Select * from Service where isActive = 'true'`;
     try {
         const { recordset }: IResult<Service> = await pool1.request()
-            // .input('id_service', TYPES.VarChar(40), (service) ? service.selected : '')
+            .input('id_service', TYPES.VarChar(40), (service) ? service.selected : '')
             .query(query);
         return recordset;
     } catch (error) {

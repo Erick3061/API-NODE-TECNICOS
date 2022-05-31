@@ -6,7 +6,6 @@ const sysController_1 = require("../controller/sysController");
 const db_validators_1 = require("../helpers/db-validators");
 const validar_jwt_1 = require("../middlewares/validar-jwt");
 const validar_campos_1 = require("../middlewares/validar_campos");
-const querysTecnicos_1 = require("../querys/querysTecnicos");
 const router = (0, express_1.Router)();
 router.post('/addService', [
     validar_jwt_1.validarJWT,
@@ -58,7 +57,7 @@ router.get('/getServiceDetails/:id', [
     validar_jwt_1.validarJWT,
     (0, express_validator_1.check)('id').notEmpty().withMessage('Campo id requerido').bail(),
     validar_campos_1.validarCampos
-], querysTecnicos_1.GetActiveServices);
+], sysController_1.getService);
 router.get('/getServices/:start/:end', [
     validar_jwt_1.validarJWT,
     (0, express_validator_1.check)('start')
