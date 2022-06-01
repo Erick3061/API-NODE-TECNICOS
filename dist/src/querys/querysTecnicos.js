@@ -521,7 +521,7 @@ const GetServices = ({ end, start, account, technical }) => __awaiter(void 0, vo
         const { recordset } = yield connection_1.pool1.request()
             .input('id_technical', mssql_1.TYPES.VarChar(40), person.id_person)
             .query(`
-                    SELECT S.id_service,S.folio,S.entryDate,S.exitDate,S.accountMW,S.isActive,S.digital,S.nameAccount FROM TechnicalService TS 
+                    SELECT S.id_service,S.folio,S.entryDate,S.exitDate,S.accountMW,S.isActive,S.digital,S.nameAccount,S.isDelivered FROM TechnicalService TS 
                     LEFT JOIN Service S ON S.id_service=TS.id_service 
                     WHERE
                     id_technical=@id_technical AND 

@@ -8,8 +8,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const querysTecnicos_1 = require("../querys/querysTecnicos");
+const moment_1 = __importDefault(require("moment"));
+const functions_1 = require("../functions/functions");
 class Task {
     constructor() {
         this.task = [];
@@ -34,17 +39,24 @@ class Task {
     }
     getCrons() {
         return __awaiter(this, void 0, void 0, function* () {
-            // const services = await GetActiveServices();
             const services = yield (0, querysTecnicos_1.GetActiveServices)({});
+            const dateActual = (0, functions_1.modDate)({ hours: 0, minutes: 0, seconds: 0 });
             if (typeof (services) === 'string') {
                 console.log(services);
             }
             else {
-                services.forEach(s => {
-                    if (s.cron !== null) {
-                        this.add(s.id_service, s.cron, s.isTimeExpired);
+                for (const s of services) {
+                    const isAfter = (0, moment_1.default)(dateActual.DATE).isAfter(s.exitDate);
+                    if (isAfter) {
+                        const prop = ` isTimeExpired = 'true' `;
+                        yield (0, querysTecnicos_1.UpdateService)({ id_service: s.id_service, interno: true, prop, selected: true });
                     }
-                });
+                    else {
+                        if (s.cron !== null) {
+                            this.add(s.id_service, s.cron, s.isTimeExpired);
+                        }
+                    }
+                }
             }
         });
     }

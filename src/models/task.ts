@@ -1,6 +1,8 @@
 import { ScheduledTask } from "node-cron";
 import { GetActiveServices, UpdateService } from '../querys/querysTecnicos';
 import { Service } from '../rules/response';
+import moment from 'moment';
+import { modDate } from "../functions/functions";
 
 interface task {
     nameTask: string;
@@ -30,16 +32,22 @@ class Task {
     }
 
     async getCrons() {
-        // const services = await GetActiveServices();
         const services = await GetActiveServices({});
+        const dateActual = modDate({ hours: 0, minutes: 0, seconds: 0 });
         if (typeof (services) === 'string') {
             console.log(services);
         } else {
-            services.forEach(s => {
-                if (s.cron !== null) {
-                    this.add(s.id_service, s.cron, s.isTimeExpired);
+            for (const s of services) {
+                const isAfter = moment(dateActual.DATE).isAfter(s.exitDate);
+                if (isAfter) {
+                    const prop: string = ` isTimeExpired = 'true' `
+                    await UpdateService({ id_service: s.id_service, interno: true, prop, selected: true });
+                } else {
+                    if (s.cron !== null) {
+                        this.add(s.id_service, s.cron, s.isTimeExpired);
+                    }
                 }
-            });
+            }
         }
     }
 

@@ -494,7 +494,7 @@ export const GetServices = async ({ end, start, account, technical }: { start: s
             .input('id_technical', TYPES.VarChar(40), person.id_person)
             .query(
                 `
-                    SELECT S.id_service,S.folio,S.entryDate,S.exitDate,S.accountMW,S.isActive,S.digital,S.nameAccount FROM TechnicalService TS 
+                    SELECT S.id_service,S.folio,S.entryDate,S.exitDate,S.accountMW,S.isActive,S.digital,S.nameAccount,S.isDelivered FROM TechnicalService TS 
                     LEFT JOIN Service S ON S.id_service=TS.id_service 
                     WHERE
                     id_technical=@id_technical AND 
