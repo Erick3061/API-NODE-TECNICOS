@@ -1,11 +1,9 @@
-import { Request, Response, json } from 'express';
+import { Request, Response } from 'express';
 import { rError } from './errorController';
-import { GetActiveServices, GetEnterprices, GetPersonGeneral, UpdateService } from '../querys/querysTecnicos';
+import { GetActiveServices, GetPersonGeneral, UpdateService } from '../querys/querysTecnicos';
 import { deleteDirectory, deleteFile, existDirectory, getFiles, upLoadFile } from '../helpers/files';
 import path from 'path';
-import { Service } from '../rules/response';
-import { IRecordSet } from 'mssql';
-import { Person } from '../rules/interfaces';
+import { responseLoadedFile } from '../rules/interfaces';
 
 export const sendFile = async (req: Request, resp: Response) => {
     const { id, img, type } = req.query;
@@ -13,48 +11,32 @@ export const sendFile = async (req: Request, resp: Response) => {
     if (type !== 'Service' && type !== 'Person' && type !== 'Enterprice') return rError({ status: 400, msg: 'No existe drectorio', resp });
     const directory: string = path.join(__dirname, '../../uploads', type, `${id}`, `${img}`);
     const isExist = await existDirectory(directory);
-    if (isExist) {
-        console.log(directory);
-        const files = await getFiles(directory);
-        if (files.includes(`${img}`)) {
-            console.log(files);
-            resp.sendFile(directory);
-        } else {
-            return rError({ status: 404, msg: 'Error', resp });
-        }
-    } else {
-        return rError({ status: 404, msg: 'Error', resp });
-    }
+    return (isExist) ? resp.sendFile(directory) : rError({ status: 404, msg: 'Directorio inexistente', resp });
 }
 
 export const getImgs = async (req: Request, resp: Response) => {
     const { id, type } = req.params;
-    const completePath: string = `../../uploads/${type}`;
-    const directory: string = path.join(__dirname, completePath, id);
-    let service: string | IRecordSet<Service> | undefined = undefined;
-    let Person: string | Person | undefined;
+    const directory: string = path.join(__dirname, `../../uploads/${type}`, id);
+    if (!await existDirectory(directory)) return rError({ status: 401, msg: 'Directorio no existe', resp });
 
     if (type === 'Service') {
-        service = await GetActiveServices({ service: { id_service: id, selected: true } });
+        const service = await GetActiveServices({ service: { id_service: id, selected: true } });
         if (typeof (service) === 'string') return rError({ status: 404, msg: service, resp });
         if (service.length === 0) return rError({ status: 404, msg: `Servicio no existe`, resp });
-        if (service[0].filesCron === 'deleted') return rError({ status: 400, msg: 'No existen Fotos ya han sido eliminadas de manera automatica', resp });
+        if (service[0].filesCron === 'deleted') return resp.status(200).json({ status: true, data: { files: [] } });
     }
+
     if (type === 'Person') {
-        Person = await GetPersonGeneral({ id });
+        const Person = await GetPersonGeneral({ id });
         if (typeof (Person) === 'string') return rError({ status: 400, msg: Person, resp });
         if (Person === undefined) return rError({ status: 500, msg: 'Pesona no existe', resp });
     }
+
     if (type === 'Enterprice') {
 
     }
-
-    const files = await getFiles(directory)
-    if (typeof (files) === 'string') return rError({ status: 400, msg: (service && service[0].filesCron === 'standby') ? 'No se han subido fotos' : files, resp });
-    return resp.status(200).json({
-        status: true,
-        data: { files }
-    });
+    const files = await getFiles(directory);
+    return (Array.isArray(files)) ? resp.status(200).json({ status: true, data: { files } }) : rError({ status: 500, msg: 'Error en el servidor de archivos...', resp });
 }
 
 export const deleteFileToService = async (req: Request, resp: Response) => {
@@ -112,32 +94,31 @@ export const deleteFileToService = async (req: Request, resp: Response) => {
 export const loadFile = async (req: Request, resp: Response) => {
     const { id, type } = req.params;
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) return rError({ status: 400, msg: 'No hay archivos que subir', resp });
+    let response: string | responseLoadedFile;
+
     switch (type) {
         case 'Service':
-            const id_service: string = id;
-            const service = await GetActiveServices({ service: { id_service } });
+            const service = await GetActiveServices({ service: { id_service: id } });
             if (typeof (service) === 'string') return rError({ status: 400, msg: service, resp });
             if (service.length === 0) return rError({ status: 500, msg: 'Servicio no existe', resp });
-            return await upLoadFile({ files: req.files, type, carpeta: service[0].id_service }).then(async response => {
-                const data: { nameFile: string, directoryFile: string, fullDirectory: string } = JSON.parse(`${response}`);
-                if (service[0].filesCron === 'standby') {
-                    const updated = await UpdateService({ id_service, interno: true, prop: `filesCron = 'going up'` });
-                    if (typeof (updated) === 'string') {
-                        const deleted = await deleteFile(data.fullDirectory);
-                        if (typeof (deleted) === 'string') return rError({ status: 500, msg: `Error: ${deleted}`, resp });
-                        return rError({ status: 400, msg: `Error al actualizar fileCron del servicio ${service[0].id_service} ${updated}`, resp })
-                    };
-                    if (typeof (updated) === 'object') return rError({ status: 500, msg: 'respuesta invalida loadFile debe ser un proceso interno', resp });
+            response = await upLoadFile({ files: req.files, type, carpeta: service[0].id_service });
+            if (typeof response === 'string') { return rError({ status: 400, msg: response, resp }); }
+
+            if (service[0].filesCron === 'standby') {
+                const updated = await UpdateService({ id_service: id, interno: true, prop: `filesCron = 'going up'` });
+                if (typeof (updated) === 'string') {
+                    const deleted = await deleteFile(response.fullDirectory);
+                    if (typeof (deleted) === 'string') return rError({ status: 500, msg: `Error: ${deleted}`, resp });
+                    return rError({ status: 400, msg: `Error al actualizar fileCron del servicio ${service[0].id_service} ${updated}`, resp })
+                };
+                if (typeof (updated) === 'object') return rError({ status: 500, msg: 'respuesta invalida loadFile debe ser un proceso interno', resp });
+            }
+            return resp.status(200).json({
+                status: true,
+                data: {
+                    isInserted: true,
+                    ...response,
                 }
-                return resp.status(200).json({
-                    status: true,
-                    data: {
-                        isInserted: true,
-                        ...data,
-                    }
-                });
-            }).catch(err => {
-                rError({ status: 500, msg: `${err}`, resp });
             });
 
         case 'Person':
@@ -145,19 +126,14 @@ export const loadFile = async (req: Request, resp: Response) => {
             const Person = await GetPersonGeneral({ id: id_person });
             if (typeof (Person) === 'string') return rError({ status: 400, msg: Person, resp });
             if (Person === undefined) return rError({ status: 500, msg: 'Pesona no existe', resp });
-
-            return await upLoadFile({ files: req.files, type, id: id_person }).then(async response => {
-                const data: { nameFile: string, directoryFile: string, fullDirectory: string } = JSON.parse(`${response}`);
-                return resp.status(200).json({
-                    status: true,
-                    data: {
-                        isInserted: true,
-                        ...data,
-                    }
-                });
-
-            }).catch(err => {
-                rError({ status: 500, msg: `${err}`, resp });
+            response = await upLoadFile({ files: req.files, type, carpeta: id_person })
+            if (typeof response === 'string') return rError({ status: 500, msg: response, resp });
+            return resp.status(200).json({
+                status: true,
+                data: {
+                    isInserted: true,
+                    ...response,
+                }
             });
 
         case 'Enterprice':

@@ -1,4 +1,5 @@
 import { Response } from "express";
+import fileUpload from "express-fileupload";
 
 export const administrator: Person = {
     email: '',
@@ -25,6 +26,19 @@ export interface BAPRole {
     id: number;
     name: string;
     user: string;
+}
+
+export interface responseLoadedFile {
+    nameFile: string,
+    directoryFile: string,
+    fullDirectory: string,
+}
+
+export interface propsUpLoadFile {
+    files: fileUpload.FileArray;
+    validExtensions?: Array<string>;
+    type: 'Service' | 'Person' | 'Enterprice';
+    carpeta?: string;
 }
 
 export interface bodyPerson {

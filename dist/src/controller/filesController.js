@@ -25,39 +25,25 @@ const sendFile = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
         return (0, errorController_1.rError)({ status: 400, msg: 'No existe drectorio', resp });
     const directory = path_1.default.join(__dirname, '../../uploads', type, `${id}`, `${img}`);
     const isExist = yield (0, files_1.existDirectory)(directory);
-    if (isExist) {
-        console.log(directory);
-        const files = yield (0, files_1.getFiles)(directory);
-        if (files.includes(`${img}`)) {
-            console.log(files);
-            resp.sendFile(directory);
-        }
-        else {
-            return (0, errorController_1.rError)({ status: 404, msg: 'Error', resp });
-        }
-    }
-    else {
-        return (0, errorController_1.rError)({ status: 404, msg: 'Error', resp });
-    }
+    return (isExist) ? resp.sendFile(directory) : (0, errorController_1.rError)({ status: 404, msg: 'Directorio inexistente', resp });
 });
 exports.sendFile = sendFile;
 const getImgs = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, type } = req.params;
-    const completePath = `../../uploads/${type}`;
-    const directory = path_1.default.join(__dirname, completePath, id);
-    let service = undefined;
-    let Person;
+    const directory = path_1.default.join(__dirname, `../../uploads/${type}`, id);
+    if (!(yield (0, files_1.existDirectory)(directory)))
+        return (0, errorController_1.rError)({ status: 401, msg: 'Directorio no existe', resp });
     if (type === 'Service') {
-        service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service: id, selected: true } });
+        const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service: id, selected: true } });
         if (typeof (service) === 'string')
             return (0, errorController_1.rError)({ status: 404, msg: service, resp });
         if (service.length === 0)
             return (0, errorController_1.rError)({ status: 404, msg: `Servicio no existe`, resp });
         if (service[0].filesCron === 'deleted')
-            return (0, errorController_1.rError)({ status: 400, msg: 'No existen Fotos ya han sido eliminadas de manera automatica', resp });
+            return resp.status(200).json({ status: true, data: { files: [] } });
     }
     if (type === 'Person') {
-        Person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id });
+        const Person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id });
         if (typeof (Person) === 'string')
             return (0, errorController_1.rError)({ status: 400, msg: Person, resp });
         if (Person === undefined)
@@ -66,12 +52,7 @@ const getImgs = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     if (type === 'Enterprice') {
     }
     const files = yield (0, files_1.getFiles)(directory);
-    if (typeof (files) === 'string')
-        return (0, errorController_1.rError)({ status: 400, msg: (service && service[0].filesCron === 'standby') ? 'No se han subido fotos' : files, resp });
-    return resp.status(200).json({
-        status: true,
-        data: { files }
-    });
+    return (Array.isArray(files)) ? resp.status(200).json({ status: true, data: { files } }) : (0, errorController_1.rError)({ status: 500, msg: 'Error en el servidor de archivos...', resp });
 });
 exports.getImgs = getImgs;
 const deleteFileToService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
@@ -135,34 +116,33 @@ const loadFile = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, type } = req.params;
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.file)
         return (0, errorController_1.rError)({ status: 400, msg: 'No hay archivos que subir', resp });
+    let response;
     switch (type) {
         case 'Service':
-            const id_service = id;
-            const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service } });
+            const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service: id } });
             if (typeof (service) === 'string')
                 return (0, errorController_1.rError)({ status: 400, msg: service, resp });
             if (service.length === 0)
                 return (0, errorController_1.rError)({ status: 500, msg: 'Servicio no existe', resp });
-            return yield (0, files_1.upLoadFile)({ files: req.files, type, carpeta: service[0].id_service }).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-                const data = JSON.parse(`${response}`);
-                if (service[0].filesCron === 'standby') {
-                    const updated = yield (0, querysTecnicos_1.UpdateService)({ id_service, interno: true, prop: `filesCron = 'going up'` });
-                    if (typeof (updated) === 'string') {
-                        const deleted = yield (0, files_1.deleteFile)(data.fullDirectory);
-                        if (typeof (deleted) === 'string')
-                            return (0, errorController_1.rError)({ status: 500, msg: `Error: ${deleted}`, resp });
-                        return (0, errorController_1.rError)({ status: 400, msg: `Error al actualizar fileCron del servicio ${service[0].id_service} ${updated}`, resp });
-                    }
-                    ;
-                    if (typeof (updated) === 'object')
-                        return (0, errorController_1.rError)({ status: 500, msg: 'respuesta invalida loadFile debe ser un proceso interno', resp });
+            response = yield (0, files_1.upLoadFile)({ files: req.files, type, carpeta: service[0].id_service });
+            if (typeof response === 'string') {
+                return (0, errorController_1.rError)({ status: 400, msg: response, resp });
+            }
+            if (service[0].filesCron === 'standby') {
+                const updated = yield (0, querysTecnicos_1.UpdateService)({ id_service: id, interno: true, prop: `filesCron = 'going up'` });
+                if (typeof (updated) === 'string') {
+                    const deleted = yield (0, files_1.deleteFile)(response.fullDirectory);
+                    if (typeof (deleted) === 'string')
+                        return (0, errorController_1.rError)({ status: 500, msg: `Error: ${deleted}`, resp });
+                    return (0, errorController_1.rError)({ status: 400, msg: `Error al actualizar fileCron del servicio ${service[0].id_service} ${updated}`, resp });
                 }
-                return resp.status(200).json({
-                    status: true,
-                    data: Object.assign({ isInserted: true }, data)
-                });
-            })).catch(err => {
-                (0, errorController_1.rError)({ status: 500, msg: `${err}`, resp });
+                ;
+                if (typeof (updated) === 'object')
+                    return (0, errorController_1.rError)({ status: 500, msg: 'respuesta invalida loadFile debe ser un proceso interno', resp });
+            }
+            return resp.status(200).json({
+                status: true,
+                data: Object.assign({ isInserted: true }, response)
             });
         case 'Person':
             const id_person = id;
@@ -171,14 +151,12 @@ const loadFile = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
                 return (0, errorController_1.rError)({ status: 400, msg: Person, resp });
             if (Person === undefined)
                 return (0, errorController_1.rError)({ status: 500, msg: 'Pesona no existe', resp });
-            return yield (0, files_1.upLoadFile)({ files: req.files, type, id: id_person }).then((response) => __awaiter(void 0, void 0, void 0, function* () {
-                const data = JSON.parse(`${response}`);
-                return resp.status(200).json({
-                    status: true,
-                    data: Object.assign({ isInserted: true }, data)
-                });
-            })).catch(err => {
-                (0, errorController_1.rError)({ status: 500, msg: `${err}`, resp });
+            response = yield (0, files_1.upLoadFile)({ files: req.files, type, carpeta: id_person });
+            if (typeof response === 'string')
+                return (0, errorController_1.rError)({ status: 500, msg: response, resp });
+            return resp.status(200).json({
+                status: true,
+                data: Object.assign({ isInserted: true }, response)
             });
         case 'Enterprice':
             break;
