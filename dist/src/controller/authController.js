@@ -33,6 +33,18 @@ const functions_1 = require("../functions/functions");
 const apiMW_1 = __importDefault(require("../api/apiMW"));
 const files_1 = require("../helpers/files");
 const path_1 = __importDefault(require("path"));
+/** @module AUTH_CONTROLLER */
+/**
+ * @name LogIn
+ * @description Inicio de sesión
+ * @path {POST} /api/auth/logIn
+ * @body {String} acceso usuario o correo electrónico
+ * @body {String} password Contraseña
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const LogIn = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     let Service = undefined;
     let AccountMW = undefined;
@@ -60,7 +72,7 @@ const LogIn = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
             if (typeof (resp) !== 'string') {
                 Service = resp;
                 if (Service) {
-                    const response = yield (0, apiMW_1.default)(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
+                    const response = yield (0, apiMW_1.default)(`single-account/${Service.accountMW}?more=true`, {}, 'GET');
                     const { status, data, errors } = response.data;
                     if (status === true) {
                         AccountMW = data === null || data === void 0 ? void 0 : data.account;
@@ -80,6 +92,16 @@ const LogIn = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.LogIn = LogIn;
+/**
+ * @name tokenValido
+ * @description valida el Json Web Token y retorna el los datos de la persona. (Inicio de sesion automático)
+ * @path {GET} /api/auth/validaJWT
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const tokenValido = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     let Service = undefined;
     let AccountMW = undefined;
@@ -97,7 +119,7 @@ const tokenValido = (req, resp) => __awaiter(void 0, void 0, void 0, function* (
         if (typeof (resp) !== 'string') {
             Service = resp;
             if (Service) {
-                const response = yield (0, apiMW_1.default)(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
+                const response = yield (0, apiMW_1.default)(`single-account/${Service.accountMW}?more=true`, {}, 'GET');
                 const { status, data, errors } = response.data;
                 if (status === true) {
                     AccountMW = data === null || data === void 0 ? void 0 : data.account;
@@ -113,6 +135,17 @@ const tokenValido = (req, resp) => __awaiter(void 0, void 0, void 0, function* (
     });
 });
 exports.tokenValido = tokenValido;
+/**
+ * @name ChangePassword
+ * @description Cambia la contraseña de un usuario.
+ * @path {POST} /api/auth/changePassword
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} password Contraseña nueva
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const ChangePassword = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { password } = req.body;
@@ -140,6 +173,19 @@ const ChangePassword = (req, resp) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.ChangePassword = ChangePassword;
+/**
+ * @name ForgetPassword
+ * @description Restaura la contraseña de un usuario de la aplicacion móvil
+ * @path /sys/auth/resetPassword
+ * @body {String} access correo electrónico o usuario
+ * @body {String} name Nombre de la persona
+ * @body {String} lastName Apellidos de la persona
+ * @body {String} employeeNumber Número de empleado de la persona
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const ForgetPassword = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { access, name, lastName, employeeNumber } = req.body;

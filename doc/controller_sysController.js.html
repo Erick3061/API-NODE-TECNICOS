@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Adding favicon -->
+    
+
+    <!-- Adding meta -->
+    
+
+    <!-- Adding external script-->
+    
+
+    <!-- Adding external style-->
+    
+
+    <!-- Adding scripts-->
+    
+
+    <!-- Adding style-->
+    
+
+    <!-- Adding overlay script-->
+    
+
+    <!-- Adding overlay style-->
+    
+
+
+    <title>
+      controller/sysController.js
+    </title>
+
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/third-party/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/third-party/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/reset.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-base.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-light.css">
+    
+    <svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    style="display:none">
+    <defs>
+        <symbol id="copy-icon" viewbox="0 0 488.3 488.3">
+            <g>
+                <path
+                    d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z" />
+                <path
+                    d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z" />
+            </g>
+        </symbol>
+        <symbol id='search-icon' viewBox="0 0 512 512">
+            <g>
+                <g>
+                    <path
+                        d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z" />
+                </g>
+            </g>
+            <g>
+                <g>
+                    <path
+                        d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z" />
+                </g>
+            </g>
+        </symbol>
+        <symbol id="down-icon" viewBox="0 0 16 16">
+            <path 
+                fill-rule="evenodd" 
+                clip-rule="evenodd" 
+                d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"
+            >
+            </path>
+        </symbol>
+    </defs>
+</svg>
+  </head>
+
+  <body>
+
+    <nav class="navbar" id="navbar">
+      <div class="navbar-heading" id="navbar-heading"><a href="index.html"><h2 class="navbar-heading-text">Home</h2></a></div><div class="search-box" id="search-box"><div class="search-box-input-container"><input class="search-box-input" type="text" placeholder="Search..." id="search-box-input" /><svg class="search-icon" alt="search-icon"><use xlink:href="#search-icon"></use></svg></div><div class="search-item-container" id="search-item-container"><ul class="search-item-ul" id="search-item-ul"></ul></div></div><div class="sidebar-main-content" id="sidebar-main-content"><div class="accordion collapsed" id="1479343" > <h3 class="accordion-heading">Modules<svg><use xlink:href="#down-icon"></use></svg></h3><ul class="accordion-content"><li class="accordion-list" id=""><a href="module-ADMIN_CONTROLLER.html">ADMIN_CONTROLLER</a></li><li class="accordion collapsed child" id=8793646><div class="accordion-heading child"><a href="module-API-MW.html">API-MW</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="module-API-MW.html#~apiMW">apiMW</a></li></ul></li><li class="accordion-list" id=""><a href="module-AUTH_CONTROLLER.html">AUTH_CONTROLLER</a></li><li class="accordion collapsed child" id=4663671><div class="accordion-heading child"><a href="module-CONSULTAS_BD_TECNICOS.html">CONSULTAS_BD_TECNICOS</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddBinnacle">AddBinnacle</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddComment">AddComment</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddPerson">AddPerson</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~addPersonBD">addPersonBD</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddService">AddService</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddTechnicalService">AddTechnicalService</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~UserAccess">UserAccess</a></li></ul></li><li class="accordion-list" id=""><a href="module-CONSULTAS_SISTEMA_MONITORING-WORKS.html">CONSULTAS_SISTEMA_MONITORING-WORKS</a></li><li class="accordion-list" id=""><a href="module-ERROR_CONTROLLER.html">ERROR_CONTROLLER</a></li><li class="accordion-list" id=""><a href="module-FILES_CONTROLLER.html">FILES_CONTROLLER</a></li><li class="accordion collapsed child" id=7454642><div class="accordion-heading child"><a href="module-FUNCTIONS.html">FUNCTIONS</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="module-FUNCTIONS.html#~DecriptRot39">DecriptRot39</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~EncriptRot39">EncriptRot39</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~esLetra">esLetra</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~esNumero">esNumero</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~getDate">getDate</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~getEnterpriceOfTechnicals">getEnterpriceOfTechnicals</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~modDate">modDate</a></li></ul></li><li class="accordion collapsed child" id=5426014><div class="accordion-heading child"><a href="module-HELPERS.html">HELPERS</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="module-HELPERS.html#~existEmail">existEmail</a></li><li data-type='method'><a href="module-HELPERS.html#~existEnterprice">existEnterprice</a></li><li data-type='method'><a href="module-HELPERS.html#~ExistPersonInDB">ExistPersonInDB</a></li><li data-type='method'><a href="module-HELPERS.html#~existRole">existRole</a></li><li data-type='method'><a href="module-HELPERS.html#~existRoleinDB">existRoleinDB</a></li><li data-type='method'><a href="module-HELPERS.html#~existTechnicals">existTechnicals</a></li><li data-type='method'><a href="module-HELPERS.html#~existTypeService">existTypeService</a></li><li data-type='method'><a href="module-HELPERS.html#~isDate">isDate</a></li><li data-type='method'><a href="module-HELPERS.html#~validateOptionUpdateEnterprice">validateOptionUpdateEnterprice</a></li><li data-type='method'><a href="module-HELPERS.html#~validateOptionUpdatePerson">validateOptionUpdatePerson</a></li><li data-type='method'><a href="module-HELPERS.html#~validEnterprice">validEnterprice</a></li></ul></li><li class="accordion-list" id=""><a href="module-SYS_CONTROLLER.html">SYS_CONTROLLER</a></li></ul> </div><div class="accordion collapsed" id="5724591" > <h3 class="accordion-heading">Classes<svg><use xlink:href="#down-icon"></use></svg></h3><ul class="accordion-content"><li class="accordion collapsed child" id=1914137><div class="accordion-heading child"><a href="Task.html">Task</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="Task.html#add">add</a></li><li data-type='method'><a href="Task.html#delete">delete</a></li><li data-type='method'><a href="Task.html#deleteTaskifNotExist">deleteTaskifNotExist</a></li><li data-type='method'><a href="Task.html#getCrons">getCrons</a></li><li data-type='method'><a href="Task.html#getTask">getTask</a></li><li data-type='method'><a href="Task.html#stop">stop</a></li><li data-type='method'><a href="Task.html#update">update</a></li></ul></li></ul> </div><div class="accordion collapsed" id="7604178" > <h3 class="accordion-heading">Global<svg><use xlink:href="#down-icon"></use></svg></h3><ul class="accordion-content"><li class="accordion-list" id=""><a href="global.html#date">date</a></li><li class="accordion-list" id=""><a href="global.html#FormatDate">FormatDate</a></li><li class="accordion-list" id=""><a href="global.html#PropsAddBinnacle">PropsAddBinnacle</a></li><li class="accordion-list" id=""><a href="global.html#PropsAddPerson">PropsAddPerson</a></li><li class="accordion-list" id=""><a href="global.html#PropsAddService">PropsAddService</a></li><li class="accordion-list" id=""><a href="global.html#RespUserAccess">RespUserAccess</a></li><li class="accordion-list" id=""><a href="global.html#time">time</a></li></ul> </div>
+      
+
+    </nav>
+    <div class="navbar-ham" id="navbar-ham">
+      <div>
+        <div class="first"></div>
+        <div class="second"></div>
+        <div class="third"></div>
+      </div>
+    </div>
+
+    <div id="main" class="main-content">
+      
+      <h1 id='page-title' class="page-title">
+        controller/sysController.js
+      </h1>
+      
+
+      
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __awaiter = (this &amp;&amp; this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __rest = (this &amp;&amp; this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) &amp;&amp; e.indexOf(p) &lt; 0)
+        t[p] = s[p];
+    if (s != null &amp;&amp; typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i &lt; p.length; i++) {
+            if (e.indexOf(p[i]) &lt; 0 &amp;&amp; Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+var __importDefault = (this &amp;&amp; this.__importDefault) || function (mod) {
+    return (mod &amp;&amp; mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.verifyPassword = exports.verifyEventsService = exports.updateTask = exports.updateService = exports.modTechnicalToAService = exports.getVersionApp = exports.getTask = exports.getServices = exports.getServiceDetails = exports.getPersons = exports.getInServiceTechnicals = exports.getEvents = exports.getDisponibleTechnicals = exports.getActiveServices = exports.getAccountsMW = exports.addService = void 0;
+const querysTecnicos_1 = require("../querys/querysTecnicos");
+const functions_1 = require("../functions/functions");
+const uuid_1 = require("uuid");
+const errorController_1 = require("./errorController");
+const connection_1 = require("../db/connection");
+const mssql_1 = require("mssql");
+const base_64_1 = __importDefault(require("base-64"));
+const apiMW_1 = __importDefault(require("../api/apiMW"));
+const generar_jwt_1 = require("../helpers/generar-jwt");
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const app_1 = require("../../app");
+/** @module SYS_CONTROLLER */
+/**
+ * @name addService
+ * @description -Agrega un servicio
+ * @path {POST} /api/sys/addService
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Object&lt;{id:String, role:Number}>} grantedEntry -Datos del monitorista que esta creando el servicio, id:Identificador único, role:Rol que desempeña
+ * @body {Number} id_type -Tipo de servicio
+ * @body {String} CodigoCte -Número de cliente registrado en Monitoring Works
+ * @body {Boolean} isKeyCode -True: Ver claves de usuario del panel, False: Ocultar claves de usuario del panel
+ * @body {Boolean} isOpCi -True: Verifica aperturas o cierres, False: No verifica aperturas o cierres
+ * @body {Array&lt;string>} technicals -Identificadores únicos de los tecnicos que estan realizando el servicio. (Debe contener al menos un identificador)
+ * @body {Object&lt;{hours: Number, minutes: Number, seconds: Number}>} time -Tiempo límite para realizar el servicio
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const addService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { CodigoCte, technicals, grantedEntry, id_type, isKeyCode, isOpCi, time } = req.body;
+    try {
+        if (time.hours &lt; 2)
+            return (0, errorController_1.rError)({ status: 401, msg: 'Minimo deben ser 2 hrs', location: 'addService', resp, });
+        const id_service = (0, uuid_1.v4)();
+        const response = yield (0, apiMW_1.default)(`informationAccount/${CodigoCte}`, {}, 'GET');
+        const { status, data, errors } = response.data;
+        if (status &amp;&amp; data) {
+            const { rowsAffected } = yield connection_1.pool1.request().query(`select accountMW from Service where accountMW='${CodigoCte}' and isActive = 'true'`);
+            if (rowsAffected[0] !== 0) {
+                return (0, errorController_1.rError)({ status: 400, msg: `La cuenta:${data.account.Nombre} con Abonado:${data.account.CodigoAbonado} no puede tener mas de un servicio activo a la vez`, location: 'addService', resp });
+            }
+            else {
+                const idx = yield (0, querysTecnicos_1.GetIndexService)();
+                if (typeof (idx) == 'string') {
+                    throw new Error(`${idx}`);
+                }
+                else {
+                    const Ffolio = base_64_1.default.encode(`${idx}`.padStart(6, 'F'));
+                    const folio = `${Ffolio}_${base_64_1.default.encode(CodigoCte)}`;
+                    const entryDate = (0, functions_1.getDate)();
+                    const exitDate = (0, functions_1.modDate)({ hours: time.hours, minutes: time.minutes, seconds: time.seconds, dateI: entryDate.DATE });
+                    const cron = `${exitDate.time.minute} ${exitDate.time.hour} ${exitDate.date.day} ${exitDate.date.month} ${exitDate.weekday}`;
+                    const insert = { id_service, grantedEntry: grantedEntry.name, id_type, folio, accountMW: data.account.CodigoCte, isKeyCode, isOpCi, cron, entryDate: entryDate.DATE, exitDate: exitDate.DATE, digital: data.account.CodigoAbonado, nameAccount: data.account.Nombre };
+                    const { isInserted, error } = yield (0, querysTecnicos_1.AddService)(insert);
+                    if (isInserted) {
+                        let asignados = [];
+                        for (const id_technical of technicals) {
+                            const { isInserted, error } = yield (0, querysTecnicos_1.AddTechnicalService)(id_service, id_technical);
+                            if (isInserted) {
+                                asignados = [...asignados, id_technical];
+                            }
+                        }
+                        return resp.status(200).json({
+                            status: true,
+                            data: { isInserted, asignados }
+                        });
+                    }
+                    else {
+                        return (0, errorController_1.rError)({ status: 400, msg: `Error al insertar AddService ${error}`, location: 'addService', resp });
+                    }
+                }
+            }
+        }
+        else {
+            return (0, errorController_1.rError)({ status: 400, msg: errors[0].msg, location: 'addService', resp });
+        }
+    }
+    catch (error) {
+        return (0, errorController_1.rError)({ status: 500, msg: `Api: ${error}`, location: 'addService', resp });
+    }
+});
+exports.addService = addService;
+/**
+ * @name getAccountsMW
+ * @description Obtiene todas las cuentas de MW
+ * @path {GET} /api/sys/getAccountsMW
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {String} [id_service] -Si solo se desea la cuenta asignada de Monitoring Works del servicio ingresado
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getAccountsMW = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const query = req.query; //una sola cuenta
+    try {
+        if (query.id_service) {
+            // const service = await GetActiveService((typeof query.id_service === 'string') ? query.id_service : '');
+            const service = yield (0, querysTecnicos_1.GetActiveServices)((typeof query.id_service === 'string') ? { service: { id_service: query.id_service } } : { service: { id_service: '' } });
+            if (typeof service === 'string')
+                throw new Error(service);
+            // if (service === undefined) throw new Error(`Servicio no existe`);
+            if (service.length === 0)
+                throw new Error(`Servicio no existe`);
+            const response = yield (0, apiMW_1.default)(`informationAccount/${service[0].accountMW}?moreInfo=true`, {}, 'GET');
+            const { status, data, errors } = response.data;
+            if (status &amp;&amp; data) {
+                return resp.status(200).json({
+                    status: true,
+                    data
+                });
+            }
+            else {
+                return (0, errorController_1.rError)({ status: 400, msg: errors[0].msg, location: 'getAccountsMW', resp });
+            }
+        }
+        else {
+            const response = yield (0, apiMW_1.default)('allAccounts', {}, 'GET');
+            const { status, data, errors } = response.data;
+            if (status &amp;&amp; data) {
+                return resp.status(200).json({
+                    status: true,
+                    data
+                });
+            }
+            else {
+                return (0, errorController_1.rError)({ status: 400, msg: errors[0].msg, location: 'getAccountsMW', resp });
+            }
+        }
+    }
+    catch (error) {
+        return (0, errorController_1.rError)({ status: 500, msg: `${error}`, location: 'getAccountsMW', resp });
+    }
+});
+exports.getAccountsMW = getAccountsMW;
+/**
+ * @name getActiveServices
+ * @description -Obtiene todos los servivios activos
+ * @path {GET} /api/sys/getActiveServices
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {String} [id_service] -Si solo se requiere un servicio activo
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getActiveServices = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const services = yield (0, querysTecnicos_1.GetActiveServices)({});
+    const token = req.header('x-token');
+    const { id_service } = req.query;
+    if (id_service) {
+        const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service: (typeof id_service === 'string') ? id_service : '' } });
+        if (typeof (service) === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: service, location: 'GetActiveService', resp });
+        // if (service === undefined)
+        if (service.length === 0)
+            return (0, errorController_1.rError)({ status: 400, msg: `Servicio no existe`, location: '', resp });
+        const technicals = yield (0, querysTecnicos_1.GetTechnicalsInServiceActive)(service[0].id_service);
+        if (typeof (technicals) === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: technicals, location: 'GetTechnicalsInService', resp });
+        return resp.json({
+            status: true,
+            data: {
+                service: service[0],
+                technicals: technicals.map(t => {
+                    const { email, password, status, id_role } = t, rest = __rest(t, ["email", "password", "status", "id_role"]);
+                    return Object.assign({}, rest);
+                })
+            }
+        });
+    }
+    if (typeof (services) === 'string')
+        return (0, errorController_1.rError)({ status: 500, msg: services, location: 'GetActiveServices', resp });
+    (_a = app_1.server.Task) === null || _a === void 0 ? void 0 : _a.deleteTaskifNotExist(services);
+    services.map((s) => __awaiter(void 0, void 0, void 0, function* () { return (!s.isTimeExpired &amp;&amp; (s.exitDate.getTime() - (0, functions_1.getDate)().DATE.getTime() &lt; 0)) &amp;&amp; (yield (0, querysTecnicos_1.UpdateService)({ id_service: s.id_service, prop: `isTimeExpired = 'true'`, interno: true })); }));
+    const id_services = [...new Set(services.map(s => s.id_service))];
+    const Enterprices = yield (0, functions_1.getEnterpriceOfTechnicals)(id_services);
+    const clave = generar_jwt_1.SECRETORPPRIVATEKEY;
+    const decode = jsonwebtoken_1.default.verify(token, clave);
+    if (typeof (decode) === 'string')
+        return (0, errorController_1.rError)({ status: 400, msg: decode, location: 'validarJWT', resp });
+    if (decode.uid !== 'admin') {
+        const person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id: decode.uid });
+        if (typeof person === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: person, resp });
+        if (person.id_role === 3) {
+            const prueba = Enterprices.filter(f => f.enterprice.find(e => e === person.id_enterprice)).map(m => m.id_service);
+            const filtered = services.filter(f => prueba.find(fi => fi === f.id_service));
+            return resp.json({
+                status: true,
+                data: {
+                    services: filtered.map(s => {
+                        const { firstVerification, grantedEntry, grantedExit, id_type, isActive, isKeyCode, isOpCi, secondVerification } = s, rest = __rest(s, ["firstVerification", "grantedEntry", "grantedExit", "id_type", "isActive", "isKeyCode", "isOpCi", "secondVerification"]);
+                        return Object.assign({}, rest);
+                    })
+                }
+            });
+        }
+    }
+    return resp.json({
+        status: true,
+        data: {
+            services: services.map(s => {
+                const { firstVerification, grantedEntry, grantedExit, id_type, isActive, isKeyCode, isOpCi, secondVerification } = s, rest = __rest(s, ["firstVerification", "grantedEntry", "grantedExit", "id_type", "isActive", "isKeyCode", "isOpCi", "secondVerification"]);
+                return Object.assign({}, rest);
+            })
+        }
+    });
+});
+exports.getActiveServices = getActiveServices;
+/**
+ * @name getDisponibleTechnicals
+ * @description -Obtiene todos los tecnicos activos
+ * @path {GET} /api/sys/getDisponibleTechnicals
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {Object&lt;{ id_enterprice: number, shortName: string, name: string }>} [enterprice] -Filtra los técnicos activos por empresa y envia solo los que coinciden a la empresa enviada
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getDisponibleTechnicals = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const technicals = yield (0, querysTecnicos_1.GetDisponibleTechnical)();
+    const { enterprice } = req.query;
+    let enterpriceSend;
+    try {
+        enterpriceSend = JSON.parse(`${enterprice}`);
+    }
+    catch (error) {
+        enterpriceSend = undefined;
+    }
+    if (typeof (technicals) === 'string')
+        return (0, errorController_1.rError)({ status: 500, msg: technicals, location: 'GetDisponibleTechnical', resp });
+    let tec = (enterpriceSend)
+        ? technicals.filter(el => el.id_enterprice === (enterpriceSend === null || enterpriceSend === void 0 ? void 0 : enterpriceSend.id_enterprice)).map(el => { return { id_person: el.id_person, name: `${el.personName} ${el.lastname}`, id_enterprice: el.id_enterprice }; })
+        : technicals.map(el => { return { id_person: el.id_person, name: `${el.personName} ${el.lastname}`, id_enterprice: el.id_enterprice }; });
+    return resp.status(200).json({
+        status: true,
+        data: {
+            technicals: tec
+        }
+    });
+});
+exports.getDisponibleTechnicals = getDisponibleTechnicals;
+/**
+ * @name getEvents
+ * @description Obtiene los eventos que llegaron a Monitoring  Works de una cuenta asignada a un servicio activo.
+ * @path {GET} /api/sys/getEvents/:id_service/:start/:end
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :id_service -Identificador del servicio activo.
+ * @param {String} :start -Fecha inicial de consulta
+ * @param {String} :end -Fecha final de consulta
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getEvents = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id_service, start, end } = req.params;
+    try {
+        // const service = await GetActiveService(id_service);
+        const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service } });
+        if (typeof service === 'string')
+            throw new Error(service);
+        // if (service === undefined) throw new Error(`Servicio no existe`);
+        if (service.length === 0)
+            throw new Error(`Servicio no existe`);
+        const send = {
+            accounts: [service[0].accountMW],
+            filter: [
+                { code: "'ACZ'", type: 1 },
+                { code: "'ASA'", type: 1 },
+                { code: "'CPA'", type: 1 },
+                { code: "'A'", type: 1 },
+                { code: "'24H'", type: 1 },
+                { code: "'FIRE'", type: 1 },
+                { code: "'SMOKE'", type: 1 },
+                { code: "'P'", type: 1 },
+                { code: "'O'", type: 1 },
+                { code: "'OS'", type: 1 },
+                { code: "'C'", type: 1 },
+                { code: "'CS'", type: 1 }
+            ]
+        };
+        const [startDate, startTime] = start.split('T');
+        const [endDate, endTime] = end.split('T');
+        const path = `events/${startDate}/${endDate}/1?startQuery=${startTime.substring(0, 5)}&amp;endQuery=${endTime.substring(0, 5)}`;
+        const response = yield (0, apiMW_1.default)(path, send, 'POST');
+        const { status, data, errors } = response.data;
+        if (status &amp;&amp; data) {
+            if (data === null || data === void 0 ? void 0 : data.datos[0].haveEvents) {
+                return resp.status(200).json({
+                    status: true,
+                    data: {
+                        events: data.datos[0].eventos
+                    }
+                });
+            }
+            else {
+                return resp.status(200).json({
+                    status: true,
+                    data: {
+                        events: []
+                    }
+                });
+            }
+        }
+        else {
+            return (0, errorController_1.rError)({ status: 400, msg: errors[0].msg, location: 'apiMW->events', resp });
+        }
+    }
+    catch (error) {
+        return (0, errorController_1.rError)({ status: 500, msg: `${error}`, location: 'getEvents', resp });
+    }
+});
+exports.getEvents = getEvents;
+/**
+ * @name getInServiceTechnicals
+ * @description Obtiene los técnicos que están en sitio o en algún servicio activo
+ * @path {GET} /api/sys/getInServiceTechnicals
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getInServiceTechnicals = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const technicals = yield (0, querysTecnicos_1.GetTechnicalsInServiceActive)();
+    if (typeof (technicals) === 'string')
+        return (0, errorController_1.rError)({ status: 500, msg: technicals, location: 'GetTechnicalsInService', resp });
+    return resp.status(200).json({
+        status: true,
+        data: {
+            technicals
+        }
+    });
+});
+exports.getInServiceTechnicals = getInServiceTechnicals;
+/**
+ * @name getPersons
+ * @description Obtiene todas las personas registradas o por rol que pertenecen a la misma empresa que realizo el inicio se sesión
+ * @path {GET} /api/sys/getPersons/:role
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión (Este filtra el personal que contenga el mismo id de empresa)
+ * @param {String} :role -1: Técnicos, 2: Monitoristas u operadores, 3: Encargados de técnicos, 850827: Todo el personal
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getPersons = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const params = req.params;
+    const id = parseInt(params.role);
+    const token = req.header('x-token');
+    const clave = generar_jwt_1.SECRETORPPRIVATEKEY;
+    const decode = jsonwebtoken_1.default.verify(token, clave);
+    if (typeof (decode) === 'string')
+        return (0, errorController_1.rError)({ status: 400, msg: decode, location: 'validarJWT', resp });
+    if (decode.uid !== 'admin') {
+        const person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id: decode.uid });
+        if (typeof person === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: person, resp });
+        if (person === undefined)
+            return (0, errorController_1.rError)({ status: 400, msg: 'Persona no existe', resp });
+        const Persons = yield (0, querysTecnicos_1.GetPersons)(id);
+        if (typeof (Persons) === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: Persons, location: 'GetPersons', resp });
+        return resp.json({
+            status: true,
+            data: { Persons: Persons.filter(f => f.id_enterprice === person.id_enterprice) }
+        });
+    }
+    const Persons = yield (0, querysTecnicos_1.GetPersons)(id);
+    if (typeof (Persons) === 'string')
+        return (0, errorController_1.rError)({ status: 500, msg: Persons, location: 'GetPersons', resp });
+    return resp.json({
+        status: true,
+        data: { Persons }
+    });
+});
+exports.getPersons = getPersons;
+/**
+ * @name getServiceDetails
+ * @description Obtiene los detalles de un ervicio ya culminado
+ * @path {GET} /api/sys/getServiceDetails/:id
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :role -1: Técnicos, 2: Monitoristas u operadores, 3: Encargados de técnicos, 850827: Todo el personal
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getServiceDetails = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    // const service = await GetActiveService(id, true);
+    const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service: id, selected: true } });
+    if (typeof service === 'string')
+        return (0, errorController_1.rError)({ status: 400, msg: service, resp, location: 'getService' });
+    if (service.length === 0)
+        throw new Error(`Servicio no existe`); //seagrego
+    // const details = await GetService({ id_service: service.id_service });
+    const details = yield (0, querysTecnicos_1.GetService)({ id_service: service[0].id_service });
+    if (typeof details === 'string')
+        return (0, errorController_1.rError)({ status: 400, msg: details, resp, location: 'GetService->queryTech' });
+    const { binnacle, comments } = details;
+    return resp.json({
+        status: true,
+        data: { service: service[0], binnacle, comments }
+    });
+});
+exports.getServiceDetails = getServiceDetails;
+/**
+ * @name getServices
+ * @description Obtiene los servicios activos e inactivos por intervalo de fecha. (Solo se puede consultar un filtro a la vez)
+ * @path {GET} /api/sys/getServices/:start/:end
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :start -Fecha inicial de consulta
+ * @param {String} :end -Fecha final de consulta
+ * @query {String} [technical] -Filtra los servicios que le pertenecen a este técnico
+ * @query {String} [account] -Filtra los servicios que le pertenecen a esta cuenta
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getServices = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { start, end } = req.params;
+    const { technical, account } = req.query;
+    const token = req.header('x-token');
+    if (technical &amp;&amp; account)
+        return (0, errorController_1.rError)({ status: 400, msg: 'Formato invalido, solo se puede consultar un opcional a la vez', location: 'getServices', resp });
+    if (technical) {
+        const services = yield (0, querysTecnicos_1.GetServices)({ start, end, technical: `${technical}` });
+        if (typeof (services) === 'string')
+            return (0, errorController_1.rError)({ status: 400, msg: services, resp });
+        return resp.json({
+            status: true,
+            data: {
+                services
+            }
+        });
+    }
+    if (account) {
+        const response = yield (0, apiMW_1.default)(`informationAccount/${account}`, {}, 'GET');
+        const { status, data, errors } = response.data;
+        if (errors)
+            return (0, errorController_1.rError)({ status: 400, msg: `${errors[0].msg}`, resp });
+        if (status &amp;&amp; data) {
+            const services = yield (0, querysTecnicos_1.GetServices)({ start, end, account: `${account}` });
+            if (typeof (services) === 'string')
+                return (0, errorController_1.rError)({ status: 400, msg: services, resp });
+            return resp.json({
+                status: true,
+                data: {
+                    services
+                }
+            });
+        }
+    }
+    const clave = generar_jwt_1.SECRETORPPRIVATEKEY;
+    const decode = jsonwebtoken_1.default.verify(token, clave);
+    if (typeof (decode) === 'string')
+        return (0, errorController_1.rError)({ status: 400, msg: decode, location: 'validarJWT', resp });
+    if (decode.uid !== 'admin') {
+        const person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id: decode.uid });
+        if (typeof person === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: person, resp });
+        if (person.id_role === 3) {
+            const services = yield (0, querysTecnicos_1.GetServices)({ start, end });
+            if (typeof (services) === 'string')
+                return (0, errorController_1.rError)({ status: 400, msg: services, resp });
+            const Enterprices = services.map(s => {
+                const id_service = s.id_service;
+                const technicals = JSON.parse(`${s.technicals}`);
+                let enterprices = [];
+                let arr = [];
+                if (technicals !== null) {
+                    technicals.forEach(p => { enterprices = [...enterprices, { id_enterprice: p.id_enterprice, id_service }]; });
+                    arr = [...new Set(enterprices.filter(f => f.id_service === id_service).map(m => m.id_enterprice))];
+                }
+                return { id_service, enterprice: arr };
+            });
+            const prueba = Enterprices.filter(f => f.enterprice.find(e => e === person.id_enterprice)).map(m => m.id_service);
+            const filtered = services.filter(f => prueba.find(fi => fi === f.id_service));
+            return resp.json({
+                status: true,
+                data: {
+                    services: filtered,
+                }
+            });
+        }
+    }
+    const services = yield (0, querysTecnicos_1.GetServices)({ start, end });
+    if (typeof (services) === 'string')
+        return (0, errorController_1.rError)({ status: 400, msg: services, resp });
+    return resp.json({
+        status: true,
+        data: {
+            services
+        }
+    });
+});
+exports.getServices = getServices;
+/**
+ * @name getTask
+ * @description Obtiene las tareas programadas proximas a ejecutarse, al igual que el estado de los servicios activos
+ * @path {GET} /api/sys/getTask
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getTask = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
+    return resp.json({
+        status: true,
+        data: { task: (_b = app_1.server.Task) === null || _b === void 0 ? void 0 : _b.getTask().map(t => { return { nameTask: t.nameTask, running: t.running, cron: t.cron }; }) }
+    });
+});
+exports.getTask = getTask;
+/**
+ * @name getVersionApp
+ * @description Obtiene la versión de la aplicacion movil.
+ * @path {GET} /api/sys/getVersionApp
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getVersionApp = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield connection_1.pool1.request()
+        .query(`select * from VersionApp`)
+        .then(({ recordset }) => {
+        return resp.status(200).json({
+            status: true,
+            data: Object.assign({}, recordset[0])
+        });
+    })
+        .catch(err => (0, errorController_1.rError)({ status: 500, msg: `${err}`, resp }));
+});
+exports.getVersionApp = getVersionApp;
+/**
+ * @name modTechnicalToAService
+ * @description Elimina Técnico del servicio por error de asignación ó se le asigna o restringe el folio de ese servicio. (Funciona cuando hay mas de 2 técnicos asignados al servicio), Solo se puede hacer una opción a la vez o elimnar o (asignar o desasignar el folio del servicio) de un tecnico a la vez.
+ * @path {POST} /api/sys/modTechnicalToAService
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} :id_service id del servicio, Este debe ser un servicio activo.
+ * @body {Array&lt;String>} :technicals Arreglo con los id de los tecnicos enviados o seleccionados aunque solo se tomará la primer posición (Se tomará en cuenta el tamaño total del arreglo en una actualizacón posterior)
+ * @query {Boolean} [del] Para eliminar al técnico
+ * @query {Boolean} [sf] Para dejar con o sin folio al técnico
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const modTechnicalToAService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id_service, technicals } = req.body;
+        const { del, sf } = req.query;
+        let errors = [];
+        let asignados = [];
+        // const service = await GetActiveService(id_service);
+        const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service } });
+        if (typeof (service) === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: `${service}`, location: 'GetActiveService', resp });
+        // if (service === undefined) return rError({ status: 400, msg: `Servicio No existe`, location: 'addTechnicalToAService', resp });
+        if (service.length === 0)
+            return (0, errorController_1.rError)({ status: 400, msg: `Servicio No existe`, location: 'addTechnicalToAService', resp });
+        if (del &amp;&amp; sf)
+            throw new Error("Solo debes mandar una opción");
+        if (del) {
+            const Delete = JSON.parse(`${del}`);
+            if (Delete) {
+                const technicalsInService = yield (0, querysTecnicos_1.GetTechnicalsInServiceActive)(service[0].id_service);
+                if (typeof (technicalsInService) === 'string')
+                    return (0, errorController_1.rError)({ status: 500, msg: technicalsInService, location: 'GetTechnicalsInService', resp });
+                if (technicalsInService.length === 1)
+                    return (0, errorController_1.rError)({ status: 401, msg: `El servicio no se puede quedar sin tecnicos asignados`, location: 'GetTechnicalsInService', resp });
+                for (const id_technical of technicals) {
+                    if (technicalsInService.find(f => f.id_person === id_technical) === undefined)
+                        throw new Error(`Hay tecnicos que no corresponden a este servicio`);
+                }
+                const deleted = yield (0, querysTecnicos_1.DeleteTechnicaltoService)(id_service, technicals[0]);
+                if (typeof deleted === 'string') {
+                    errors = [...errors, deleted];
+                }
+                if (deleted) {
+                    asignados = [...asignados, technicals[0]];
+                }
+                return resp.status(200).json({
+                    status: true,
+                    data: { id_service, eliminados: asignados, errors }
+                });
+            }
+        }
+        if (sf) {
+            const SF = JSON.parse(`${sf}`);
+            // const technicalsInService = await GetTechnicalsInServiceActive(service.id_service);
+            const technicalsInService = yield (0, querysTecnicos_1.GetTechnicalsInServiceActive)(service[0].id_service);
+            if (typeof (technicalsInService) === 'string')
+                return (0, errorController_1.rError)({ status: 500, msg: technicalsInService, location: 'GetTechnicalsInService', resp });
+            if (technicalsInService.length === 1)
+                return (0, errorController_1.rError)({ status: 401, msg: `El servicio no se puede quedar sin tecnicos asignados`, location: 'GetTechnicalsInService', resp });
+            for (const id_technical of technicals) {
+                if (technicalsInService.find(f => f.id_person === id_technical) === undefined)
+                    throw new Error(`Hay tecnicos que no corresponden a este servicio`);
+            }
+            const updated = yield (0, querysTecnicos_1.UpdateTechnical)({ id_service, id_person: technicals[0], prop: `withOutFolio='${SF ? 'true' : 'false'}'` });
+            if (typeof updated === 'string') {
+                errors = [...errors, updated];
+            }
+            if (updated) {
+                asignados = [...asignados, technicals[0]];
+            }
+            return resp.status(200).json({
+                status: true,
+                data: { id_service, actualizados: asignados, errors }
+            });
+        }
+        for (const id_technical of technicals) {
+            const { isInserted, error } = yield (0, querysTecnicos_1.AddTechnicalService)(id_service, id_technical);
+            if (error) {
+                errors = [...errors, error];
+            }
+            if (isInserted) {
+                asignados = [...asignados, id_technical];
+            }
+        }
+        return resp.status(200).json({
+            status: true,
+            data: { id_service, asignados, errors }
+        });
+    }
+    catch (error) {
+        return (0, errorController_1.rError)({ status: 500, msg: `${error}`, location: 'modTechnicalToAService', resp });
+    }
+});
+exports.modTechnicalToAService = modTechnicalToAService;
+/**
+ * @name updateService
+ * @description Realiza varias opciones del sericio activo (UNA A LA VEZ)
+ * @path {POST} /api/sys/updateService
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} :id_service id del servicio activo.
+ * @body {Object&lt;{ id:String, role:Number, name:String }>} :person Datos del monitorista o encargado que realiza la acción
+ * @body {'isKeyCode' | 'isDelivered' | 'accountMW' | 'firstVerification' | 'secondVerification' | 'moreTime' | 'SF' | 'EF' | 'TS'} :prop Opcion que realizará el proceso
+ * @body {Object&lt;{comment:String, moreTime:{hours:Number, minutes:Number, seconds:Number}}>} :value comment: Para agregar un comentario , moreTime:Para asignar mas tiempo limite al servico
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const updateService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    var _c, _d, _e;
+    /**Hay que regresar los datos a como estaban en el caso de error revisar mas tarde */
+    const { person, id_service, prop, value } = req.body;
+    try {
+        // const service = await GetActiveService(id_service);
+        const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service } });
+        if (typeof (service) === 'string')
+            throw new Error(`${service}`);
+        // if (service === undefined) throw new Error("Servicio no existente");
+        if (service.length === 0)
+            throw new Error("Servicio no existente");
+        if (prop === 'isKeyCode' &amp;&amp; typeof (value) === 'boolean') {
+            const prop = `isKeyCode = '${(value) ? 'true' : 'false'}' `;
+            const updated = yield (0, querysTecnicos_1.UpdateService)({ id_service, prop, interno: false });
+            if (typeof (updated) === 'string')
+                throw new Error(`${updated}`);
+            if (typeof (updated) === 'boolean')
+                throw new Error("interno debe estar en false dentro de la api");
+            return resp.json({ status: true, data: Object.assign({}, updated) });
+        }
+        if ((prop === 'SF' || prop === 'TS') &amp;&amp; person.id &amp;&amp; typeof (value) === 'object') {
+            if (value.value === undefined)
+                throw new Error(`Error de formato`);
+            if (value.binnacle === undefined)
+                throw new Error(`Error de formato`);
+            if (value.value &amp;&amp; value.comment !== '') {
+                const comment = yield (0, querysTecnicos_1.AddComment)({ id_service, person: person.name, comment: `${prop} ${value.comment}` });
+                if (!comment.isInserted)
+                    throw new Error(`${comment.error}`);
+            }
+            const binnacle = yield (0, querysTecnicos_1.AddBinnacle)({ id_service, zones: value.binnacle.ze, missingZones: value.binnacle.zf, zonesUndefined: value.binnacle.zu, users: value.binnacle.ue, missingUsers: value.binnacle.uf, usersUndefined: value.binnacle.uu, link: value.binnacle.link, technicals: value.binnacle.technicals });
+            if (!binnacle.isInserted)
+                throw new Error(`${binnacle.error}`);
+            const query = (prop === 'SF')
+                ? `update Service set exitDate = @exitDate, grantedExit=@grantedExit, isActive='False', isTimeExpired='True' where id_service = @id_service`
+                : `update Service set exitDate = @exitDate, grantedExit=@grantedExit, isActive='False', isTimeExpired='True', isDelivered='True' where id_service = @id_service`;
+            const { rowsAffected } = yield connection_1.pool1.request()
+                .input('id_service', mssql_1.TYPES.VarChar(40), id_service)
+                .input('grantedExit', mssql_1.TYPES.Text, person.name)
+                .input('exitDate', mssql_1.TYPES.DateTime, (0, functions_1.getDate)().DATE)
+                .query(query);
+            if (rowsAffected[0] !== 0) {
+                const prop = `cron = ''`;
+                const updated = yield (0, querysTecnicos_1.UpdateService)({ id_service, prop, interno: false, selected: true });
+                if (typeof (updated) === 'string')
+                    throw new Error(`${updated}`);
+                if (typeof (updated) === 'boolean')
+                    throw new Error("interno debe estar en false dentro de la api");
+                (_c = app_1.server.Task) === null || _c === void 0 ? void 0 : _c.delete(id_service);
+                return resp.json({ status: true, data: Object.assign({}, updated) });
+            }
+            else {
+                throw new Error(`Error al actualizar`);
+            }
+        }
+        if (prop === 'EF' &amp;&amp; person.id &amp;&amp; typeof (value) === 'boolean') {
+            const prop = `isDelivered = 'true'`;
+            const updated = yield (0, querysTecnicos_1.UpdateService)({ id_service, prop, interno: false });
+            if (typeof (updated) === 'string')
+                throw new Error(`${updated}`);
+            if (typeof (updated) === 'boolean')
+                throw new Error("interno debe estar en false dentro de la api");
+            const comment = yield (0, querysTecnicos_1.AddComment)({ id_service, person: person.name, comment: `Entrego folio` });
+            if (!comment.isInserted)
+                throw new Error(`${comment.error}`);
+            return resp.json({ status: true, data: Object.assign({}, updated) });
+        }
+        if (prop === 'moreTime' &amp;&amp; typeof (value) === 'object') {
+            if (value.moreTime === undefined)
+                throw new Error(`Error de formato`);
+            const exitDate = (0, functions_1.modDate)({ hours: value.moreTime.hours, minutes: value.moreTime.minutes, seconds: value.moreTime.seconds });
+            const cron = `${exitDate.time.minute} ${exitDate.time.hour} ${exitDate.date.day} ${exitDate.date.month} ${exitDate.weekday}`;
+            const { rowsAffected } = yield connection_1.pool1.request()
+                .input('id_service', mssql_1.TYPES.VarChar(40), id_service)
+                .input('exitDate', mssql_1.TYPES.DateTime, exitDate.DATE)
+                .query(`update Service set exitDate = @exitDate, isTimeExpired = 'false' where id_service = @id_service`);
+            if (rowsAffected[0] !== 0) {
+                const prop = `cron = '${cron}'`;
+                const updated = yield (0, querysTecnicos_1.UpdateService)({ id_service, prop, interno: false });
+                // const comment: { isInserted: boolean, error?: string } = await AddComment({ id_service, person: person.name, comment: `SYSTEM: Se agrego mas tiempo ${service.exitDate.toJSON()} - ${exitDate.DATE.toJSON()}` });
+                const comment = yield (0, querysTecnicos_1.AddComment)({ id_service, person: person.name, comment: `SYSTEM: Se agrego mas tiempo ${service[0].exitDate.toJSON()} - ${exitDate.DATE.toJSON()}` });
+                if (typeof (updated) === 'string')
+                    throw new Error(`${updated}`);
+                if (typeof (updated) === 'boolean')
+                    throw new Error("interno debe estar en false dentro de la api");
+                if (!comment.isInserted)
+                    throw new Error(`${comment.error}`);
+                (_d = app_1.server.Task) === null || _d === void 0 ? void 0 : _d.delete(id_service);
+                // server.Task?.add(service.id_service, cron, false);
+                (_e = app_1.server.Task) === null || _e === void 0 ? void 0 : _e.add(service[0].id_service, cron, false);
+                return resp.json({
+                    status: true,
+                    data: Object.assign({}, updated)
+                });
+            }
+            else {
+                throw new Error(`Error al actualizar`);
+            }
+        }
+        if (person.role === 2 &amp;&amp; prop === 'secondVerification' &amp;&amp; typeof (value) === 'object') {
+            if (value.value)
+                throw new Error(`Error de formato`);
+            const updated = yield (0, querysTecnicos_1.UpdateService)({ id_service, prop: `secondVerification = '${person.name}'`, interno: false });
+            if (value.comment !== '') {
+                const comment = yield (0, querysTecnicos_1.AddComment)({ id_service, person: person.name, comment: `${prop} ${value.comment}` });
+                if (!comment.isInserted)
+                    throw new Error(`${comment.error}`);
+            }
+            if (typeof (updated) === 'string')
+                throw new Error(`${updated}`);
+            if (typeof (updated) === 'boolean')
+                throw new Error("interno debe estar en false dentro de la api");
+            return resp.json({
+                status: true,
+                data: Object.assign({}, updated)
+            });
+        }
+        else if (person.role === 3 &amp;&amp; prop === 'firstVerification' &amp;&amp; typeof (value) === 'object') {
+            if (value.value)
+                throw new Error(`Error de formato`);
+            const updated = yield (0, querysTecnicos_1.UpdateService)({ id_service, prop: `firstVerification = '${person.name}'`, interno: false });
+            if (value.comment !== '') {
+                const comment = yield (0, querysTecnicos_1.AddComment)({ id_service, person: person.name, comment: `${prop} ${value.comment}` });
+                if (!comment.isInserted)
+                    throw new Error(`${comment.error}`);
+            }
+            if (typeof (updated) === 'string')
+                throw new Error(`${updated}`);
+            if (typeof (updated) === 'boolean')
+                throw new Error("interno debe estar en false dentro de la api");
+            return resp.json({
+                status: true,
+                data: Object.assign({}, updated)
+            });
+        }
+        else {
+            return (0, errorController_1.rError)({ status: 500, msg: `Ningun caso contemplado`, location: 'updateService', resp });
+        }
+    }
+    catch (error) {
+        return (0, errorController_1.rError)({ status: 500, msg: `${error}`, location: 'updateService', resp });
+    }
+});
+exports.updateService = updateService;
+/**
+ * @name updateTask
+ * @description Actualiza las tareas para que se mantengan actualizadas en los procesos de conexión y desconexión
+ * @path {GET} /api/sys/updateTask
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const updateTask = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g;
+    yield ((_f = app_1.server.Task) === null || _f === void 0 ? void 0 : _f.update());
+    return resp.json({
+        status: true,
+        data: { task: (_g = app_1.server.Task) === null || _g === void 0 ? void 0 : _g.getTask().map(t => { return { nameTask: t.nameTask, running: t.running, cron: t.cron }; }) }
+    });
+});
+exports.updateTask = updateTask;
+/**
+ * @name verifyEventsService
+ * @description Verifica las zonas, usuarios y particiones enviadas en el intervalo de consulta del servicio activo
+ * @path {GET} /api/sys/verifyEventsService/:id_service
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :id_service id del servicio activo
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const verifyEventsService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    //Faltan las validaciones de la fecha
+    const { id_service } = req.params;
+    try {
+        // const service = await GetActiveService(id_service);
+        const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service } });
+        if (typeof service === 'string')
+            throw new Error(service);
+        // if (service === undefined) throw new Error(`Servicio no existe`);
+        if (service.length === 0)
+            throw new Error(`Servicio no existe`);
+        const send = {
+            // accounts: [service.accountMW],
+            accounts: [service[0].accountMW],
+            filter: [
+                { code: "'ACZ'", type: 1 },
+                { code: "'ASA'", type: 1 },
+                { code: "'CPA'", type: 1 },
+                { code: "'A'", type: 1 },
+                { code: "'24H'", type: 1 },
+                { code: "'FIRE'", type: 1 },
+                { code: "'SMOKE'", type: 1 },
+                { code: "'P'", type: 1 },
+                { code: "'O'", type: 1 },
+                { code: "'OS'", type: 1 },
+                { code: "'C'", type: 1 },
+                { code: "'CS'", type: 1 }
+            ]
+        };
+        // const start = modDate({ hours: 0, minutes: 0, seconds: 0, dateI: service.entryDate });
+        // const end = modDate({ hours: 0, minutes: 0, seconds: 0, dateI: service.exitDate });
+        const start = (0, functions_1.modDate)({ hours: 0, minutes: 0, seconds: 0, dateI: service[0].entryDate });
+        const end = (0, functions_1.modDate)({ hours: 0, minutes: 0, seconds: 0, dateI: service[0].exitDate });
+        const path = `events/${start.date.date}/${end.date.date}/1?startQuery=${start.time.time.substring(0, 5)}&amp;endQuery=${end.time.time.substring(0, 5)}`;
+        const response = yield (0, apiMW_1.default)(path, send, 'POST');
+        const { status, data, errors } = response.data;
+        if (status &amp;&amp; data) {
+            if (data === null || data === void 0 ? void 0 : data.datos[0].haveEvents) {
+                const alarms = ['ACZ', 'ASA', 'CPA', 'A', '24H', 'FIRE', 'SMOKE', 'P'];
+                const OpCi = ['O', 'OS', 'C', 'CS'];
+                let zones = [];
+                let users = [];
+                data.datos[0].eventos.forEach(ev => {
+                    if (alarms.find(f => f === ev.CodigoAlarma)) {
+                        if (zones.find(f => f === ev.CodigoZona) === undefined) {
+                            zones = [...zones, ev.CodigoZona];
+                        }
+                    }
+                    else if (OpCi.find(f => f === ev.CodigoAlarma)) {
+                        if (users.find(f => f === ev.CodigoUsuario) === undefined) {
+                            users = [...users, ev.CodigoUsuario];
+                        }
+                    }
+                });
+                return resp.json({
+                    status: true,
+                    data: {
+                        zones,
+                        users
+                    }
+                });
+            }
+            else {
+                return resp.json({
+                    status: true,
+                    data: {
+                        zones: [],
+                        users: []
+                    }
+                });
+            }
+        }
+        else {
+            return (0, errorController_1.rError)({ status: 400, msg: errors[0].msg, location: 'verifyEventsService-> apiMW-> events', resp });
+        }
+    }
+    catch (error) {
+        return (0, errorController_1.rError)({ status: 500, msg: `${error}`, location: 'verifyEventsService', resp });
+    }
+});
+exports.verifyEventsService = verifyEventsService;
+/**
+ * @name verifyPassword
+ * @description Verifica que la contraseña enviada por un usuario que ha iniciado sesión corresponda a la registrada en la base de datos
+ * @path {POST} /api/sys/validatePassword
+ * @body {String} password Contraseña a verificar
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const verifyPassword = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { password } = req.body;
+    const token = req.header('x-token');
+    const clave = generar_jwt_1.SECRETORPPRIVATEKEY;
+    const decode = jsonwebtoken_1.default.verify(token, clave);
+    if (typeof (decode) === 'string')
+        return (0, errorController_1.rError)({ status: 400, msg: decode, location: 'validarJWT', resp });
+    const person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id: decode.uid });
+    if (typeof person === 'string')
+        return (0, errorController_1.rError)({ status: 500, msg: person, resp });
+    if (person === undefined)
+        return (0, errorController_1.rError)({ status: 400, msg: 'Persona no existe', resp });
+    if (password !== person.password)
+        return (0, errorController_1.rError)({ status: 400, msg: 'Password invalida', resp });
+    return resp.status(200).json({
+        status: true,
+        data: {
+            isValid: true
+        }
+    });
+});
+exports.verifyPassword = verifyPassword;
+//# sourceMappingURL=sysController.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+    </div>
+
+    <footer class="footer" id="footer">
+      
+    </footer>
+
+    <script src="scripts/third-party/prettify.js"></script>
+    <script src="scripts/third-party/lang-css.js"></script>
+    <script type="text/javascript" src="scripts/misc.js"></script>
+
+    <script>prettyPrint();</script>
+    <script src="scripts/linenumber.js"></script>
+    <script src="scripts/fix-code-block.js"></script>
+    <script src="scripts/fix-navbar.js"></script>
+    
+      <script src="scripts/search.js"></script>
+      <script src="scripts/third-party/fuse.js"></script>
+      <script>
+        var list = [{"title":"ADMIN_CONTROLLER","link":"<a href=\"module-ADMIN_CONTROLLER.html\">ADMIN_CONTROLLER</a>"},{"title":"API-MW","link":"<a href=\"module-API-MW.html\">API-MW</a>"},{"title":"module:API-MW~apiMW","link":"<a href=\"module-API-MW.html#~apiMW\">module:API-MW~apiMW &rtrif; undefined</a>"},{"title":"AUTH_CONTROLLER","link":"<a href=\"module-AUTH_CONTROLLER.html\">AUTH_CONTROLLER</a>"},{"title":"CONSULTAS_BD_TECNICOS","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html\">CONSULTAS_BD_TECNICOS</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddBinnacle","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddBinnacle\">module:CONSULTAS_BD_TECNICOS~AddBinnacle &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddComment","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddComment\">module:CONSULTAS_BD_TECNICOS~AddComment &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddPerson","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddPerson\">module:CONSULTAS_BD_TECNICOS~AddPerson &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~addPersonBD","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~addPersonBD\">module:CONSULTAS_BD_TECNICOS~addPersonBD &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddService","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddService\">module:CONSULTAS_BD_TECNICOS~AddService &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddTechnicalService","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddTechnicalService\">module:CONSULTAS_BD_TECNICOS~AddTechnicalService &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~UserAccess","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~UserAccess\">module:CONSULTAS_BD_TECNICOS~UserAccess &rtrif; undefined</a>"},{"title":"CONSULTAS_SISTEMA_MONITORING-WORKS","link":"<a href=\"module-CONSULTAS_SISTEMA_MONITORING-WORKS.html\">CONSULTAS_SISTEMA_MONITORING-WORKS</a>"},{"title":"ERROR_CONTROLLER","link":"<a href=\"module-ERROR_CONTROLLER.html\">ERROR_CONTROLLER</a>"},{"title":"FILES_CONTROLLER","link":"<a href=\"module-FILES_CONTROLLER.html\">FILES_CONTROLLER</a>"},{"title":"FUNCTIONS","link":"<a href=\"module-FUNCTIONS.html\">FUNCTIONS</a>"},{"title":"module:FUNCTIONS~DecriptRot39","link":"<a href=\"module-FUNCTIONS.html#~DecriptRot39\">module:FUNCTIONS~DecriptRot39 &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~EncriptRot39","link":"<a href=\"module-FUNCTIONS.html#~EncriptRot39\">module:FUNCTIONS~EncriptRot39 &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~esLetra","link":"<a href=\"module-FUNCTIONS.html#~esLetra\">module:FUNCTIONS~esLetra &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~esNumero","link":"<a href=\"module-FUNCTIONS.html#~esNumero\">module:FUNCTIONS~esNumero &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~getDate","link":"<a href=\"module-FUNCTIONS.html#~getDate\">module:FUNCTIONS~getDate &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~getEnterpriceOfTechnicals","link":"<a href=\"module-FUNCTIONS.html#~getEnterpriceOfTechnicals\">module:FUNCTIONS~getEnterpriceOfTechnicals &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~modDate","link":"<a href=\"module-FUNCTIONS.html#~modDate\">module:FUNCTIONS~modDate &rtrif; undefined</a>"},{"title":"HELPERS","link":"<a href=\"module-HELPERS.html\">HELPERS</a>"},{"title":"module:HELPERS~existEmail","link":"<a href=\"module-HELPERS.html#~existEmail\">module:HELPERS~existEmail &rtrif; undefined</a>"},{"title":"module:HELPERS~existEnterprice","link":"<a href=\"module-HELPERS.html#~existEnterprice\">module:HELPERS~existEnterprice &rtrif; undefined</a>"},{"title":"module:HELPERS~ExistPersonInDB","link":"<a href=\"module-HELPERS.html#~ExistPersonInDB\">module:HELPERS~ExistPersonInDB &rtrif; undefined</a>"},{"title":"module:HELPERS~existRole","link":"<a href=\"module-HELPERS.html#~existRole\">module:HELPERS~existRole &rtrif; undefined</a>"},{"title":"module:HELPERS~existRoleinDB","link":"<a href=\"module-HELPERS.html#~existRoleinDB\">module:HELPERS~existRoleinDB &rtrif; undefined</a>"},{"title":"module:HELPERS~existTechnicals","link":"<a href=\"module-HELPERS.html#~existTechnicals\">module:HELPERS~existTechnicals &rtrif; undefined</a>"},{"title":"module:HELPERS~existTypeService","link":"<a href=\"module-HELPERS.html#~existTypeService\">module:HELPERS~existTypeService &rtrif; undefined</a>"},{"title":"module:HELPERS~isDate","link":"<a href=\"module-HELPERS.html#~isDate\">module:HELPERS~isDate &rtrif; undefined</a>"},{"title":"module:HELPERS~validateOptionUpdateEnterprice","link":"<a href=\"module-HELPERS.html#~validateOptionUpdateEnterprice\">module:HELPERS~validateOptionUpdateEnterprice &rtrif; undefined</a>"},{"title":"module:HELPERS~validateOptionUpdatePerson","link":"<a href=\"module-HELPERS.html#~validateOptionUpdatePerson\">module:HELPERS~validateOptionUpdatePerson &rtrif; undefined</a>"},{"title":"module:HELPERS~validEnterprice","link":"<a href=\"module-HELPERS.html#~validEnterprice\">module:HELPERS~validEnterprice &rtrif; undefined</a>"},{"title":"SYS_CONTROLLER","link":"<a href=\"module-SYS_CONTROLLER.html\">SYS_CONTROLLER</a>"},{"title":"Task","link":"<a href=\"Task.html\">Task</a>"},{"title":"Task#add","link":"<a href=\"Task.html#add\">Task &rtrif; add</a>"},{"title":"Task#delete","link":"<a href=\"Task.html#delete\">Task &rtrif; delete</a>"},{"title":"Task#deleteTaskifNotExist","link":"<a href=\"Task.html#deleteTaskifNotExist\">Task &rtrif; deleteTaskifNotExist</a>"},{"title":"Task#getCrons","link":"<a href=\"Task.html#getCrons\">Task &rtrif; getCrons</a>"},{"title":"Task#getTask","link":"<a href=\"Task.html#getTask\">Task &rtrif; getTask</a>"},{"title":"Task#stop","link":"<a href=\"Task.html#stop\">Task &rtrif; stop</a>"},{"title":"Task#update","link":"<a href=\"Task.html#update\">Task &rtrif; update</a>"},{"title":"date","link":"<a href=\"global.html#date\">date</a>"},{"title":"FormatDate","link":"<a href=\"global.html#FormatDate\">FormatDate</a>"},{"title":"PropsAddBinnacle","link":"<a href=\"global.html#PropsAddBinnacle\">PropsAddBinnacle</a>"},{"title":"PropsAddPerson","link":"<a href=\"global.html#PropsAddPerson\">PropsAddPerson</a>"},{"title":"PropsAddService","link":"<a href=\"global.html#PropsAddService\">PropsAddService</a>"},{"title":"RespUserAccess","link":"<a href=\"global.html#RespUserAccess\">RespUserAccess</a>"},{"title":"time","link":"<a href=\"global.html#time\">time</a>"}];
+        var options = 
+          setupSearch(list, options)
+      </script>
+    
+
+    
+
+    
+
+    
+
+
+  </body>
+
+</html>

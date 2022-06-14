@@ -17,6 +17,15 @@ const errorController_1 = require("./errorController");
 const querysTecnicos_1 = require("../querys/querysTecnicos");
 const files_1 = require("../helpers/files");
 const path_1 = __importDefault(require("path"));
+/** @module FILES_CONTROLLER */
+/**
+ * @name sendFile
+ * @description retorna el recurso consultado
+ * @path {GET} /api/files/getImg
+ * @response {Object} response
+ * @response {File} files.ext Retorna un recurso como archivo
+ * @response {Array} [response.errors] Errores en la petición
+ */
 const sendFile = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, img, type } = req.query;
     if (id === undefined || img === undefined || type === undefined)
@@ -28,6 +37,18 @@ const sendFile = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     return (isExist) ? resp.sendFile(directory) : (0, errorController_1.rError)({ status: 404, msg: 'Directorio inexistente', resp });
 });
 exports.sendFile = sendFile;
+/**
+ * @name getImgs
+ * @description Retorna un Arreglo de los nombres de los archivos de un directorio ya sea un Servicio, Persona, Empresa
+ * @path {GET} /api/files/getImgs/:id/:type
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} id id de la persona, servicio, empresa(en proxima actualización)
+ * @body {String} type Tipo de carpeta {'Service' | 'Person' | 'Enterprice'}
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getImgs = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, type } = req.params;
     const directory = path_1.default.join(__dirname, `../../uploads/${type}`, id);
@@ -55,6 +76,17 @@ const getImgs = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     return (Array.isArray(files)) ? resp.status(200).json({ status: true, data: { files } }) : (0, errorController_1.rError)({ status: 500, msg: 'Error en el servidor de archivos...', resp });
 });
 exports.getImgs = getImgs;
+/**
+ * @name deleteFileToService
+ * @description elimina archivos de un servicio en especifico, si la carpeta se queda sin ningun archivo, la carpeta será elimnada
+ * @path {POST} /api/files/deleteFileToService
+ * @body {String} id_service id del servicio activo
+ * @body {String} file Nombre del archivo con su extensión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const deleteFileToService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_service, file } = req.body;
     const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service } });
@@ -112,6 +144,15 @@ const deleteFileToService = (req, resp) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.deleteFileToService = deleteFileToService;
+/**
+ * @name loadFile
+ * @description Carga un archivo en un directorio dentro del servidor
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @path {PUT} /api/files/loadFile/:id/:type
+ * @body {String} id id del servicio, persona o empresa
+ * @body {String} type Tipo de carpeta a guardar 'Service', 'Person', 'Enterprice'
+ * @body {FILE} file Archivo seleccionado con extensión: 'png', 'jpg', 'jpeg'
+ */
 const loadFile = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { id, type } = req.params;
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.file)

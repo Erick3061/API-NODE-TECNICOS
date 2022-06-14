@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from 'express-validator';
-import { addService, getAccountsMW, getActiveServices, getDisponibleTechnicals, getEvents, getInServiceTechnicals, getPersons, getService, getServices, getTask, geyVersionApp, modTechnicalToAService, updateService, updateTask, verifyEventsService, verifyPassword } from "../controller/sysController";
+import { addService, getAccountsMW, getActiveServices, getDisponibleTechnicals, getEvents, getInServiceTechnicals, getPersons, getServiceDetails, getServices, getTask, getVersionApp, modTechnicalToAService, updateService, updateTask, verifyEventsService, verifyPassword } from "../controller/sysController";
 import { ExistPersonInDB, existRoleinDB, existTechnicals, existTypeService, isDate } from "../helpers/db-validators";
 import { validarJWT } from "../middlewares/validar-jwt";
 import { validarCampos } from "../middlewares/validar_campos";
@@ -64,7 +64,7 @@ router.get('/getServiceDetails/:id', [
     validarJWT,
     check('id').notEmpty().withMessage('Campo id requerido').bail(),
     validarCampos
-], getService);
+], getServiceDetails);
 
 router.get('/getServices/:start/:end', [
     validarJWT,
@@ -79,7 +79,7 @@ router.get('/getServices/:start/:end', [
 
 router.get('/getTask', [], getTask);
 
-router.get('/getVersionApp', [], geyVersionApp);
+router.get('/getVersionApp', [], getVersionApp);
 
 router.post('/modTechnicalToAService', [
     validarJWT,

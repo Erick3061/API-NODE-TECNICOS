@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import { pool1, pool2 } from '../db/connection';
+import { pool1 } from '../db/connection';
 import adminRoutes from '../routes/admin';
 import authRoutes from '../routes/auth';
 import sysRoutes from '../routes/sys';
@@ -56,7 +56,6 @@ class Server {
             .then(async () => {
                 this.Con1 = true;
                 console.log('Conexion exitosa TECNICOS');
-                await this.coonectMW(0);
             })
             .catch(() => {
                 console.log('Error al conectar TECNICOS --> Reintentando conectar a TECNICOS...');
@@ -68,24 +67,6 @@ class Server {
                 }
 
             });
-    }
-    async coonectMW(intent: number) {
-        if (this.Con1)
-            pool2.connect()
-                .then(async () => {
-                    this.Con1 = true;
-                    console.log('Conexion exitosa SISTEMA MW');
-                    this.Task = new Task();
-                })
-                .catch(() => {
-                    console.log('Error al conectar SISTEMA MW --> Reintentando conectar a SISTEMA MW...');
-                    if (intent < 5) {
-                        setTimeout(() => this.coonectMW(intent + 1), 3000);
-                    } else {
-                        console.log('Se detuvo el proceso, no se pudo conectar a la base de datos');
-                        process.exit(0);
-                    }
-                });
     }
 
     middlewares() {

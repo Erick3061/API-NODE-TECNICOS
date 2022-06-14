@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Adding favicon -->
+    
+
+    <!-- Adding meta -->
+    
+
+    <!-- Adding external script-->
+    
+
+    <!-- Adding external style-->
+    
+
+    <!-- Adding scripts-->
+    
+
+    <!-- Adding style-->
+    
+
+    <!-- Adding overlay script-->
+    
+
+    <!-- Adding overlay style-->
+    
+
+
+    <title>
+      controller/adminController.js
+    </title>
+
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/third-party/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/third-party/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/reset.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-base.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-light.css">
+    
+    <svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    style="display:none">
+    <defs>
+        <symbol id="copy-icon" viewbox="0 0 488.3 488.3">
+            <g>
+                <path
+                    d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z" />
+                <path
+                    d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z" />
+            </g>
+        </symbol>
+        <symbol id='search-icon' viewBox="0 0 512 512">
+            <g>
+                <g>
+                    <path
+                        d="M225.474,0C101.151,0,0,101.151,0,225.474c0,124.33,101.151,225.474,225.474,225.474    c124.33,0,225.474-101.144,225.474-225.474C450.948,101.151,349.804,0,225.474,0z M225.474,409.323    c-101.373,0-183.848-82.475-183.848-183.848S124.101,41.626,225.474,41.626s183.848,82.475,183.848,183.848    S326.847,409.323,225.474,409.323z" />
+                </g>
+            </g>
+            <g>
+                <g>
+                    <path
+                        d="M505.902,476.472L386.574,357.144c-8.131-8.131-21.299-8.131-29.43,0c-8.131,8.124-8.131,21.306,0,29.43l119.328,119.328    c4.065,4.065,9.387,6.098,14.715,6.098c5.321,0,10.649-2.033,14.715-6.098C514.033,497.778,514.033,484.596,505.902,476.472z" />
+                </g>
+            </g>
+        </symbol>
+        <symbol id="down-icon" viewBox="0 0 16 16">
+            <path 
+                fill-rule="evenodd" 
+                clip-rule="evenodd" 
+                d="M12.7803 6.21967C13.0732 6.51256 13.0732 6.98744 12.7803 7.28033L8.53033 11.5303C8.23744 11.8232 7.76256 11.8232 7.46967 11.5303L3.21967 7.28033C2.92678 6.98744 2.92678 6.51256 3.21967 6.21967C3.51256 5.92678 3.98744 5.92678 4.28033 6.21967L8 9.93934L11.7197 6.21967C12.0126 5.92678 12.4874 5.92678 12.7803 6.21967Z"
+            >
+            </path>
+        </symbol>
+    </defs>
+</svg>
+  </head>
+
+  <body>
+
+    <nav class="navbar" id="navbar">
+      <div class="navbar-heading" id="navbar-heading"><a href="index.html"><h2 class="navbar-heading-text">Home</h2></a></div><div class="search-box" id="search-box"><div class="search-box-input-container"><input class="search-box-input" type="text" placeholder="Search..." id="search-box-input" /><svg class="search-icon" alt="search-icon"><use xlink:href="#search-icon"></use></svg></div><div class="search-item-container" id="search-item-container"><ul class="search-item-ul" id="search-item-ul"></ul></div></div><div class="sidebar-main-content" id="sidebar-main-content"><div class="accordion collapsed" id="1479343" > <h3 class="accordion-heading">Modules<svg><use xlink:href="#down-icon"></use></svg></h3><ul class="accordion-content"><li class="accordion-list" id=""><a href="module-ADMIN_CONTROLLER.html">ADMIN_CONTROLLER</a></li><li class="accordion collapsed child" id=8793646><div class="accordion-heading child"><a href="module-API-MW.html">API-MW</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="module-API-MW.html#~apiMW">apiMW</a></li></ul></li><li class="accordion-list" id=""><a href="module-AUTH_CONTROLLER.html">AUTH_CONTROLLER</a></li><li class="accordion collapsed child" id=4663671><div class="accordion-heading child"><a href="module-CONSULTAS_BD_TECNICOS.html">CONSULTAS_BD_TECNICOS</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddBinnacle">AddBinnacle</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddComment">AddComment</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddPerson">AddPerson</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~addPersonBD">addPersonBD</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddService">AddService</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~AddTechnicalService">AddTechnicalService</a></li><li data-type='method'><a href="module-CONSULTAS_BD_TECNICOS.html#~UserAccess">UserAccess</a></li></ul></li><li class="accordion-list" id=""><a href="module-CONSULTAS_SISTEMA_MONITORING-WORKS.html">CONSULTAS_SISTEMA_MONITORING-WORKS</a></li><li class="accordion-list" id=""><a href="module-ERROR_CONTROLLER.html">ERROR_CONTROLLER</a></li><li class="accordion-list" id=""><a href="module-FILES_CONTROLLER.html">FILES_CONTROLLER</a></li><li class="accordion collapsed child" id=7454642><div class="accordion-heading child"><a href="module-FUNCTIONS.html">FUNCTIONS</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="module-FUNCTIONS.html#~DecriptRot39">DecriptRot39</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~EncriptRot39">EncriptRot39</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~esLetra">esLetra</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~esNumero">esNumero</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~getDate">getDate</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~getEnterpriceOfTechnicals">getEnterpriceOfTechnicals</a></li><li data-type='method'><a href="module-FUNCTIONS.html#~modDate">modDate</a></li></ul></li><li class="accordion collapsed child" id=5426014><div class="accordion-heading child"><a href="module-HELPERS.html">HELPERS</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="module-HELPERS.html#~existEmail">existEmail</a></li><li data-type='method'><a href="module-HELPERS.html#~existEnterprice">existEnterprice</a></li><li data-type='method'><a href="module-HELPERS.html#~ExistPersonInDB">ExistPersonInDB</a></li><li data-type='method'><a href="module-HELPERS.html#~existRole">existRole</a></li><li data-type='method'><a href="module-HELPERS.html#~existRoleinDB">existRoleinDB</a></li><li data-type='method'><a href="module-HELPERS.html#~existTechnicals">existTechnicals</a></li><li data-type='method'><a href="module-HELPERS.html#~existTypeService">existTypeService</a></li><li data-type='method'><a href="module-HELPERS.html#~isDate">isDate</a></li><li data-type='method'><a href="module-HELPERS.html#~validateOptionUpdateEnterprice">validateOptionUpdateEnterprice</a></li><li data-type='method'><a href="module-HELPERS.html#~validateOptionUpdatePerson">validateOptionUpdatePerson</a></li><li data-type='method'><a href="module-HELPERS.html#~validEnterprice">validEnterprice</a></li></ul></li><li class="accordion-list" id=""><a href="module-SYS_CONTROLLER.html">SYS_CONTROLLER</a></li></ul> </div><div class="accordion collapsed" id="5724591" > <h3 class="accordion-heading">Classes<svg><use xlink:href="#down-icon"></use></svg></h3><ul class="accordion-content"><li class="accordion collapsed child" id=1914137><div class="accordion-heading child"><a href="Task.html">Task</a><svg><use xlink:href="#down-icon"></use></svg></div><ul class='methods accordion-content'><li data-type='method'><a href="Task.html#add">add</a></li><li data-type='method'><a href="Task.html#delete">delete</a></li><li data-type='method'><a href="Task.html#deleteTaskifNotExist">deleteTaskifNotExist</a></li><li data-type='method'><a href="Task.html#getCrons">getCrons</a></li><li data-type='method'><a href="Task.html#getTask">getTask</a></li><li data-type='method'><a href="Task.html#stop">stop</a></li><li data-type='method'><a href="Task.html#update">update</a></li></ul></li></ul> </div><div class="accordion collapsed" id="7604178" > <h3 class="accordion-heading">Global<svg><use xlink:href="#down-icon"></use></svg></h3><ul class="accordion-content"><li class="accordion-list" id=""><a href="global.html#date">date</a></li><li class="accordion-list" id=""><a href="global.html#FormatDate">FormatDate</a></li><li class="accordion-list" id=""><a href="global.html#PropsAddBinnacle">PropsAddBinnacle</a></li><li class="accordion-list" id=""><a href="global.html#PropsAddPerson">PropsAddPerson</a></li><li class="accordion-list" id=""><a href="global.html#PropsAddService">PropsAddService</a></li><li class="accordion-list" id=""><a href="global.html#RespUserAccess">RespUserAccess</a></li><li class="accordion-list" id=""><a href="global.html#time">time</a></li></ul> </div>
+      
+
+    </nav>
+    <div class="navbar-ham" id="navbar-ham">
+      <div>
+        <div class="first"></div>
+        <div class="second"></div>
+        <div class="third"></div>
+      </div>
+    </div>
+
+    <div id="main" class="main-content">
+      
+      <h1 id='page-title' class="page-title">
+        controller/adminController.js
+      </h1>
+      
+
+      
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __awaiter = (this &amp;&amp; this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this &amp;&amp; this.__importDefault) || function (mod) {
+    return (mod &amp;&amp; mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getGeneral = exports.Enterprice = exports.addPerson = exports.addEnterprice = exports.actionsPerson = exports.actionsEnterprice = void 0;
+const connection_1 = require("../db/connection");
+const querysTecnicos_1 = require("../querys/querysTecnicos");
+const errorController_1 = require("./errorController");
+const mssql_1 = require("mssql");
+const files_1 = require("../helpers/files");
+const path_1 = __importDefault(require("path"));
+/** @module ADMIN_CONTROLLER */
+/**
+ * @name actionsEnterprice
+ * @description Actuaiza y Elimina la información de la empresa seleccionada o enviada solo se ejecuta una opción a la vez
+ * @path {POST} /api/admin/enterpriceActions
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Object&lt;{id:Number, shortName:String}>} Datos de la empresa a modificar
+ * @body {Object&lt;{updateData:{shortName:String, name:String}}>} Datos que se actualizarán en la empresa seleccionada
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const actionsEnterprice = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { enterprice, option } = req.body;
+    if (option.deleteEnterprice) {
+    }
+    if (option.updateData) {
+        const { rowsAffected: isExist } = yield connection_1.pool1.request()
+            .input('id_enterprice', mssql_1.TYPES.Numeric, enterprice.id)
+            .input('shortName', mssql_1.TYPES.VarChar(50), option.updateData.shortName)
+            .input('name', mssql_1.TYPES.VarChar(150), option.updateData.name)
+            .query(`Select * from enterprice where shortName = @shortName and name = @name and id_enterprice != @id_enterprice`);
+        if (isExist[0] !== 0)
+            return (0, errorController_1.rError)({ status: 400, msg: `Los datos de la emmpresa ya existem`, resp });
+        return yield connection_1.pool1.request()
+            .input('id_enterprice', mssql_1.TYPES.Numeric, enterprice.id)
+            .input('shortName', mssql_1.TYPES.VarChar(50), option.updateData.shortName)
+            .input('name', mssql_1.TYPES.VarChar(150), option.updateData.name)
+            .query(`Update Enterprice set shortName = @shortName, name = @name where id_enterprice = @id_enterprice`)
+            .then(() => resp.status(200).json({
+            status: true,
+            data: {
+                isUpdated: true
+            }
+        }))
+            .catch(err => (0, errorController_1.rError)({ status: 500, msg: `${err}`, resp }));
+    }
+    const Enterprice = yield (0, querysTecnicos_1.GetEnterprices)({ enterprice: { id_enterprice: enterprice.id, shortName: enterprice.shortName } });
+    if (typeof Enterprice === 'string')
+        return (0, errorController_1.rError)({ status: 500, msg: Enterprice, resp });
+    return resp.status(200).json({
+        status: true,
+        data: {
+            enterprice: Enterprice[0]
+        }
+    });
+});
+exports.actionsEnterprice = actionsEnterprice;
+/**
+ * @name actionsPerson
+ * @description Realiza acciones en las personas registradas en la base de datos
+ * @path {POST} /api/admin/personActions
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Ocject&lt;{id:String, role:Number}>} person Datos de la persona a la que se la apicarán los cambios u acciones
+ * @body {Object&lt;{resetPassword:Boolean, deletePerson:Boolean, updateStatus:'ACTIVO', 'INACTIVO',  updateData:{ name: String, lastname: String, email: String, password: String, phoneNumber: String, employeeNumber: String, enterprice: Number, role: Number } }>} optios acciones
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const actionsPerson = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { person, option } = req.body;
+    if (option.resetPassword) {
+        const Person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id: person.id });
+        if (typeof Person === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: Person, resp });
+        if (Person === undefined)
+            return (0, errorController_1.rError)({ status: 400, msg: `Persona inactiva, Activela para restaurar su contraseña`, resp });
+        const passwordWasReset = yield (0, querysTecnicos_1.UpdatePerson)({ id_person: Person.id_person, prop: `password = '${Person.employeeNumber}'` });
+        if (typeof passwordWasReset === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: passwordWasReset, resp });
+        return resp.status(200).json({
+            status: true,
+            data: { passwordWasReset, Person }
+        });
+    }
+    if (option.deletePerson) {
+        const Person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id: person.id, inactive: 'INACTIVO' });
+        if (typeof (Person) === 'object') {
+            if (Person.id_role === 1) {
+                const Technicals = yield (0, querysTecnicos_1.GetTechnicalsInServiceActive)();
+                if (typeof (Technicals) === 'string')
+                    return (0, errorController_1.rError)({ status: 500, msg: Technicals, resp, location: 'GetTechnicalsInServiceActive' });
+                if (Technicals.find(f => f.id_person === Person.id_person))
+                    return (0, errorController_1.rError)({ status: 400, msg: `Técnico: ${Person.personName} ${Person.lastname} esta en servicio`, resp, location: 'deletePerson' });
+            }
+            return yield connection_1.pool1.request().query(`delete Person where id_person = '${Person.id_person}'`).then(() => __awaiter(void 0, void 0, void 0, function* () {
+                const isExistDirectory = yield (0, files_1.existDirectory)(path_1.default.join(__dirname, '../../uploads/Person', Person.id_person));
+                if (isExistDirectory) {
+                    const isDeleted = yield (0, files_1.deleteDirectory)(path_1.default.join(__dirname, '../../uploads/Person', Person.id_person));
+                    console.log(isDeleted);
+                }
+                return resp.status(200).json({ status: true, data: { isDeleted: true } });
+            })).catch(err => (0, errorController_1.rError)({ status: 500, msg: `${err}`, resp, location: 'deletePerson' }));
+        }
+        else {
+            return (0, errorController_1.rError)({ status: 400, msg: `Primero debe Desactivar la persona seleccionada`, resp, location: 'deletePerson' });
+        }
+    }
+    if (option.updateStatus) {
+        if (person.role === 1 &amp;&amp; option.updateStatus === 'INACTIVO') {
+            const Technicals = yield (0, querysTecnicos_1.GetTechnicalsInServiceActive)();
+            if (typeof (Technicals) === 'string')
+                return (0, errorController_1.rError)({ status: 500, msg: Technicals, resp, location: 'GetTechnicalsInServiceActive' });
+            if (Technicals.find(f => f.id_person === person.id))
+                return (0, errorController_1.rError)({ status: 400, msg: `No se puede desactivar un técnico esta en servicio`, resp, location: 'updateStatusPerson' });
+        }
+        const isUpdated = yield (0, querysTecnicos_1.UpdatePerson)({ id_person: person.id, prop: `status = '${option.updateStatus}'` });
+        return (typeof isUpdated === 'string')
+            ? (0, errorController_1.rError)({ status: 500, msg: `${isUpdated}`, resp, location: 'updateStatusPerson' })
+            : resp.status(200).json({ status: true, data: { isUpdated } });
+    }
+    if (option.updateData) {
+        let data = option.updateData;
+        const Person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id: person.id });
+        if (typeof (Person) === 'string')
+            throw (Person);
+        if (Person === undefined)
+            throw ("No existe la persona");
+        const { role, enterprice, email, employeeNumber, lastname, name, password, phoneNumber } = option.updateData;
+        const Enterprices = yield (0, querysTecnicos_1.GetEnterprices)({ shortName: enterprice.shortName });
+        if (typeof Enterprices === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: Enterprices, resp });
+        if (Enterprices.length === 0)
+            return (0, errorController_1.rError)({ status: 400, msg: 'No esiste la empresa', resp });
+        const Roles = yield (0, querysTecnicos_1.GetRoles)({ role: { id_role: role.id, name: role.name } });
+        if (typeof Roles === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: Roles, resp });
+        if (Roles.length === 0)
+            return (0, errorController_1.rError)({ status: 400, msg: 'No existe el Rol', resp });
+        if (employeeNumber === '')
+            return (0, errorController_1.rError)({ status: 400, msg: `La persona no se puede quedar sin numero de empleado`, resp });
+        if (email !== '') {
+            const { recordset: existEmail } = yield connection_1.pool1.request()
+                .input('id_person', mssql_1.TYPES.VarChar(40), person.id)
+                .input('email', mssql_1.TYPES.VarChar, email)
+                .query(`select email from Person where email = @email and id_person != @id_person`);
+            if (existEmail.length > 0)
+                return (0, errorController_1.rError)({ status: 400, msg: `El correo ${email} ya existe`, resp });
+        }
+        if (Person.employeeNumber !== employeeNumber) {
+            const isExistEmployeNumber = yield (0, querysTecnicos_1.ExistEployeeNumber)({ employeeNumber: employeeNumber, id_enterprice: enterprice.id, personExclude: person.id });
+            if (typeof (isExistEmployeNumber) === 'string')
+                return (0, errorController_1.rError)({ status: 500, msg: isExistEmployeNumber, resp });
+            if (isExistEmployeNumber)
+                return (0, errorController_1.rError)({ status: 400, msg: `Número de empleado ya esta asignado a otra persona`, resp });
+            data = (Person.id_role !== 2) ? Object.assign(Object.assign({}, data), { password: data.employeeNumber }) : data;
+        }
+        if (Person.nameUser !== role.user &amp;&amp; data.role.id !== 2) {
+            try {
+                //verificar si la persona tiene un usuario registrado...
+                const isPersonHaveUser = yield (0, querysTecnicos_1.UserAccess)({ id_user: person.id, personHaveUser: { nameUser: role.user } });
+                if (isPersonHaveUser &amp;&amp; !isPersonHaveUser.isPersonHaveUser) { //No tiene usuario enUsers
+                    if (role.user !== '') { //insertar
+                        const existWithoutThisPerson = yield (0, querysTecnicos_1.UserAccess)({ id_user: person.id, existWithoutThisPerson: { nameUser: role.user } });
+                        if (existWithoutThisPerson === null || existWithoutThisPerson === void 0 ? void 0 : existWithoutThisPerson.error)
+                            return (0, errorController_1.rError)({ status: existWithoutThisPerson.error.status, msg: existWithoutThisPerson.error.msg, resp });
+                        const isInserted = yield (0, querysTecnicos_1.UserAccess)({ id_user: person.id, insert: { nameUser: role.user } });
+                        if (isInserted === null || isInserted === void 0 ? void 0 : isInserted.error)
+                            return (0, errorController_1.rError)({ status: isInserted.error.status, msg: isInserted.error.msg, resp });
+                    }
+                }
+                else { //Tiene usuario en users
+                    if (role.user === '') { //delete
+                        const isDeleted = yield (0, querysTecnicos_1.UserAccess)({ id_user: person.id, deleteUser: true });
+                        if (typeof (isDeleted) === 'string')
+                            return (0, errorController_1.rError)({ status: 500, msg: isDeleted, resp });
+                    }
+                    else { //update
+                        const existWithoutThisPerson = yield (0, querysTecnicos_1.UserAccess)({ id_user: person.id, existWithoutThisPerson: { nameUser: role.user } });
+                        if (existWithoutThisPerson === null || existWithoutThisPerson === void 0 ? void 0 : existWithoutThisPerson.error)
+                            return (0, errorController_1.rError)({ status: existWithoutThisPerson.error.status, msg: existWithoutThisPerson.error.msg, resp });
+                        const isUpdated = yield (0, querysTecnicos_1.UserAccess)({ id_user: person.id, update: { nameUser: role.user } });
+                        if (isUpdated === null || isUpdated === void 0 ? void 0 : isUpdated.error)
+                            return (0, errorController_1.rError)({ status: isUpdated.error.status, msg: isUpdated.error.msg, resp });
+                    }
+                }
+            }
+            catch (error) {
+                return (0, errorController_1.rError)({ status: 500, msg: `${error}`, resp });
+            }
+        }
+        const updated = yield (0, querysTecnicos_1.UpdatePerson)({ id_person: person.id, data: { email, employeeNumber, lastname, password: password === undefined ? Person.password : password, personName: name, phoneNumber } });
+        if (typeof (updated) === 'string')
+            return (0, errorController_1.rError)({ status: 500, msg: updated, resp });
+        return resp.status(200).json({
+            status: true,
+            data: {
+                isUpdated: true
+            }
+        });
+    }
+});
+exports.actionsPerson = actionsPerson;
+/**
+ * @name addEnterprice
+ * @description Agrega una empresa
+ * @path {POST} /api/admin/addEnterprice
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Object&lt;{shorName:String, name:String}>} enterprice Datos de la empresa a agregar
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const addEnterprice = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    const { enterprice } = req.body;
+    return yield connection_1.pool1.request()
+        .input('shortName', mssql_1.TYPES.VarChar(50), enterprice.shortName)
+        .input('name', mssql_1.TYPES.VarChar(150), enterprice.name)
+        .query(`Insert into Enterprice( shortName, name ) values ( @shortName, @name )`)
+        .then(() => {
+        return resp.json({
+            status: true,
+            data: {
+                isInserted: true
+            }
+        });
+    })
+        .catch(err => (0, errorController_1.rError)({ status: 500, msg: `${err}`, resp }));
+});
+exports.addEnterprice = addEnterprice;
+/**
+ * @name addPerson
+ * @description Agrega una persona nueva
+ * @path {POST} /api/admin/addPerson
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} name Nombre de la persona
+ * @body {String} lastname Apellidos de la persona
+ * @body {String} [email] Correo electronico de la persona
+ * @body {String} passsword Contraseña de la persona
+ * @body {String} phoneNumber Teléfono de contacto de la persona
+ * @body {String} employeeNumber Número de empleado de la persona
+ * @body {Object&lt;{ id:Number, shorName:String }>} enterprice Datos de la empresa registrada a la que la persona pertenece
+ * @body {Object&lt;{ id:Number, name:String, user:String, '' }>} role Rol que desempeña la persona al igual si no tiene un correo se le asigna un usuario para su acceso a las diferentes aplicaciones por rol
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+  */
+const addPerson = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    let body = req.body;
+    const { error, isInserted } = yield (0, querysTecnicos_1.addPersonBD)(body);
+    return (isInserted)
+        ? resp.status(isInserted.status).json({ status: true, data: { isInserted: true } })
+        : (error) ? (0, errorController_1.rError)({ status: error.status, msg: error.msg, resp, location: 'addPersonBD' }) : (0, errorController_1.rError)({ status: 500, msg: 'desconocido', resp });
+});
+exports.addPerson = addPerson;
+const Enterprice = (req, resp) => __awaiter(void 0, void 0, void 0, function* () { });
+exports.Enterprice = Enterprice;
+/**
+ * @name getGeneral
+ * @description Obtiene los parámetros generales de empresas, roles, y tipo de servicio
+ * @path {GET} /api/sys/getGeneral
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getGeneral = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const Enterprices = yield (0, querysTecnicos_1.GetEnterprices)({});
+        const Roles = yield (0, querysTecnicos_1.GetRoles)({});
+        const ServicesTypes = yield (0, querysTecnicos_1.GetTypes)({});
+        if (typeof (Enterprices) !== 'string' &amp;&amp; typeof (Roles) !== 'string' &amp;&amp; typeof (ServicesTypes) !== 'string') {
+            return resp.status(200).json({
+                status: true,
+                data: {
+                    Enterprices,
+                    Roles,
+                    ServicesTypes
+                }
+            });
+        }
+        else {
+            let error = (typeof (Enterprices) === 'string' &amp;&amp; typeof (Roles) === 'string') ? `No hay Empresas y Roles de persona registrados `
+                : (typeof (Enterprices) === 'string') ? Enterprices : (typeof (Roles) === 'string') ? Roles : '';
+            resp.status(500).json({
+                status: false,
+                errors: [
+                    {
+                        value: '',
+                        msg: `Error en el servidor. Error: ${error}`,
+                        location: 'getUsersMon',
+                        param: '',
+                    }
+                ]
+            });
+        }
+    }
+    catch (error) {
+        resp.status(500).json({
+            status: false,
+            errors: [
+                {
+                    value: '',
+                    msg: `Error en el servidor. Error: ${error}`,
+                    location: 'getUsersMon',
+                    param: '',
+                }
+            ]
+        });
+    }
+});
+exports.getGeneral = getGeneral;
+//# sourceMappingURL=adminController.js.map</code></pre>
+        </article>
+    </section>
+
+
+
+
+    </div>
+
+    <footer class="footer" id="footer">
+      
+    </footer>
+
+    <script src="scripts/third-party/prettify.js"></script>
+    <script src="scripts/third-party/lang-css.js"></script>
+    <script type="text/javascript" src="scripts/misc.js"></script>
+
+    <script>prettyPrint();</script>
+    <script src="scripts/linenumber.js"></script>
+    <script src="scripts/fix-code-block.js"></script>
+    <script src="scripts/fix-navbar.js"></script>
+    
+      <script src="scripts/search.js"></script>
+      <script src="scripts/third-party/fuse.js"></script>
+      <script>
+        var list = [{"title":"ADMIN_CONTROLLER","link":"<a href=\"module-ADMIN_CONTROLLER.html\">ADMIN_CONTROLLER</a>"},{"title":"API-MW","link":"<a href=\"module-API-MW.html\">API-MW</a>"},{"title":"module:API-MW~apiMW","link":"<a href=\"module-API-MW.html#~apiMW\">module:API-MW~apiMW &rtrif; undefined</a>"},{"title":"AUTH_CONTROLLER","link":"<a href=\"module-AUTH_CONTROLLER.html\">AUTH_CONTROLLER</a>"},{"title":"CONSULTAS_BD_TECNICOS","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html\">CONSULTAS_BD_TECNICOS</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddBinnacle","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddBinnacle\">module:CONSULTAS_BD_TECNICOS~AddBinnacle &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddComment","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddComment\">module:CONSULTAS_BD_TECNICOS~AddComment &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddPerson","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddPerson\">module:CONSULTAS_BD_TECNICOS~AddPerson &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~addPersonBD","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~addPersonBD\">module:CONSULTAS_BD_TECNICOS~addPersonBD &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddService","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddService\">module:CONSULTAS_BD_TECNICOS~AddService &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~AddTechnicalService","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~AddTechnicalService\">module:CONSULTAS_BD_TECNICOS~AddTechnicalService &rtrif; undefined</a>"},{"title":"module:CONSULTAS_BD_TECNICOS~UserAccess","link":"<a href=\"module-CONSULTAS_BD_TECNICOS.html#~UserAccess\">module:CONSULTAS_BD_TECNICOS~UserAccess &rtrif; undefined</a>"},{"title":"CONSULTAS_SISTEMA_MONITORING-WORKS","link":"<a href=\"module-CONSULTAS_SISTEMA_MONITORING-WORKS.html\">CONSULTAS_SISTEMA_MONITORING-WORKS</a>"},{"title":"ERROR_CONTROLLER","link":"<a href=\"module-ERROR_CONTROLLER.html\">ERROR_CONTROLLER</a>"},{"title":"FILES_CONTROLLER","link":"<a href=\"module-FILES_CONTROLLER.html\">FILES_CONTROLLER</a>"},{"title":"FUNCTIONS","link":"<a href=\"module-FUNCTIONS.html\">FUNCTIONS</a>"},{"title":"module:FUNCTIONS~DecriptRot39","link":"<a href=\"module-FUNCTIONS.html#~DecriptRot39\">module:FUNCTIONS~DecriptRot39 &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~EncriptRot39","link":"<a href=\"module-FUNCTIONS.html#~EncriptRot39\">module:FUNCTIONS~EncriptRot39 &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~esLetra","link":"<a href=\"module-FUNCTIONS.html#~esLetra\">module:FUNCTIONS~esLetra &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~esNumero","link":"<a href=\"module-FUNCTIONS.html#~esNumero\">module:FUNCTIONS~esNumero &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~getDate","link":"<a href=\"module-FUNCTIONS.html#~getDate\">module:FUNCTIONS~getDate &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~getEnterpriceOfTechnicals","link":"<a href=\"module-FUNCTIONS.html#~getEnterpriceOfTechnicals\">module:FUNCTIONS~getEnterpriceOfTechnicals &rtrif; undefined</a>"},{"title":"module:FUNCTIONS~modDate","link":"<a href=\"module-FUNCTIONS.html#~modDate\">module:FUNCTIONS~modDate &rtrif; undefined</a>"},{"title":"HELPERS","link":"<a href=\"module-HELPERS.html\">HELPERS</a>"},{"title":"module:HELPERS~existEmail","link":"<a href=\"module-HELPERS.html#~existEmail\">module:HELPERS~existEmail &rtrif; undefined</a>"},{"title":"module:HELPERS~existEnterprice","link":"<a href=\"module-HELPERS.html#~existEnterprice\">module:HELPERS~existEnterprice &rtrif; undefined</a>"},{"title":"module:HELPERS~ExistPersonInDB","link":"<a href=\"module-HELPERS.html#~ExistPersonInDB\">module:HELPERS~ExistPersonInDB &rtrif; undefined</a>"},{"title":"module:HELPERS~existRole","link":"<a href=\"module-HELPERS.html#~existRole\">module:HELPERS~existRole &rtrif; undefined</a>"},{"title":"module:HELPERS~existRoleinDB","link":"<a href=\"module-HELPERS.html#~existRoleinDB\">module:HELPERS~existRoleinDB &rtrif; undefined</a>"},{"title":"module:HELPERS~existTechnicals","link":"<a href=\"module-HELPERS.html#~existTechnicals\">module:HELPERS~existTechnicals &rtrif; undefined</a>"},{"title":"module:HELPERS~existTypeService","link":"<a href=\"module-HELPERS.html#~existTypeService\">module:HELPERS~existTypeService &rtrif; undefined</a>"},{"title":"module:HELPERS~isDate","link":"<a href=\"module-HELPERS.html#~isDate\">module:HELPERS~isDate &rtrif; undefined</a>"},{"title":"module:HELPERS~validateOptionUpdateEnterprice","link":"<a href=\"module-HELPERS.html#~validateOptionUpdateEnterprice\">module:HELPERS~validateOptionUpdateEnterprice &rtrif; undefined</a>"},{"title":"module:HELPERS~validateOptionUpdatePerson","link":"<a href=\"module-HELPERS.html#~validateOptionUpdatePerson\">module:HELPERS~validateOptionUpdatePerson &rtrif; undefined</a>"},{"title":"module:HELPERS~validEnterprice","link":"<a href=\"module-HELPERS.html#~validEnterprice\">module:HELPERS~validEnterprice &rtrif; undefined</a>"},{"title":"SYS_CONTROLLER","link":"<a href=\"module-SYS_CONTROLLER.html\">SYS_CONTROLLER</a>"},{"title":"Task","link":"<a href=\"Task.html\">Task</a>"},{"title":"Task#add","link":"<a href=\"Task.html#add\">Task &rtrif; add</a>"},{"title":"Task#delete","link":"<a href=\"Task.html#delete\">Task &rtrif; delete</a>"},{"title":"Task#deleteTaskifNotExist","link":"<a href=\"Task.html#deleteTaskifNotExist\">Task &rtrif; deleteTaskifNotExist</a>"},{"title":"Task#getCrons","link":"<a href=\"Task.html#getCrons\">Task &rtrif; getCrons</a>"},{"title":"Task#getTask","link":"<a href=\"Task.html#getTask\">Task &rtrif; getTask</a>"},{"title":"Task#stop","link":"<a href=\"Task.html#stop\">Task &rtrif; stop</a>"},{"title":"Task#update","link":"<a href=\"Task.html#update\">Task &rtrif; update</a>"},{"title":"date","link":"<a href=\"global.html#date\">date</a>"},{"title":"FormatDate","link":"<a href=\"global.html#FormatDate\">FormatDate</a>"},{"title":"PropsAddBinnacle","link":"<a href=\"global.html#PropsAddBinnacle\">PropsAddBinnacle</a>"},{"title":"PropsAddPerson","link":"<a href=\"global.html#PropsAddPerson\">PropsAddPerson</a>"},{"title":"PropsAddService","link":"<a href=\"global.html#PropsAddService\">PropsAddService</a>"},{"title":"RespUserAccess","link":"<a href=\"global.html#RespUserAccess\">RespUserAccess</a>"},{"title":"time","link":"<a href=\"global.html#time\">time</a>"}];
+        var options = 
+          setupSearch(list, options)
+      </script>
+    
+
+    
+
+    
+
+    
+
+
+  </body>
+
+</html>

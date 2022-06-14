@@ -5,7 +5,69 @@ import { Role, Service, TypeService, Binnacle, Comment } from '../rules/response
 import { v4 as uuidv4 } from 'uuid';
 import { pool1 } from '../db/connection';
 
+/**
+ * @typedef {Object} PropsAddPerson
+ * @property {string} id_person id único
+ * @property {number} id_enterprice id de empresa
+ * @property {number} id_role id rol que desempeña
+ * @property {string} name Nombre de la persona
+ * @property {string} lastname Apellidos de la persona
+ * @property {string | null} email Correo
+ * @property {string} password Contraseña
+ * @property {string | null} phoneNumber Número telefónico
+ * @property {string} employeeNumber Número de empleado
+ */
 
+/**
+ * @typedef {Object} PropsAddBinnacle
+ * @property {string} id_service id único
+ * @property {string} zones JSON convertido a string
+ * @property {string} missingZones JSON convertido a string
+ * @property {string} zonesUndefined JSON convertido a string
+ * @property {string} users JSON convertido a string
+ * @property {string} missingUsers JSON convertido a string
+ * @property {string} usersUndefined JSON convertido a string
+ * @property {string} link Estado del enlace
+ * @property {string} technicals Arreglo convertido a string
+ */
+
+/**
+ * @typedef {Object} PropsAddService
+ * @property {string} id_service
+ * @property {string} grantedEntry
+ * @property {number} id_type
+ * @property {string} folio
+ * @property {Date} entryDate
+ * @property {Date} exitDate
+ * @property {string} accountMW
+ * @property {string} digital
+ * @property {string} nameAccount
+ * @property {boolean} isKeyCode
+ * @property {boolean} isOpCi
+ * @property {string} cron
+ */
+
+/**
+ * @typedef {Object} Body
+ */
+
+/**
+ * @typedef {Object} RespUserAccess
+ * @property {Object<{status:number, msg:string}>} [error] Si se hubo algún error
+ * @property {boolean} [isExist] si existe el usuario mandado
+ * @property {boolean} [isPersonHaveUser] si el usuario mandado le pertenece a la persona ingresada
+ * @property {boolean} [isInserted] si la persona inserto un dato correctamente
+ * @property {boolean} [isUpdated] si  los datos de la persona fuerpn actuaizados correctamente
+ * @property {boolean} [isDeleted] si la persona fue eliminada correctamente
+ */
+
+/**@module CONSULTAS_BD_TECNICOS */
+
+/**
+ * Agrega una persona a la base de datos
+ * @param {PropsAddPerson} data 
+ * @returns {Promise<{ isInserted: boolean} | { isInserted: boolean, error: string }>}
+ */
 export const AddPerson = async (data: PropsAddPerson) => {
     return await pool1.request()
         .input('id_person', TYPES.VarChar(40), data.id_person)
@@ -33,6 +95,11 @@ export const AddPerson = async (data: PropsAddPerson) => {
         })
 }
 
+/**
+ * Agrega un comentario a un servicio
+ * @param {Object<{id_service: string, person: string, comment: string}>} data Datos del comentario
+ * @returns { Promise<{ isInserted: boolean } | {isInserted: boolean, error: string }> }
+ */
 export const AddComment = async (data: PropsAddComment) => {
     return await pool1.request()
         .input('id_service', TYPES.VarChar(40), data.id_service)
@@ -54,6 +121,11 @@ export const AddComment = async (data: PropsAddComment) => {
         })
 }
 
+/**
+ * Agrega la bitácora del servicio cuando ya se ha liberado
+ * @param {PropsAddBinnacle} data Datos de la bitácora
+ * @returns {Promise<{ isInserted: boolean} | { isInserted: boolean, error: string }>} 
+ */
 export const AddBinnacle = async (data: PropsAddBinnacle) => {
     return await pool1.request()
         .input('id_service', TYPES.VarChar(40), data.id_service)
@@ -81,6 +153,11 @@ export const AddBinnacle = async (data: PropsAddBinnacle) => {
         })
 }
 
+/**
+ * Agrega un nuevo servicio
+ * @param {PropsAddService} data 
+ * @returns {Promise<{ isInserted: boolean} | { isInserted: boolean, error: string }>} 
+ */
 export const AddService = async (data: PropsAddService) => {
     return await pool1.request()
         .input('id_service', TYPES.VarChar(40), data.id_service)
@@ -112,6 +189,11 @@ export const AddService = async (data: PropsAddService) => {
         })
 }
 
+/**
+ * Proceso que hace la verifiación de usuarios registrados al momento de actualizar alguna persona, eliminacion de una persona y actualización de datos de la persona
+ * @param {Object} props { id_user: string | null; insert?: { nameUser: string; }; deleteUser?: boolean; update?: { nameUser: string; }; exist?: { nameUser: string; id_role?: number; }; existWithoutThisPerson?: { nameUser: string; }; personHaveUser?: { nameUser: string; }; }
+ * @returns {Promise<RespUserAccess>}
+ */
 export const UserAccess = async (props: { id_user: string | null, insert?: { nameUser: string; }, deleteUser?: boolean, update?: { nameUser: string; }, exist?: { nameUser: string, id_role?: number }, existWithoutThisPerson?: { nameUser: string; }, personHaveUser?: { nameUser: string; } }) => {
     if (Object.keys(props).length > 2) return { error: { status: 400, msg: `Propiedades invalidas ${Object.keys(props)}` } };
 
@@ -172,6 +254,12 @@ export const UserAccess = async (props: { id_user: string | null, insert?: { nam
 
 }
 
+/**
+ * 
+ * @param {String} id_service id del servicio. (Debe ser un servicio activo )
+ * @param {String} id_technical id del técnico. (Debe ser un técnico disponible; no asignado a un servicio).
+ * @returns {Promise<{ isInserted: boolean } | { isInserted: boolean, error: string }>}
+ */
 export const AddTechnicalService = async (id_service: string, id_technical: string) => {
     return await pool1.request()
         .input('id_service', TYPES.VarChar(40), id_service)
@@ -185,6 +273,11 @@ export const AddTechnicalService = async (id_service: string, id_technical: stri
         })
 }
 
+/**
+ * Agrega una persona a la base de datos
+ * @param person 
+ * @returns {Promise<{ error: { status: number, msg: string }, isInserted: undefined } | { isInserted: { status: number }, error: undefined }>}
+ */
 export const addPersonBD = async (person: bodyPerson) => {
     const id_person = uuidv4();
     const exist = await GetPersonGeneral({ id: id_person });

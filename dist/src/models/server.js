@@ -25,7 +25,6 @@ const express_fileupload_1 = __importDefault(require("express-fileupload"));
 /*Servers */
 const https_1 = __importDefault(require("https"));
 const http_1 = __importDefault(require("http"));
-const task_1 = __importDefault(require("./task"));
 class Server {
     constructor() {
         this.Con1 = false;
@@ -55,7 +54,6 @@ class Server {
                 .then(() => __awaiter(this, void 0, void 0, function* () {
                 this.Con1 = true;
                 console.log('Conexion exitosa TECNICOS');
-                yield this.coonectMW(0);
             }))
                 .catch(() => {
                 console.log('Error al conectar TECNICOS --> Reintentando conectar a TECNICOS...');
@@ -67,27 +65,6 @@ class Server {
                     process.exit(0);
                 }
             });
-        });
-    }
-    coonectMW(intent) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.Con1)
-                connection_1.pool2.connect()
-                    .then(() => __awaiter(this, void 0, void 0, function* () {
-                    this.Con1 = true;
-                    console.log('Conexion exitosa SISTEMA MW');
-                    this.Task = new task_1.default();
-                }))
-                    .catch(() => {
-                    console.log('Error al conectar SISTEMA MW --> Reintentando conectar a SISTEMA MW...');
-                    if (intent < 5) {
-                        setTimeout(() => this.coonectMW(intent + 1), 3000);
-                    }
-                    else {
-                        console.log('Se detuvo el proceso, no se pudo conectar a la base de datos');
-                        process.exit(0);
-                    }
-                });
         });
     }
     middlewares() {

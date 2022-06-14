@@ -17,6 +17,11 @@ const connection_1 = require("../db/connection");
 const querysTecnicos_1 = require("../querys/querysTecnicos");
 const moment_1 = __importDefault(require("moment"));
 ;
+/**@module HELPERS */
+/**
+ * @description Verifica si no existe la empresa
+ * @param {Object<{ id: Number, shortName: String}>}
+ */
 const existEnterprice = ({ id, shortName }) => __awaiter(void 0, void 0, void 0, function* () {
     if (!id)
         throw new Error("El campo id del objeto enterprice es obligatorio");
@@ -32,6 +37,10 @@ const existEnterprice = ({ id, shortName }) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.existEnterprice = existEnterprice;
+/**
+ * Verifica si existe la empresa
+ * @param {Object<{ shorName:String, name:String }>}
+ */
 const validEnterprice = ({ shortName, name }) => __awaiter(void 0, void 0, void 0, function* () {
     if (!name)
         throw new Error("El campo id del objeto enterprice es obligatorio");
@@ -47,6 +56,11 @@ const validEnterprice = ({ shortName, name }) => __awaiter(void 0, void 0, void 
     }
 });
 exports.validEnterprice = validEnterprice;
+/**
+ * Valida las opciones para poder eliminar o actualizar los datos de una empresa
+ * @param {Object<{deleteEnterprice: Boolean | Undefined, updateData:Object<{shortName:String , name:String}>}>} option
+ * @returns True:Todos los valores excelentes, False: Valores inválidos
+ */
 const validateOptionUpdateEnterprice = (option) => {
     const entries = Object.entries(option);
     if (entries.length > 1)
@@ -77,6 +91,11 @@ const validateOptionUpdateEnterprice = (option) => {
         throw new Error("Nimgún caso contemplado");
 };
 exports.validateOptionUpdateEnterprice = validateOptionUpdateEnterprice;
+/**
+ * Valida si las opciones para editar o actualizar una persona son validas
+ * @param {Object} option
+ * @returns True:Todo correcto
+ */
 const validateOptionUpdatePerson = (option) => {
     const entries = Object.entries(option);
     if (entries.length > 1)
@@ -120,6 +139,11 @@ const validateOptionUpdatePerson = (option) => {
         throw new Error("Nimgún caso contemplado");
 };
 exports.validateOptionUpdatePerson = validateOptionUpdatePerson;
+/**
+ * Valida si existe el rol de usuario
+ * @param {Object<{id:Number, name:String, user:String , Undefined}>} props
+ * @param {Request} req
+ */
 const existRole = ({ id, name, user }, req) => __awaiter(void 0, void 0, void 0, function* () {
     const body = req.body;
     if (!id)
@@ -147,6 +171,10 @@ const existRole = ({ id, name, user }, req) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.existRole = existRole;
+/**
+ * Valida si existe el correo enviado
+ * @param {String} email correo enviado
+ */
 const existEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { rowsAffected } = yield connection_1.pool1.request().query(`select * from Person where email='${email}'`);
@@ -158,6 +186,11 @@ const existEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.existEmail = existEmail;
+/**
+ * Verifica si existe el tipo de servicio
+ * @param {Number} id_type id del tipo
+ * @returns Boolean
+ */
 const existTypeService = (id_type) => __awaiter(void 0, void 0, void 0, function* () {
     const type = yield (0, querysTecnicos_1.GetTypes)({ id_type });
     if (typeof (type) === 'string')
@@ -167,6 +200,11 @@ const existTypeService = (id_type) => __awaiter(void 0, void 0, void 0, function
     return true;
 });
 exports.existTypeService = existTypeService;
+/**
+ * Verifica si existe la persona en la base de datos
+ * @param {Object<{id:String, role:Number}>} param
+ * @returns Boolean
+ */
 const ExistPersonInDB = ({ id, role }) => __awaiter(void 0, void 0, void 0, function* () {
     const person = yield (0, querysTecnicos_1.GetPersonGeneral)({ id, role });
     if (typeof (person) === 'string')
@@ -181,6 +219,12 @@ const ExistPersonInDB = ({ id, role }) => __awaiter(void 0, void 0, void 0, func
     return true;
 });
 exports.ExistPersonInDB = ExistPersonInDB;
+/**
+ * Verifica si existe el técnico
+ * @param {Array<string>} technicals
+ * @param { Array<string,any >} query
+ * @returns Boolean
+ */
 const existTechnicals = (technicals, query) => __awaiter(void 0, void 0, void 0, function* () {
     if (technicals.length === 0)
         throw new Error(`Debes asignar al menos un tecnico a este servicio`);
@@ -204,6 +248,11 @@ const existTechnicals = (technicals, query) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.existTechnicals = existTechnicals;
+/**
+ * Verifica si existe el identificador de rol de una persona
+ * @param {string} id_role Rol de persona
+ * @returns Boolean
+ */
 const existRoleinDB = (id_role) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(id_role);
     if (id === 850827)
@@ -216,6 +265,11 @@ const existRoleinDB = (id_role) => __awaiter(void 0, void 0, void 0, function* (
     return true;
 });
 exports.existRoleinDB = existRoleinDB;
+/**
+ * Verifica si es una fecha valida
+ * @param {string} date Fecha
+ * @returns Boolean
+ */
 const isDate = (date) => {
     if ((0, moment_1.default)(date, "YYYY-MM-DD", true).isValid())
         return true;

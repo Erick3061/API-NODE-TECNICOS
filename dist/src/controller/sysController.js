@@ -23,7 +23,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyPassword = exports.verifyEventsService = exports.updateTask = exports.updateService = exports.modTechnicalToAService = exports.geyVersionApp = exports.getTask = exports.getServices = exports.getService = exports.getPersons = exports.getInServiceTechnicals = exports.getEvents = exports.getDisponibleTechnicals = exports.getActiveServices = exports.getAccountsMW = exports.addService = void 0;
+exports.verifyPassword = exports.verifyEventsService = exports.updateTask = exports.updateService = exports.modTechnicalToAService = exports.getVersionApp = exports.getTask = exports.getServices = exports.getServiceDetails = exports.getPersons = exports.getInServiceTechnicals = exports.getEvents = exports.getDisponibleTechnicals = exports.getActiveServices = exports.getAccountsMW = exports.addService = void 0;
 const querysTecnicos_1 = require("../querys/querysTecnicos");
 const functions_1 = require("../functions/functions");
 const uuid_1 = require("uuid");
@@ -35,11 +35,32 @@ const apiMW_1 = __importDefault(require("../api/apiMW"));
 const generar_jwt_1 = require("../helpers/generar-jwt");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const app_1 = require("../../app");
-/** @module SYSCONTROLLER */
+const filter = [
+    { code: "ACZ", type: 1 },
+    { code: "ASA", type: 1 },
+    { code: "CPA", type: 1 },
+    { code: "A", type: 1 },
+    { code: "24H", type: 1 },
+    { code: "FIRE", type: 1 },
+    { code: "SMOKE", type: 1 },
+    { code: "P", type: 1 },
+    { code: "O", type: 1 },
+    { code: "OS", type: 1 },
+    { code: "C", type: 1 },
+    { code: "CS", type: 1 }
+];
 /**
- * @name Agregar un servicio
+ * @name addService
+ * @description -Agrega un servicio
  * @path {POST} /api/sys/addService
- * @body {id_type: number; grantedEntry: ExistPerson; CodigoCte: string; technicals: Array<string>; isKeyCode: boolean; isOpCi: boolean; time: PropsMoreTime; } parametros a insertar
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Object<{id:String, role:Number}>} grantedEntry -Datos del monitorista que esta creando el servicio, id:Identificador único, role:Rol que desempeña
+ * @body {Number} id_type -Tipo de servicio
+ * @body {String} CodigoCte -Número de cliente registrado en Monitoring Works
+ * @body {Boolean} isKeyCode -True: Ver claves de usuario del panel, False: Ocultar claves de usuario del panel
+ * @body {Boolean} isOpCi -True: Verifica aperturas o cierres, False: No verifica aperturas o cierres
+ * @body {Array<string>} technicals -Identificadores únicos de los tecnicos que estan realizando el servicio. (Debe contener al menos un identificador)
+ * @body {Object<{hours: Number, minutes: Number, seconds: Number}>} time -Tiempo límite para realizar el servicio
  * @response {Object} response
  * @response {Boolean} response.status Estado de la petición
  * @response {Array} [response.errors] Errores en la petición
@@ -51,7 +72,7 @@ const addService = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
         if (time.hours < 2)
             return (0, errorController_1.rError)({ status: 401, msg: 'Minimo deben ser 2 hrs', location: 'addService', resp, });
         const id_service = (0, uuid_1.v4)();
-        const response = yield (0, apiMW_1.default)(`informationAccount/${CodigoCte}`, {}, 'GET');
+        const response = yield (0, apiMW_1.default)(`single-account/${CodigoCte}`, {}, 'GET');
         const { status, data, errors } = response.data;
         if (status && data) {
             const { rowsAffected } = yield connection_1.pool1.request().query(`select accountMW from Service where accountMW='${CodigoCte}' and isActive = 'true'`);
@@ -100,9 +121,11 @@ const addService = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.addService = addService;
 /**
- * @name Agregar obtener todas las cuentas de MW
+ * @name getAccountsMW
+ * @description Obtiene todas las cuentas de MW
  * @path {GET} /api/sys/getAccountsMW
- * @param {String} :id_service Identificador del servicio si solo se desea una cuenta
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {String} [id_service] -Si solo se desea la cuenta asignada de Monitoring Works del servicio ingresado
  * @response {Object} response
  * @response {Boolean} response.status Estado de la petición
  * @response {Array} [response.errors] Errores en la petición
@@ -119,7 +142,7 @@ const getAccountsMW = (req, resp) => __awaiter(void 0, void 0, void 0, function*
             // if (service === undefined) throw new Error(`Servicio no existe`);
             if (service.length === 0)
                 throw new Error(`Servicio no existe`);
-            const response = yield (0, apiMW_1.default)(`informationAccount/${service[0].accountMW}?moreInfo=true`, {}, 'GET');
+            const response = yield (0, apiMW_1.default)(`single-account/${service[0].accountMW}?more=true`, {}, 'GET');
             const { status, data, errors } = response.data;
             if (status && data) {
                 return resp.status(200).json({
@@ -132,7 +155,7 @@ const getAccountsMW = (req, resp) => __awaiter(void 0, void 0, void 0, function*
             }
         }
         else {
-            const response = yield (0, apiMW_1.default)('allAccounts', {}, 'GET');
+            const response = yield (0, apiMW_1.default)('all-accounts', {}, 'GET');
             const { status, data, errors } = response.data;
             if (status && data) {
                 return resp.status(200).json({
@@ -150,6 +173,17 @@ const getAccountsMW = (req, resp) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.getAccountsMW = getAccountsMW;
+/**
+ * @name getActiveServices
+ * @description -Obtiene todos los servivios activos
+ * @path {GET} /api/sys/getActiveServices
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {String} [id_service] -Si solo se requiere un servicio activo
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getActiveServices = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const services = yield (0, querysTecnicos_1.GetActiveServices)({});
@@ -215,6 +249,17 @@ const getActiveServices = (req, resp) => __awaiter(void 0, void 0, void 0, funct
     });
 });
 exports.getActiveServices = getActiveServices;
+/**
+ * @name getDisponibleTechnicals
+ * @description -Obtiene todos los tecnicos activos
+ * @path {GET} /api/sys/getDisponibleTechnicals
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {Object<{ id_enterprice: number, shortName: string, name: string }>} [enterprice] -Filtra los técnicos activos por empresa y envia solo los que coinciden a la empresa enviada
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getDisponibleTechnicals = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const technicals = yield (0, querysTecnicos_1.GetDisponibleTechnical)();
     const { enterprice } = req.query;
@@ -238,6 +283,19 @@ const getDisponibleTechnicals = (req, resp) => __awaiter(void 0, void 0, void 0,
     });
 });
 exports.getDisponibleTechnicals = getDisponibleTechnicals;
+/**
+ * @name getEvents
+ * @description Obtiene los eventos que llegaron a Monitoring  Works de una cuenta asignada a un servicio activo.
+ * @path {GET} /api/sys/getEvents/:id_service/:start/:end
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :id_service -Identificador del servicio activo.
+ * @param {String} :start -Fecha inicial de consulta
+ * @param {String} :end -Fecha final de consulta
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getEvents = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { id_service, start, end } = req.params;
     try {
@@ -250,20 +308,12 @@ const getEvents = (req, resp) => __awaiter(void 0, void 0, void 0, function* () 
             throw new Error(`Servicio no existe`);
         const send = {
             accounts: [service[0].accountMW],
-            filter: [
-                { code: "'ACZ'", type: 1 },
-                { code: "'ASA'", type: 1 },
-                { code: "'CPA'", type: 1 },
-                { code: "'A'", type: 1 },
-                { code: "'24H'", type: 1 },
-                { code: "'FIRE'", type: 1 },
-                { code: "'SMOKE'", type: 1 },
-                { code: "'P'", type: 1 },
-                { code: "'O'", type: 1 },
-                { code: "'OS'", type: 1 },
-                { code: "'C'", type: 1 },
-                { code: "'CS'", type: 1 }
-            ]
+            filter,
+            exclude: false,
+            orderBy: 'ASC',
+            typeOrder: 'FechaHora',
+            typeAccounts: 'A',
+            ignoreGroups: false
         };
         const [startDate, startTime] = start.split('T');
         const [endDate, endTime] = end.split('T');
@@ -271,11 +321,12 @@ const getEvents = (req, resp) => __awaiter(void 0, void 0, void 0, function* () 
         const response = yield (0, apiMW_1.default)(path, send, 'POST');
         const { status, data, errors } = response.data;
         if (status && data) {
-            if (data === null || data === void 0 ? void 0 : data.datos[0].haveEvents) {
+            console.log(data);
+            if (data[0].haveEvents) {
                 return resp.status(200).json({
                     status: true,
                     data: {
-                        events: data.datos[0].eventos
+                        events: data[0].eventos
                     }
                 });
             }
@@ -297,6 +348,16 @@ const getEvents = (req, resp) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getEvents = getEvents;
+/**
+ * @name getInServiceTechnicals
+ * @description Obtiene los técnicos que están en sitio o en algún servicio activo
+ * @path {GET} /api/sys/getInServiceTechnicals
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getInServiceTechnicals = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const technicals = yield (0, querysTecnicos_1.GetTechnicalsInServiceActive)();
     if (typeof (technicals) === 'string')
@@ -309,6 +370,17 @@ const getInServiceTechnicals = (req, resp) => __awaiter(void 0, void 0, void 0, 
     });
 });
 exports.getInServiceTechnicals = getInServiceTechnicals;
+/**
+ * @name getPersons
+ * @description Obtiene todas las personas registradas o por rol que pertenecen a la misma empresa que realizo el inicio se sesión
+ * @path {GET} /api/sys/getPersons/:role
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión (Este filtra el personal que contenga el mismo id de empresa)
+ * @param {String} :role -1: Técnicos, 2: Monitoristas u operadores, 3: Encargados de técnicos, 850827: Todo el personal
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getPersons = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const params = req.params;
     const id = parseInt(params.role);
@@ -340,7 +412,18 @@ const getPersons = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     });
 });
 exports.getPersons = getPersons;
-const getService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+/**
+ * @name getServiceDetails
+ * @description Obtiene los detalles de un ervicio ya culminado
+ * @path {GET} /api/sys/getServiceDetails/:id
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :role -1: Técnicos, 2: Monitoristas u operadores, 3: Encargados de técnicos, 850827: Todo el personal
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getServiceDetails = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
     // const service = await GetActiveService(id, true);
     const service = yield (0, querysTecnicos_1.GetActiveServices)({ service: { id_service: id, selected: true } });
@@ -358,7 +441,21 @@ const getService = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
         data: { service: service[0], binnacle, comments }
     });
 });
-exports.getService = getService;
+exports.getServiceDetails = getServiceDetails;
+/**
+ * @name getServices
+ * @description Obtiene los servicios activos e inactivos por intervalo de fecha. (Solo se puede consultar un filtro a la vez)
+ * @path {GET} /api/sys/getServices/:start/:end
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :start -Fecha inicial de consulta
+ * @param {String} :end -Fecha final de consulta
+ * @query {String} [technical] -Filtra los servicios que le pertenecen a este técnico
+ * @query {String} [account] -Filtra los servicios que le pertenecen a esta cuenta
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getServices = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { start, end } = req.params;
     const { technical, account } = req.query;
@@ -377,7 +474,7 @@ const getServices = (req, resp) => __awaiter(void 0, void 0, void 0, function* (
         });
     }
     if (account) {
-        const response = yield (0, apiMW_1.default)(`informationAccount/${account}`, {}, 'GET');
+        const response = yield (0, apiMW_1.default)(`single-account/${account}`, {}, 'GET');
         const { status, data, errors } = response.data;
         if (errors)
             return (0, errorController_1.rError)({ status: 400, msg: `${errors[0].msg}`, resp });
@@ -437,6 +534,15 @@ const getServices = (req, resp) => __awaiter(void 0, void 0, void 0, function* (
     });
 });
 exports.getServices = getServices;
+/**
+ * @name getTask
+ * @description Obtiene las tareas programadas proximas a ejecutarse, al igual que el estado de los servicios activos
+ * @path {GET} /api/sys/getTask
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getTask = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     return resp.json({
@@ -445,7 +551,16 @@ const getTask = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.getTask = getTask;
-const geyVersionApp = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
+/**
+ * @name getVersionApp
+ * @description Obtiene la versión de la aplicacion movil.
+ * @path {GET} /api/sys/getVersionApp
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+const getVersionApp = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     return yield connection_1.pool1.request()
         .query(`select * from VersionApp`)
         .then(({ recordset }) => {
@@ -456,7 +571,21 @@ const geyVersionApp = (req, resp) => __awaiter(void 0, void 0, void 0, function*
     })
         .catch(err => (0, errorController_1.rError)({ status: 500, msg: `${err}`, resp }));
 });
-exports.geyVersionApp = geyVersionApp;
+exports.getVersionApp = getVersionApp;
+/**
+ * @name modTechnicalToAService
+ * @description Elimina Técnico del servicio por error de asignación ó se le asigna o restringe el folio de ese servicio. (Funciona cuando hay mas de 2 técnicos asignados al servicio), Solo se puede hacer una opción a la vez o elimnar o (asignar o desasignar el folio del servicio) de un tecnico a la vez.
+ * @path {POST} /api/sys/modTechnicalToAService
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} :id_service id del servicio, Este debe ser un servicio activo.
+ * @body {Array<String>} :technicals Arreglo con los id de los tecnicos enviados o seleccionados aunque solo se tomará la primer posición (Se tomará en cuenta el tamaño total del arreglo en una actualizacón posterior)
+ * @query {Boolean} [del] Para eliminar al técnico
+ * @query {Boolean} [sf] Para dejar con o sin folio al técnico
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const modTechnicalToAService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { id_service, technicals } = req.body;
@@ -540,6 +669,20 @@ const modTechnicalToAService = (req, resp) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.modTechnicalToAService = modTechnicalToAService;
+/**
+ * @name updateService
+ * @description Realiza varias opciones del sericio activo (UNA A LA VEZ)
+ * @path {POST} /api/sys/updateService
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} :id_service id del servicio activo.
+ * @body {Object<{ id:String, role:Number, name:String }>} :person Datos del monitorista o encargado que realiza la acción
+ * @body {'isKeyCode' | 'isDelivered' | 'accountMW' | 'firstVerification' | 'secondVerification' | 'moreTime' | 'SF' | 'EF' | 'TS'} :prop Opcion que realizará el proceso
+ * @body {Object<{comment:String, moreTime:{hours:Number, minutes:Number, seconds:Number}}>} :value comment: Para agregar un comentario , moreTime:Para asignar mas tiempo limite al servico
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const updateService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     var _c, _d, _e;
     /**Hay que regresar los datos a como estaban en el caso de error revisar mas tarde */
@@ -685,6 +828,15 @@ const updateService = (req, resp) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.updateService = updateService;
+/**
+ * @name updateTask
+ * @description Actualiza las tareas para que se mantengan actualizadas en los procesos de conexión y desconexión
+ * @path {GET} /api/sys/updateTask
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const updateTask = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     var _f, _g;
     yield ((_f = app_1.server.Task) === null || _f === void 0 ? void 0 : _f.update());
@@ -694,6 +846,17 @@ const updateTask = (req, resp) => __awaiter(void 0, void 0, void 0, function* ()
     });
 });
 exports.updateTask = updateTask;
+/**
+ * @name verifyEventsService
+ * @description Verifica las zonas, usuarios y particiones enviadas en el intervalo de consulta del servicio activo
+ * @path {GET} /api/sys/verifyEventsService/:id_service
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :id_service id del servicio activo
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const verifyEventsService = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     //Faltan las validaciones de la fecha
     const { id_service } = req.params;
@@ -708,20 +871,12 @@ const verifyEventsService = (req, resp) => __awaiter(void 0, void 0, void 0, fun
         const send = {
             // accounts: [service.accountMW],
             accounts: [service[0].accountMW],
-            filter: [
-                { code: "'ACZ'", type: 1 },
-                { code: "'ASA'", type: 1 },
-                { code: "'CPA'", type: 1 },
-                { code: "'A'", type: 1 },
-                { code: "'24H'", type: 1 },
-                { code: "'FIRE'", type: 1 },
-                { code: "'SMOKE'", type: 1 },
-                { code: "'P'", type: 1 },
-                { code: "'O'", type: 1 },
-                { code: "'OS'", type: 1 },
-                { code: "'C'", type: 1 },
-                { code: "'CS'", type: 1 }
-            ]
+            filter,
+            exclude: false,
+            orderBy: 'ASC',
+            typeOrder: 'FechaHora',
+            typeAccounts: 'A',
+            ignoreGroups: false
         };
         // const start = modDate({ hours: 0, minutes: 0, seconds: 0, dateI: service.entryDate });
         // const end = modDate({ hours: 0, minutes: 0, seconds: 0, dateI: service.exitDate });
@@ -731,12 +886,12 @@ const verifyEventsService = (req, resp) => __awaiter(void 0, void 0, void 0, fun
         const response = yield (0, apiMW_1.default)(path, send, 'POST');
         const { status, data, errors } = response.data;
         if (status && data) {
-            if (data === null || data === void 0 ? void 0 : data.datos[0].haveEvents) {
+            if (data[0].haveEvents) {
                 const alarms = ['ACZ', 'ASA', 'CPA', 'A', '24H', 'FIRE', 'SMOKE', 'P'];
                 const OpCi = ['O', 'OS', 'C', 'CS'];
                 let zones = [];
                 let users = [];
-                data.datos[0].eventos.forEach(ev => {
+                data[0].eventos.forEach(ev => {
                     if (alarms.find(f => f === ev.CodigoAlarma)) {
                         if (zones.find(f => f === ev.CodigoZona) === undefined) {
                             zones = [...zones, ev.CodigoZona];
@@ -775,6 +930,16 @@ const verifyEventsService = (req, resp) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.verifyEventsService = verifyEventsService;
+/**
+ * @name verifyPassword
+ * @description Verifica que la contraseña enviada por un usuario que ha iniciado sesión corresponda a la registrada en la base de datos
+ * @path {POST} /api/sys/validatePassword
+ * @body {String} password Contraseña a verificar
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const verifyPassword = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     const { password } = req.body;
     const token = req.header('x-token');

@@ -8,32 +8,41 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getUsersMon = void 0;
-const connection_1 = require("../db/connection");
+const apiMW_1 = __importDefault(require("../api/apiMW"));
 const functions_1 = require("../functions/functions");
+/**@module CONSULTAS_SISTEMA_MONITORING-WORKS */
+/**
+ * @name getUsersMon
+ * @description Obtiene todos los usuarios y contraseñas de los monitoristas de Mw
+ * @path {GET} /api/sys/getUsersMon
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 const getUsersMon = (req, resp) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rowsAffected, recordset } = yield connection_1.pool2.request().query(`select CodigoUsuario, Contraseña as password, Nombre from Usuario where Inactivo='false'`);
-        if (rowsAffected[0] !== 0) {
-            return resp.json({
+        const response = yield (0, apiMW_1.default)(`system-users`, {}, 'GET');
+        const { status, data, errors } = response.data;
+        // const { rowsAffected, recordset }: IResult<resp> = await pool2.request().query(`select CodigoUsuario, Contraseña as password, Nombre from Usuario where Inactivo='false'`);
+        if (status && data) {
+            return resp.status(200).json({
                 status: true,
                 data: {
-                    users: recordset.map(el => { return { user: el.CodigoUsuario.trim(), password: (0, functions_1.DecriptRot39)(el.password.trim()), name: el.Nombre.trim() }; })
+                    users: data.usuarios.map(el => { return { user: el.CodigoUsuario.trim(), password: (0, functions_1.DecriptRot39)(el.password.trim()), name: el.Nombre.trim() }; })
                 }
             });
         }
         else {
-            return resp.status(200).json({
+            return resp.status(400).json({
                 status: false,
-                errors: [
-                    {
-                        value: '',
-                        msg: 'Error al obtener Usuarios MW',
-                        location: 'getUsersMon',
-                        param: '',
-                    }
-                ]
+                errors
             });
         }
     }

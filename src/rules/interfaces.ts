@@ -253,16 +253,13 @@ export interface event {
     FechaFinalizo: string;
     HoraFinalizo: string;
 }
-export interface datos {
+export interface RespgetEvents {
     Nombre: string;
     Direccion: string;
     CodigoCte: string;
     CodigoAbonado: string;
     haveEvents: boolean;
     eventos: Array<event>
-}
-export interface RespgetEvents {
-    datos: Array<datos>
 }
 
 export interface partition {

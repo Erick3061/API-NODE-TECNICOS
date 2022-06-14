@@ -10,12 +10,21 @@ interface task {
     running: boolean;
     task: ScheduledTask;
 }
-
+/**
+ * @class Task
+ */
 class Task {
     task: Array<task> = [];
+    /**
+     * Obtiene todos los Cron que están registrados en la base de datos de servicios activos
+     */
     constructor() {
         this.getCrons();
     }
+    /**
+     * Elimina la tarea si el servicio ya esta terminado o expiró el tiempo del servicio.
+     * @param {Array<Service>} services Arreglo de servicios
+     */
     async deleteTaskifNotExist(services: Array<Service>) {
         console.log(`verificando tareas`);
         if (services.length === 0) {
@@ -31,6 +40,9 @@ class Task {
         }
     }
 
+    /**
+     * Obtiene todas las tareas programadas, solo de servicios activos
+     */
     async getCrons() {
         const services = await GetActiveServices({});
         const dateActual = modDate({ hours: 0, minutes: 0, seconds: 0 });
@@ -50,9 +62,16 @@ class Task {
             }
         }
     }
-
+    /**
+     * Retorna todas las tareas programadas 
+     * @returns {Array<Object>} {Array<{nameTask: string, cron: string, running: boolean, task: ScheduledTask}>}
+     */
     public getTask() { return this.task; }
 
+    /**
+     * Para una tarea en ejecución
+     * @param {String} nameTask id del servicio o nombre de la tarea
+     */
     stop(nameTask: string) {
         const idx = this.task.findIndex(f => f.nameTask === nameTask);
         if (idx !== -1) {
@@ -63,6 +82,12 @@ class Task {
         }
     }
 
+    /**
+     * Agrega una nueva tarea
+     * @param {String} id_service id de servicio
+     * @param {String} expire cuando expira Cron ( * * * * * )->( minuto hora día(día del mes) mes dia(dia de la semana 1-Lunes...6-sabado, 0-domingo) )
+     * @param {boolean} isTimeExpired si el tiempo expiró
+     */
     public add(id_service: string, expire: string, isTimeExpired: boolean) {
         const cron = require('node-cron');
         const task: ScheduledTask = cron.schedule(expire, async () => {
@@ -81,6 +106,9 @@ class Task {
         this.task = [...this.task, { nameTask: id_service, running: (isTimeExpired) ? false : true, task, cron: expire }];
     }
 
+    /**
+     * Actualiza todos los estados de las tareas y verifica si es necesario terminarlas o violverlas a activar...
+     */
     public async update() {
         this.task.map(t => this.stop(t.nameTask));
         console.log(`Tareasparadas`, this.task);
@@ -90,6 +118,10 @@ class Task {
         console.log(`tareas actualizadas`, this.task.map(t => t.nameTask));
     }
 
+    /**
+     * Para la tarea y posteriormente la elimina.
+     * @param {String} id_service nombre de la tarea
+     */
     public delete(id_service: string) {
         this.stop(id_service);
         this.task = this.task.filter(f => f.nameTask !== id_service);

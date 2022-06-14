@@ -1,4 +1,4 @@
-import { Request, Response, json } from 'express';
+import { Request, Response } from 'express';
 import { account, administrator, Person, ResponseApi } from '../rules/interfaces';
 import { GetPersonGeneral, GetTechnicalInService, UpdatePerson } from '../querys/querysTecnicos';
 import { generarJWT, SECRETORPPRIVATEKEY } from '../helpers/generar-jwt';
@@ -10,6 +10,19 @@ import apiMW from "../api/apiMW";
 import { existDirectory, getFiles } from '../helpers/files';
 import path from 'path';
 
+/** @module AUTH_CONTROLLER */
+
+/**
+ * @name LogIn
+ * @description Inicio de sesión
+ * @path {POST} /api/auth/logIn
+ * @body {String} acceso usuario o correo electrónico
+ * @body {String} password Contraseña
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const LogIn = async (req: Request, resp: Response) => {
     let Service: Service | undefined = undefined;
     let AccountMW: account | undefined = undefined;
@@ -32,7 +45,7 @@ export const LogIn = async (req: Request, resp: Response) => {
             if (typeof (resp) !== 'string') {
                 Service = resp;
                 if (Service) {
-                    const response = await apiMW(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
+                    const response = await apiMW(`single-account/${Service.accountMW}?more=true`, {}, 'GET');
                     const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
                     if (status === true) {
                         AccountMW = data?.account
@@ -51,6 +64,16 @@ export const LogIn = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * @name tokenValido 
+ * @description valida el Json Web Token y retorna el los datos de la persona. (Inicio de sesion automático) 
+ * @path {GET} /api/auth/validaJWT
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const tokenValido = async (req: Request, resp: Response) => {
     let Service: Service | undefined = undefined;
     let AccountMW: account | undefined = undefined;
@@ -66,7 +89,7 @@ export const tokenValido = async (req: Request, resp: Response) => {
         if (typeof (resp) !== 'string') {
             Service = resp;
             if (Service) {
-                const response = await apiMW(`informationAccount/${Service.accountMW}?moreInfo=true`, {}, 'GET');
+                const response = await apiMW(`single-account/${Service.accountMW}?more=true`, {}, 'GET');
                 const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
                 if (status === true) {
                     AccountMW = data?.account
@@ -82,6 +105,17 @@ export const tokenValido = async (req: Request, resp: Response) => {
     });
 }
 
+/**
+ * @name ChangePassword
+ * @description Cambia la contraseña de un usuario.
+ * @path {POST} /api/auth/changePassword
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} password Contraseña nueva
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const ChangePassword = async (req: Request, resp: Response) => {
     try {
         const { password }: { password: string } = req.body;
@@ -104,6 +138,19 @@ export const ChangePassword = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * @name ForgetPassword
+ * @description Restaura la contraseña de un usuario de la aplicacion móvil
+ * @path /sys/auth/resetPassword
+ * @body {String} access correo electrónico o usuario
+ * @body {String} name Nombre de la persona
+ * @body {String} lastName Apellidos de la persona
+ * @body {String} employeeNumber Número de empleado de la persona
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const ForgetPassword = async (req: Request, resp: Response) => {
     try {
         const { access, name, lastName, employeeNumber } = req.body;

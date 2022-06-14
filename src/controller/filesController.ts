@@ -5,6 +5,16 @@ import { deleteDirectory, deleteFile, existDirectory, getFiles, upLoadFile } fro
 import path from 'path';
 import { responseLoadedFile } from '../rules/interfaces';
 
+/** @module FILES_CONTROLLER */
+
+/**
+ * @name sendFile
+ * @description retorna el recurso consultado
+ * @path {GET} /api/files/getImg
+ * @response {Object} response
+ * @response {File} files.ext Retorna un recurso como archivo
+ * @response {Array} [response.errors] Errores en la petición
+ */
 export const sendFile = async (req: Request, resp: Response) => {
     const { id, img, type } = req.query;
     if (id === undefined || img === undefined || type === undefined) return rError({ status: 404, msg: 'Error faltan parametros', resp });
@@ -14,6 +24,18 @@ export const sendFile = async (req: Request, resp: Response) => {
     return (isExist) ? resp.sendFile(directory) : rError({ status: 404, msg: 'Directorio inexistente', resp });
 }
 
+/**
+ * @name getImgs
+ * @description Retorna un Arreglo de los nombres de los archivos de un directorio ya sea un Servicio, Persona, Empresa
+ * @path {GET} /api/files/getImgs/:id/:type
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} id id de la persona, servicio, empresa(en proxima actualización)
+ * @body {String} type Tipo de carpeta {'Service' | 'Person' | 'Enterprice'}
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const getImgs = async (req: Request, resp: Response) => {
     const { id, type } = req.params;
     const directory: string = path.join(__dirname, `../../uploads/${type}`, id);
@@ -39,6 +61,17 @@ export const getImgs = async (req: Request, resp: Response) => {
     return (Array.isArray(files)) ? resp.status(200).json({ status: true, data: { files } }) : rError({ status: 500, msg: 'Error en el servidor de archivos...', resp });
 }
 
+/**
+ * @name deleteFileToService
+ * @description elimina archivos de un servicio en especifico, si la carpeta se queda sin ningun archivo, la carpeta será elimnada
+ * @path {POST} /api/files/deleteFileToService
+ * @body {String} id_service id del servicio activo
+ * @body {String} file Nombre del archivo con su extensión 
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const deleteFileToService = async (req: Request, resp: Response) => {
     const { id_service, file } = req.body;
     const service = await GetActiveServices({ service: { id_service } });
@@ -91,6 +124,15 @@ export const deleteFileToService = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * @name loadFile 
+ * @description Carga un archivo en un directorio dentro del servidor
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @path {PUT} /api/files/loadFile/:id/:type
+ * @body {String} id id del servicio, persona o empresa
+ * @body {String} type Tipo de carpeta a guardar 'Service', 'Person', 'Enterprice'
+ * @body {FILE} file Archivo seleccionado con extensión: 'png', 'jpg', 'jpeg'
+ */
 export const loadFile = async (req: Request, resp: Response) => {
     const { id, type } = req.params;
     if (!req.files || Object.keys(req.files).length === 0 || !req.files.file) return rError({ status: 400, msg: 'No hay archivos que subir', resp });

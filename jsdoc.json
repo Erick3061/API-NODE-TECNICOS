@@ -1,0 +1,24 @@
+{
+    "plugins": [
+        "jsdoc-http-plugin"
+    ],
+    "source": {
+        "include": [
+            "dist"
+        ],
+        "includePattern": ".js$",
+        "excludePattern": "(node_modules|interfaces|docs|public)"
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "opts": {
+        "recurse": "true",
+        "template": "./node_modules/clean-jsdoc-theme",
+        "destination": "./doc",
+        "theme_opts": {
+            "theme": "light"
+        }
+    }
+}

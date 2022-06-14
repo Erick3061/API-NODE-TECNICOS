@@ -57,7 +57,7 @@ router.get('/getServiceDetails/:id', [
     validar_jwt_1.validarJWT,
     (0, express_validator_1.check)('id').notEmpty().withMessage('Campo id requerido').bail(),
     validar_campos_1.validarCampos
-], sysController_1.getService);
+], sysController_1.getServiceDetails);
 router.get('/getServices/:start/:end', [
     validar_jwt_1.validarJWT,
     (0, express_validator_1.check)('start')
@@ -69,7 +69,7 @@ router.get('/getServices/:start/:end', [
     validar_campos_1.validarCampos
 ], sysController_1.getServices);
 router.get('/getTask', [], sysController_1.getTask);
-router.get('/getVersionApp', [], sysController_1.geyVersionApp);
+router.get('/getVersionApp', [], sysController_1.getVersionApp);
 router.post('/modTechnicalToAService', [
     validar_jwt_1.validarJWT,
     (0, express_validator_1.check)('id_service').notEmpty().withMessage('Campo servicio requerido').bail(),

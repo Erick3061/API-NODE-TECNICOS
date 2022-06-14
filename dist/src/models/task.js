@@ -15,11 +15,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const querysTecnicos_1 = require("../querys/querysTecnicos");
 const moment_1 = __importDefault(require("moment"));
 const functions_1 = require("../functions/functions");
+/**
+ * @class Task
+ */
 class Task {
+    /**
+     * Obtiene todos los Cron que están registrados en la base de datos de servicios activos
+     */
     constructor() {
         this.task = [];
         this.getCrons();
     }
+    /**
+     * Elimina la tarea si el servicio ya esta terminado o expiró el tiempo del servicio.
+     * @param {Array<Service>} services Arreglo de servicios
+     */
     deleteTaskifNotExist(services) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log(`verificando tareas`);
@@ -37,6 +47,9 @@ class Task {
             }
         });
     }
+    /**
+     * Obtiene todas las tareas programadas, solo de servicios activos
+     */
     getCrons() {
         return __awaiter(this, void 0, void 0, function* () {
             const services = yield (0, querysTecnicos_1.GetActiveServices)({});
@@ -60,7 +73,15 @@ class Task {
             }
         });
     }
+    /**
+     * Retorna todas las tareas programadas
+     * @returns {Array<Object>} {Array<{nameTask: string, cron: string, running: boolean, task: ScheduledTask}>}
+     */
     getTask() { return this.task; }
+    /**
+     * Para una tarea en ejecución
+     * @param {String} nameTask id del servicio o nombre de la tarea
+     */
     stop(nameTask) {
         const idx = this.task.findIndex(f => f.nameTask === nameTask);
         if (idx !== -1) {
@@ -71,6 +92,12 @@ class Task {
             console.log(`servicio no encontrado`);
         }
     }
+    /**
+     * Agrega una nueva tarea
+     * @param {String} id_service id de servicio
+     * @param {String} expire cuando expira Cron ( * * * * * )->( minuto hora día(día del mes) mes dia(dia de la semana 1-Lunes...6-sabado, 0-domingo) )
+     * @param {boolean} isTimeExpired si el tiempo expiró
+     */
     add(id_service, expire, isTimeExpired) {
         const cron = require('node-cron');
         const task = cron.schedule(expire, () => __awaiter(this, void 0, void 0, function* () {
@@ -87,6 +114,9 @@ class Task {
         }), { scheduled: (isTimeExpired) ? false : true });
         this.task = [...this.task, { nameTask: id_service, running: (isTimeExpired) ? false : true, task, cron: expire }];
     }
+    /**
+     * Actualiza todos los estados de las tareas y verifica si es necesario terminarlas o violverlas a activar...
+     */
     update() {
         return __awaiter(this, void 0, void 0, function* () {
             this.task.map(t => this.stop(t.nameTask));
@@ -97,6 +127,10 @@ class Task {
             console.log(`tareas actualizadas`, this.task.map(t => t.nameTask));
         });
     }
+    /**
+     * Para la tarea y posteriormente la elimina.
+     * @param {String} id_service nombre de la tarea
+     */
     delete(id_service) {
         this.stop(id_service);
         this.task = this.task.filter(f => f.nameTask !== id_service);

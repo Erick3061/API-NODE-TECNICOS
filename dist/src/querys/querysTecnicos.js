@@ -25,6 +25,63 @@ const mssql_1 = require("mssql");
 const app_1 = require("../../app");
 const uuid_1 = require("uuid");
 const connection_1 = require("../db/connection");
+/**
+ * @typedef {Object} PropsAddPerson
+ * @property {string} id_person id único
+ * @property {number} id_enterprice id de empresa
+ * @property {number} id_role id rol que desempeña
+ * @property {string} name Nombre de la persona
+ * @property {string} lastname Apellidos de la persona
+ * @property {string | null} email Correo
+ * @property {string} password Contraseña
+ * @property {string | null} phoneNumber Número telefónico
+ * @property {string} employeeNumber Número de empleado
+ */
+/**
+ * @typedef {Object} PropsAddBinnacle
+ * @property {string} id_service id único
+ * @property {string} zones JSON convertido a string
+ * @property {string} missingZones JSON convertido a string
+ * @property {string} zonesUndefined JSON convertido a string
+ * @property {string} users JSON convertido a string
+ * @property {string} missingUsers JSON convertido a string
+ * @property {string} usersUndefined JSON convertido a string
+ * @property {string} link Estado del enlace
+ * @property {string} technicals Arreglo convertido a string
+ */
+/**
+ * @typedef {Object} PropsAddService
+ * @property {string} id_service
+ * @property {string} grantedEntry
+ * @property {number} id_type
+ * @property {string} folio
+ * @property {Date} entryDate
+ * @property {Date} exitDate
+ * @property {string} accountMW
+ * @property {string} digital
+ * @property {string} nameAccount
+ * @property {boolean} isKeyCode
+ * @property {boolean} isOpCi
+ * @property {string} cron
+ */
+/**
+ * @typedef {Object} Body
+ */
+/**
+ * @typedef {Object} RespUserAccess
+ * @property {Object<{status:number, msg:string}>} [error] Si se hubo algún error
+ * @property {boolean} [isExist] si existe el usuario mandado
+ * @property {boolean} [isPersonHaveUser] si el usuario mandado le pertenece a la persona ingresada
+ * @property {boolean} [isInserted] si la persona inserto un dato correctamente
+ * @property {boolean} [isUpdated] si  los datos de la persona fuerpn actuaizados correctamente
+ * @property {boolean} [isDeleted] si la persona fue eliminada correctamente
+ */
+/**@module CONSULTAS_BD_TECNICOS */
+/**
+ * Agrega una persona a la base de datos
+ * @param {PropsAddPerson} data
+ * @returns {Promise<{ isInserted: boolean} | { isInserted: boolean, error: string }>}
+ */
 const AddPerson = (data) => __awaiter(void 0, void 0, void 0, function* () {
     return yield connection_1.pool1.request()
         .input('id_person', mssql_1.TYPES.VarChar(40), data.id_person)
@@ -50,6 +107,11 @@ const AddPerson = (data) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.AddPerson = AddPerson;
+/**
+ * Agrega un comentario a un servicio
+ * @param {Object<{id_service: string, person: string, comment: string}>} data Datos del comentario
+ * @returns { Promise<{ isInserted: boolean } | {isInserted: boolean, error: string }> }
+ */
 const AddComment = (data) => __awaiter(void 0, void 0, void 0, function* () {
     return yield connection_1.pool1.request()
         .input('id_service', mssql_1.TYPES.VarChar(40), data.id_service)
@@ -69,6 +131,11 @@ const AddComment = (data) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.AddComment = AddComment;
+/**
+ * Agrega la bitácora del servicio cuando ya se ha liberado
+ * @param {PropsAddBinnacle} data Datos de la bitácora
+ * @returns {Promise<{ isInserted: boolean} | { isInserted: boolean, error: string }>}
+ */
 const AddBinnacle = (data) => __awaiter(void 0, void 0, void 0, function* () {
     return yield connection_1.pool1.request()
         .input('id_service', mssql_1.TYPES.VarChar(40), data.id_service)
@@ -94,6 +161,11 @@ const AddBinnacle = (data) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.AddBinnacle = AddBinnacle;
+/**
+ * Agrega un nuevo servicio
+ * @param {PropsAddService} data
+ * @returns {Promise<{ isInserted: boolean} | { isInserted: boolean, error: string }>}
+ */
 const AddService = (data) => __awaiter(void 0, void 0, void 0, function* () {
     return yield connection_1.pool1.request()
         .input('id_service', mssql_1.TYPES.VarChar(40), data.id_service)
@@ -124,6 +196,11 @@ const AddService = (data) => __awaiter(void 0, void 0, void 0, function* () {
     });
 });
 exports.AddService = AddService;
+/**
+ * Proceso que hace la verifiación de usuarios registrados al momento de actualizar alguna persona, eliminacion de una persona y actualización de datos de la persona
+ * @param {Object} props { id_user: string | null; insert?: { nameUser: string; }; deleteUser?: boolean; update?: { nameUser: string; }; exist?: { nameUser: string; id_role?: number; }; existWithoutThisPerson?: { nameUser: string; }; personHaveUser?: { nameUser: string; }; }
+ * @returns {Promise<RespUserAccess>}
+ */
 const UserAccess = (props) => __awaiter(void 0, void 0, void 0, function* () {
     if (Object.keys(props).length > 2)
         return { error: { status: 400, msg: `Propiedades invalidas ${Object.keys(props)}` } };
@@ -184,6 +261,12 @@ const UserAccess = (props) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.UserAccess = UserAccess;
+/**
+ *
+ * @param {String} id_service id del servicio. (Debe ser un servicio activo )
+ * @param {String} id_technical id del técnico. (Debe ser un técnico disponible; no asignado a un servicio).
+ * @returns {Promise<{ isInserted: boolean } | { isInserted: boolean, error: string }>}
+ */
 const AddTechnicalService = (id_service, id_technical) => __awaiter(void 0, void 0, void 0, function* () {
     return yield connection_1.pool1.request()
         .input('id_service', mssql_1.TYPES.VarChar(40), id_service)
@@ -197,6 +280,11 @@ const AddTechnicalService = (id_service, id_technical) => __awaiter(void 0, void
     });
 });
 exports.AddTechnicalService = AddTechnicalService;
+/**
+ * Agrega una persona a la base de datos
+ * @param person
+ * @returns {Promise<{ error: { status: number, msg: string }, isInserted: undefined } | { isInserted: { status: number }, error: undefined }>}
+ */
 const addPersonBD = (person) => __awaiter(void 0, void 0, void 0, function* () {
     const id_person = (0, uuid_1.v4)();
     const exist = yield (0, exports.GetPersonGeneral)({ id: id_person });

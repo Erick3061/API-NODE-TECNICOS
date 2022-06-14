@@ -1,5 +1,5 @@
-import e, { Request, Response } from 'express';
-import { GetIndexService, GetPersons, GetDisponibleTechnical, AddService, AddTechnicalService, GetTechnicalsInServiceActive, GetActiveServices, GetTypes, UpdateService, DeleteTechnicaltoService, AddComment, AddBinnacle, UpdateTechnical, GetServices, GetService, GetPersonGeneral } from '../querys/querysTecnicos';
+import { Request, Response } from 'express';
+import { GetIndexService, GetPersons, GetDisponibleTechnical, AddService, AddTechnicalService, GetTechnicalsInServiceActive, GetActiveServices, UpdateService, DeleteTechnicaltoService, AddComment, AddBinnacle, UpdateTechnical, GetServices, GetService, GetPersonGeneral } from '../querys/querysTecnicos';
 import { account, PropAddService, ResponseApi, PropsAddService, RespInsert, PropsUpdateService, RespgetEvents, Enterprices, propsTechnicalBinnacle } from '../rules/interfaces';
 import { getDate, getEnterpriceOfTechnicals, modDate } from '../functions/functions';
 import { v4 as uuidv4 } from 'uuid';
@@ -11,16 +11,50 @@ import apiMW from "../api/apiMW";
 import { SECRETORPPRIVATEKEY } from '../helpers/generar-jwt';
 import jwt from 'jsonwebtoken';
 import { server } from '../../app';
-/** @module SYSCONTROLLER */
+
+/** @module SYS_CONTROLLER */
+
+interface sendData { 
+    accounts: Array<string>, 
+    filter: Array<{ code: string, type: number }>,
+    exclude:boolean,
+    orderBy:'ASC'|'DESC',
+    typeOrder:'FechaHora',
+    typeAccounts:'A'| 'I',
+    ignoreGroups:boolean,
+}
+
+const filter:Array<{code:string, type:number}> =[
+    { code: "ACZ", type: 1 },
+    { code: "ASA", type: 1 },
+    { code: "CPA", type: 1 },
+    { code: "A", type: 1 },
+    { code: "24H", type: 1 },
+    { code: "FIRE", type: 1 },
+    { code: "SMOKE", type: 1 },
+    { code: "P", type: 1 },
+    { code: "O", type: 1 },
+    { code: "OS", type: 1 },
+    { code: "C", type: 1 },
+    { code: "CS", type: 1 }
+];
 
 /**
- * @name Agregar un servicio
+ * @name addService 
+ * @description -Agrega un servicio
  * @path {POST} /api/sys/addService
- * @body {id_type: number; grantedEntry: ExistPerson; CodigoCte: string; technicals: Array<string>; isKeyCode: boolean; isOpCi: boolean; time: PropsMoreTime; } parametros a insertar
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Object<{id:String, role:Number}>} grantedEntry -Datos del monitorista que esta creando el servicio, id:Identificador único, role:Rol que desempeña
+ * @body {Number} id_type -Tipo de servicio
+ * @body {String} CodigoCte -Número de cliente registrado en Monitoring Works
+ * @body {Boolean} isKeyCode -True: Ver claves de usuario del panel, False: Ocultar claves de usuario del panel 
+ * @body {Boolean} isOpCi -True: Verifica aperturas o cierres, False: No verifica aperturas o cierres
+ * @body {Array<string>} technicals -Identificadores únicos de los tecnicos que estan realizando el servicio. (Debe contener al menos un identificador)
+ * @body {Object<{hours: Number, minutes: Number, seconds: Number}>} time -Tiempo límite para realizar el servicio 
  * @response {Object} response
  * @response {Boolean} response.status Estado de la petición
  * @response {Array} [response.errors] Errores en la petición
- * @response {Object} [response.data] Datos en caso de respuesta satisfactoria 
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
  */
 export const addService = async (req: Request, resp: Response) => {
     const { CodigoCte, technicals, grantedEntry, id_type, isKeyCode, isOpCi, time }: PropAddService = req.body;
@@ -28,7 +62,7 @@ export const addService = async (req: Request, resp: Response) => {
     try {
         if (time.hours < 2) return rError({ status: 401, msg: 'Minimo deben ser 2 hrs', location: 'addService', resp, });
         const id_service = uuidv4();
-        const response = await apiMW(`informationAccount/${CodigoCte}`, {}, 'GET');
+        const response = await apiMW(`single-account/${CodigoCte}`, {}, 'GET');
         const { status, data, errors }: ResponseApi<data> = response.data;
         if (status && data) {
             const { rowsAffected } = await pool1.request().query(`select accountMW from Service where accountMW='${CodigoCte}' and isActive = 'true'`);
@@ -64,9 +98,11 @@ export const addService = async (req: Request, resp: Response) => {
 }
 
 /**
- * @name Agregar obtener todas las cuentas de MW
+ * @name getAccountsMW
+ * @description Obtiene todas las cuentas de MW
  * @path {GET} /api/sys/getAccountsMW
- * @param {String} :id_service Identificador del servicio si solo se desea una cuenta
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {String} [id_service] -Si solo se desea la cuenta asignada de Monitoring Works del servicio ingresado
  * @response {Object} response
  * @response {Boolean} response.status Estado de la petición
  * @response {Array} [response.errors] Errores en la petición
@@ -82,7 +118,7 @@ export const getAccountsMW = async (req: Request, resp: Response) => {
             if (typeof service === 'string') throw new Error(service);
             // if (service === undefined) throw new Error(`Servicio no existe`);
             if (service.length === 0) throw new Error(`Servicio no existe`);
-            const response = await apiMW(`informationAccount/${service[0].accountMW}?moreInfo=true`, {}, 'GET');
+            const response = await apiMW(`single-account/${service[0].accountMW}?more=true`, {}, 'GET');
             const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
             if (status && data) {
                 return resp.status(200).json({
@@ -93,7 +129,7 @@ export const getAccountsMW = async (req: Request, resp: Response) => {
                 return rError({ status: 400, msg: errors![0].msg, location: 'getAccountsMW', resp });
             }
         } else {
-            const response = await apiMW('allAccounts', {}, 'GET');
+            const response = await apiMW('all-accounts', {}, 'GET');
             const { status, data, errors }: ResponseApi<data> = response.data;
             if (status && data) {
                 return resp.status(200).json({
@@ -109,6 +145,17 @@ export const getAccountsMW = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * @name getActiveServices
+ * @description -Obtiene todos los servivios activos
+ * @path {GET} /api/sys/getActiveServices
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {String} [id_service] -Si solo se requiere un servicio activo 
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria 
+ */
 export const getActiveServices = async (req: Request, resp: Response) => {
     const services = await GetActiveServices({});
     const token = req.header('x-token');
@@ -172,6 +219,17 @@ export const getActiveServices = async (req: Request, resp: Response) => {
     })
 }
 
+/**
+ * @name getDisponibleTechnicals
+ * @description -Obtiene todos los tecnicos activos
+ * @path {GET} /api/sys/getDisponibleTechnicals
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @query {Object<{ id_enterprice: number, shortName: string, name: string }>} [enterprice] -Filtra los técnicos activos por empresa y envia solo los que coinciden a la empresa enviada
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria 
+ */
 export const getDisponibleTechnicals = async (req: Request, resp: Response) => {
     const technicals = await GetDisponibleTechnical();
     const { enterprice } = req.query;
@@ -197,6 +255,19 @@ export const getDisponibleTechnicals = async (req: Request, resp: Response) => {
     });
 }
 
+/**
+ * @name getEvents
+ * @description Obtiene los eventos que llegaron a Monitoring  Works de una cuenta asignada a un servicio activo.
+ * @path {GET} /api/sys/getEvents/:id_service/:start/:end
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :id_service -Identificador del servicio activo.
+ * @param {String} :start -Fecha inicial de consulta
+ * @param {String} :end -Fecha final de consulta
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria 
+ */
 export const getEvents = async (req: Request, resp: Response) => {
     const { id_service, start, end } = req.params;
     try {
@@ -205,35 +276,29 @@ export const getEvents = async (req: Request, resp: Response) => {
         if (typeof service === 'string') throw new Error(service);
         // if (service === undefined) throw new Error(`Servicio no existe`);
         if (service.length === 0) throw new Error(`Servicio no existe`);
-        interface sendData { accounts: Array<string>, filter: Array<{ code: string, type: number }> }
+
         const send: sendData = {
             accounts: [service[0].accountMW],
-            filter: [
-                { code: "'ACZ'", type: 1 },
-                { code: "'ASA'", type: 1 },
-                { code: "'CPA'", type: 1 },
-                { code: "'A'", type: 1 },
-                { code: "'24H'", type: 1 },
-                { code: "'FIRE'", type: 1 },
-                { code: "'SMOKE'", type: 1 },
-                { code: "'P'", type: 1 },
-                { code: "'O'", type: 1 },
-                { code: "'OS'", type: 1 },
-                { code: "'C'", type: 1 },
-                { code: "'CS'", type: 1 }
-            ]
+            filter,
+            exclude:false,
+            orderBy:'ASC',
+            typeOrder:'FechaHora',
+            typeAccounts:'A',
+            ignoreGroups:false
         }
         const [startDate, startTime] = start.split('T');
         const [endDate, endTime] = end.split('T');
         const path: string = `events/${startDate}/${endDate}/1?startQuery=${startTime.substring(0, 5)}&endQuery=${endTime.substring(0, 5)}`;
         const response = await apiMW(path, send, 'POST');
-        const { status, data, errors }: ResponseApi<RespgetEvents> = response.data;
+        const { status, data, errors }: ResponseApi<Array<RespgetEvents>> = response.data;
         if (status && data) {
-            if (data?.datos[0].haveEvents) {
+            console.log(data);
+            
+            if (data[0].haveEvents) {
                 return resp.status(200).json({
                     status: true,
                     data: {
-                        events: data.datos[0].eventos
+                        events: data[0].eventos
                     }
                 });
             } else {
@@ -252,6 +317,16 @@ export const getEvents = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * @name getInServiceTechnicals
+ * @description Obtiene los técnicos que están en sitio o en algún servicio activo
+ * @path {GET} /api/sys/getInServiceTechnicals
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria 
+ */
 export const getInServiceTechnicals = async (req: Request, resp: Response) => {
     const technicals = await GetTechnicalsInServiceActive();
     if (typeof (technicals) === 'string')
@@ -265,6 +340,17 @@ export const getInServiceTechnicals = async (req: Request, resp: Response) => {
 
 }
 
+/**
+ * @name getPersons
+ * @description Obtiene todas las personas registradas o por rol que pertenecen a la misma empresa que realizo el inicio se sesión
+ * @path {GET} /api/sys/getPersons/:role
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión (Este filtra el personal que contenga el mismo id de empresa)
+ * @param {String} :role -1: Técnicos, 2: Monitoristas u operadores, 3: Encargados de técnicos, 850827: Todo el personal
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria 
+ */
 export const getPersons = async (req: Request, resp: Response) => {
     const params = req.params;
     const id = parseInt(params.role);
@@ -293,7 +379,18 @@ export const getPersons = async (req: Request, resp: Response) => {
     });
 }
 
-export const getService = async (req: Request, resp: Response) => {
+/**
+ * @name getServiceDetails
+ * @description Obtiene los detalles de un ervicio ya culminado
+ * @path {GET} /api/sys/getServiceDetails/:id
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :role -1: Técnicos, 2: Monitoristas u operadores, 3: Encargados de técnicos, 850827: Todo el personal
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria 
+ */
+export const getServiceDetails = async (req: Request, resp: Response) => {
     const { id } = req.params;
     // const service = await GetActiveService(id, true);
     const service = await GetActiveServices({ service: { id_service: id, selected: true } });
@@ -309,6 +406,20 @@ export const getService = async (req: Request, resp: Response) => {
     });
 }
 
+/**
+ * @name getServices
+ * @description Obtiene los servicios activos e inactivos por intervalo de fecha. (Solo se puede consultar un filtro a la vez)
+ * @path {GET} /api/sys/getServices/:start/:end
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :start -Fecha inicial de consulta
+ * @param {String} :end -Fecha final de consulta
+ * @query {String} [technical] -Filtra los servicios que le pertenecen a este técnico
+ * @query {String} [account] -Filtra los servicios que le pertenecen a esta cuenta
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const getServices = async (req: Request, resp: Response) => {
     const { start, end } = req.params;
     const { technical, account } = req.query;
@@ -327,7 +438,7 @@ export const getServices = async (req: Request, resp: Response) => {
     }
 
     if (account) {
-        const response = await apiMW(`informationAccount/${account}`, {}, 'GET');
+        const response = await apiMW(`single-account/${account}`, {}, 'GET');
         const { status, data, errors }: ResponseApi<{ account: account }> = response.data;
         if (errors) return rError({ status: 400, msg: `${errors[0].msg}`, resp });
         if (status && data) {
@@ -383,6 +494,15 @@ export const getServices = async (req: Request, resp: Response) => {
     })
 }
 
+/**
+ * @name getTask
+ * @description Obtiene las tareas programadas proximas a ejecutarse, al igual que el estado de los servicios activos
+ * @path {GET} /api/sys/getTask
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const getTask = async (req: Request, resp: Response) => {
     return resp.json({
         status: true,
@@ -390,7 +510,16 @@ export const getTask = async (req: Request, resp: Response) => {
     });
 }
 
-export const geyVersionApp = async (req: Request, resp: Response) => {
+/**
+ * @name getVersionApp
+ * @description Obtiene la versión de la aplicacion movil.
+ * @path {GET} /api/sys/getVersionApp
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
+export const getVersionApp = async (req: Request, resp: Response) => {
     return await pool1.request()
         .query(`select * from VersionApp`)
         .then(({ recordset }) => {
@@ -402,6 +531,20 @@ export const geyVersionApp = async (req: Request, resp: Response) => {
         .catch(err => rError({ status: 500, msg: `${err}`, resp }))
 }
 
+/**
+ * @name modTechnicalToAService
+ * @description Elimina Técnico del servicio por error de asignación ó se le asigna o restringe el folio de ese servicio. (Funciona cuando hay mas de 2 técnicos asignados al servicio), Solo se puede hacer una opción a la vez o elimnar o (asignar o desasignar el folio del servicio) de un tecnico a la vez.
+ * @path {POST} /api/sys/modTechnicalToAService
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} :id_service id del servicio, Este debe ser un servicio activo.
+ * @body {Array<String>} :technicals Arreglo con los id de los tecnicos enviados o seleccionados aunque solo se tomará la primer posición (Se tomará en cuenta el tamaño total del arreglo en una actualizacón posterior)
+ * @query {Boolean} [del] Para eliminar al técnico
+ * @query {Boolean} [sf] Para dejar con o sin folio al técnico
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const modTechnicalToAService = async (req: Request, resp: Response) => {
     try {
         const { id_service, technicals }: { id_service: string, technicals: Array<string> } = req.body;
@@ -476,6 +619,20 @@ export const modTechnicalToAService = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * @name updateService
+ * @description Realiza varias opciones del sericio activo (UNA A LA VEZ)
+ * @path {POST} /api/sys/updateService
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} :id_service id del servicio activo.
+ * @body {Object<{ id:String, role:Number, name:String }>} :person Datos del monitorista o encargado que realiza la acción  
+ * @body {'isKeyCode' | 'isDelivered' | 'accountMW' | 'firstVerification' | 'secondVerification' | 'moreTime' | 'SF' | 'EF' | 'TS'} :prop Opcion que realizará el proceso
+ * @body {Object<{comment:String, moreTime:{hours:Number, minutes:Number, seconds:Number}}>} :value comment: Para agregar un comentario , moreTime:Para asignar mas tiempo limite al servico 
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const updateService = async (req: Request, resp: Response) => {
     /**Hay que regresar los datos a como estaban en el caso de error revisar mas tarde */
     const { person, id_service, prop, value }: PropsUpdateService = req.body;
@@ -597,6 +754,15 @@ export const updateService = async (req: Request, resp: Response) => {
     } catch (error) { return rError({ status: 500, msg: `${error}`, location: 'updateService', resp }); }
 }
 
+/**
+ * @name updateTask
+ * @description Actualiza las tareas para que se mantengan actualizadas en los procesos de conexión y desconexión
+ * @path {GET} /api/sys/updateTask
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const updateTask = async (req: Request, resp: Response) => {
     await server.Task?.update();
     return resp.json({
@@ -605,6 +771,17 @@ export const updateTask = async (req: Request, resp: Response) => {
     });
 }
 
+/**
+ * @name verifyEventsService
+ * @description Verifica las zonas, usuarios y particiones enviadas en el intervalo de consulta del servicio activo
+ * @path {GET} /api/sys/verifyEventsService/:id_service
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @param {String} :id_service id del servicio activo
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const verifyEventsService = async (req: Request, resp: Response) => {
     //Faltan las validaciones de la fecha
     const { id_service } = req.params;
@@ -614,40 +791,30 @@ export const verifyEventsService = async (req: Request, resp: Response) => {
         if (typeof service === 'string') throw new Error(service);
         // if (service === undefined) throw new Error(`Servicio no existe`);
         if (service.length === 0) throw new Error(`Servicio no existe`);
-        interface sendData { accounts: Array<string>, filter: Array<{ code: string, type: number }> }
         const send: sendData = {
             // accounts: [service.accountMW],
             accounts: [service[0].accountMW],
-            filter: [
-                { code: "'ACZ'", type: 1 },
-                { code: "'ASA'", type: 1 },
-                { code: "'CPA'", type: 1 },
-                { code: "'A'", type: 1 },
-                { code: "'24H'", type: 1 },
-                { code: "'FIRE'", type: 1 },
-                { code: "'SMOKE'", type: 1 },
-                { code: "'P'", type: 1 },
-                { code: "'O'", type: 1 },
-                { code: "'OS'", type: 1 },
-                { code: "'C'", type: 1 },
-                { code: "'CS'", type: 1 }
-            ]
-        }
+            filter,
+            exclude:false,
+            orderBy:'ASC',
+            typeOrder:'FechaHora',
+            typeAccounts:'A',
+            ignoreGroups:false
+        }        
         // const start = modDate({ hours: 0, minutes: 0, seconds: 0, dateI: service.entryDate });
         // const end = modDate({ hours: 0, minutes: 0, seconds: 0, dateI: service.exitDate });
         const start = modDate({ hours: 0, minutes: 0, seconds: 0, dateI: service[0].entryDate });
         const end = modDate({ hours: 0, minutes: 0, seconds: 0, dateI: service[0].exitDate });
         const path: string = `events/${start.date.date}/${end.date.date}/1?startQuery=${start.time.time.substring(0, 5)}&endQuery=${end.time.time.substring(0, 5)}`;
-
-        const response = await apiMW(path, send, 'POST');
-        const { status, data, errors }: ResponseApi<RespgetEvents> = response.data;
+        const response = await apiMW(path, send, 'POST');        
+        const { status, data, errors }: ResponseApi<Array<RespgetEvents>> = response.data;
         if (status && data) {
-            if (data?.datos[0].haveEvents) {
+            if (data[0].haveEvents) {
                 const alarms = ['ACZ', 'ASA', 'CPA', 'A', '24H', 'FIRE', 'SMOKE', 'P'];
                 const OpCi = ['O', 'OS', 'C', 'CS'];
                 let zones: Array<string> = [];
                 let users: Array<string> = [];
-                data.datos[0].eventos.forEach(ev => {
+                data[0].eventos.forEach(ev => {
                     if (alarms.find(f => f === ev.CodigoAlarma)) {
                         if (zones.find(f => f === ev.CodigoZona) === undefined) {
                             zones = [...zones, ev.CodigoZona];
@@ -682,6 +849,16 @@ export const verifyEventsService = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * @name verifyPassword
+ * @description Verifica que la contraseña enviada por un usuario que ha iniciado sesión corresponda a la registrada en la base de datos
+ * @path {POST} /api/sys/validatePassword
+ * @body {String} password Contraseña a verificar
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const verifyPassword = async (req: Request, resp: Response) => {
     const { password } = req.body;
     const token = req.header('x-token');

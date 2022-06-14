@@ -7,6 +7,20 @@ import { TYPES } from 'mssql';
 import { existDirectory, deleteDirectory } from '../helpers/files';
 import path from 'path';
 
+/** @module ADMIN_CONTROLLER */
+
+/**
+ * @name actionsEnterprice
+ * @description Actuaiza y Elimina la información de la empresa seleccionada o enviada solo se ejecuta una opción a la vez
+ * @path {POST} /api/admin/enterpriceActions
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Object<{id:Number, shortName:String}>} Datos de la empresa a modificar
+ * @body {Object<{updateData:{shortName:String, name:String}}>} Datos que se actualizarán en la empresa seleccionada
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const actionsEnterprice = async (req: Request, resp: Response) => {
     const { enterprice, option }: actionEnterpriceProps = req.body;
     if (option.deleteEnterprice) {
@@ -46,6 +60,18 @@ export const actionsEnterprice = async (req: Request, resp: Response) => {
     });
 }
 
+/**
+ * @name actionsPerson
+ * @description Realiza acciones en las personas registradas en la base de datos
+ * @path {POST} /api/admin/personActions
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Ocject<{id:String, role:Number}>} person Datos de la persona a la que se la apicarán los cambios u acciones
+ * @body {Object<{resetPassword:Boolean, deletePerson:Boolean, updateStatus:'ACTIVO', 'INACTIVO',  updateData:{ name: String, lastname: String, email: String, password: String, phoneNumber: String, employeeNumber: String, enterprice: Number, role: Number } }>} optios acciones
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const actionsPerson = async (req: Request, resp: Response) => {
     const { person, option }: actionPersonProps = req.body;
 
@@ -174,6 +200,17 @@ export const actionsPerson = async (req: Request, resp: Response) => {
     }
 }
 
+/**
+ * @name addEnterprice
+ * @description Agrega una empresa
+ * @path {POST} /api/admin/addEnterprice
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {Object<{shorName:String, name:String}>} enterprice Datos de la empresa a agregar
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const addEnterprice = async (req: Request, resp: Response) => {
     const { enterprice }: { enterprice: { shortName: string, name: string } } = req.body;
     return await pool1.request()
@@ -191,6 +228,24 @@ export const addEnterprice = async (req: Request, resp: Response) => {
         .catch(err => rError({ status: 500, msg: `${err}`, resp }));
 }
 
+/**
+ * @name addPerson
+ * @description Agrega una persona nueva
+ * @path {POST} /api/admin/addPerson
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @body {String} name Nombre de la persona
+ * @body {String} lastname Apellidos de la persona
+ * @body {String} [email] Correo electronico de la persona
+ * @body {String} passsword Contraseña de la persona
+ * @body {String} phoneNumber Teléfono de contacto de la persona
+ * @body {String} employeeNumber Número de empleado de la persona
+ * @body {Object<{ id:Number, shorName:String }>} enterprice Datos de la empresa registrada a la que la persona pertenece
+ * @body {Object<{ id:Number, name:String, user:String, '' }>} role Rol que desempeña la persona al igual si no tiene un correo se le asigna un usuario para su acceso a las diferentes aplicaciones por rol
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+  */
 export const addPerson = async (req: Request, resp: Response) => {
     let body: bodyPerson = req.body;
     const { error, isInserted } = await addPersonBD(body);
@@ -201,6 +256,16 @@ export const addPerson = async (req: Request, resp: Response) => {
 
 export const Enterprice = async (req: Request, resp: Response) => { }
 
+/**
+ * @name getGeneral
+ * @description Obtiene los parámetros generales de empresas, roles, y tipo de servicio
+ * @path {GET} /api/sys/getGeneral
+ * @header {String} x-token -Requiere Json Web Token generado al iniciar sesión
+ * @response {Object} response
+ * @response {Boolean} response.status Estado de la petición
+ * @response {Array} [response.errors] Errores en la petición
+ * @response {Object} [response.data] Datos en caso de respuesta satisfactoria
+ */
 export const getGeneral = async (req: Request, resp: Response) => {
     try {
         const Enterprices = await GetEnterprices({});
