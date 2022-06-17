@@ -31,7 +31,7 @@
 
 
     <title>
-      CONSULTAS_SISTEMA_MONITORING-WORKS
+      helpers/generar-jwt.js
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        CONSULTAS_SISTEMA_MONITORING-WORKS
+        helpers/generar-jwt.js
       </h1>
       
 
@@ -106,185 +106,66 @@
 
 
 
-
-<section>
-
-
-<header>
     
-        
-    
-</header>
-
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="getUsersMon">
-    <a href="#getUsersMon">#</a>
-    <span class="type-signature">(route) </span>getUsersMon<span class="type-signature"></span>
-</h4>
-
-
-
-
-<div class="description">
-    <h5>Route:</h5>
-                            <table class="params">
-                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
-                            <tr>
-                            <td class="type">GET</td>
-                            <td class="name last">/api/sys/getUsersMon</td>
-                            </tr>
-                            </table>
-                            Obtiene todos los usuarios y contraseñas de los monitoristas de Mw
-                            <h5>Header Parameters:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">x-token</td>
-            <td class="type">String</td>
-            
-            
-            <td class="description last">Requiere Json Web Token generado al iniciar sesión</td>
-          </tr>
-          </table>
-                            <h5>Response:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Attributes</th>
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">response</td>
-            <td class="type">Object</td>
-            <td class="attributes"></td>
-            
-            <td class="description last"></td>
-          </tr><tr>
-            <td class="name">response.status</td>
-            <td class="type">Boolean</td>
-            <td class="attributes"></td>
-            
-            <td class="description last">Estado de la petición</td>
-          </tr><tr>
-            <td class="name">response.errors</td>
-            <td class="type">Array</td>
-            <td class="attributes">optional</td>
-            
-            <td class="description last">Errores en la petición</td>
-          </tr><tr>
-            <td class="name">response.data</td>
-            <td class="type">Object</td>
-            <td class="attributes">optional</td>
-            
-            <td class="description last">Datos en caso de respuesta satisfactoria</td>
-          </tr>
-          </table>
-</div>
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="querys_querysSistemaMW.js.html">querys/querysSistemaMW.js</a>, <a href="querys_querysSistemaMW.js.html#line19">line 19</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __awaiter = (this &amp;&amp; this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this &amp;&amp; this.__importDefault) || function (mod) {
+    return (mod &amp;&amp; mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.decodeJWT = exports.generarJWT = exports.SECRETORPPRIVATEKEY = void 0;
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.SECRETORPPRIVATEKEY = 'P3Ms43zTP3Ms467P3Ms4mV54rIYP3MS4';
+/**@module GENERAR_JWT */
+/**
+ * Crea un JSON WEB TOKEN
+ * @param {string} uid id de la persona
+ * @param {number} role rol que desempeña la persona
+ * @returns {Promise&lt;{ token: string } | { error: string }>}
+ */
+const generarJWT = (uid, role) => __awaiter(void 0, void 0, void 0, function* () {
+    let expiresIn = (role === 1) ? '2h' : (role === 2) ? '12h' : (role === 3) ? '8h' : '10h';
+    return yield new Promise((resolve, reject) => {
+        const payload = { uid };
+        const clave = exports.SECRETORPPRIVATEKEY;
+        jsonwebtoken_1.default.sign(payload, clave, { expiresIn }, (err, token) => {
+            if (err) {
+                console.log(err);
+                reject('No se generó el token');
+            }
+            else {
+                resolve(token);
+            }
+        });
+    })
+        .then(resp => { return { token: `${resp}` }; })
+        .catch(err => { return { error: `${err}` }; });
+});
+exports.generarJWT = generarJWT;
+/**
+ * Decodifica el token enviado
+ * @param {string} token token enviado
+ * @returns {jwt.JwtPayload | undefined}
+ */
+const decodeJWT = (token) => {
+    const decode = jsonwebtoken_1.default.decode(token);
+    if (decode !== null &amp;&amp; typeof (decode) !== 'string')
+        return decode;
+};
+exports.decodeJWT = decodeJWT;
+//# sourceMappingURL=generar-jwt.js.map</code></pre>
+        </article>
+    </section>
 
 
 

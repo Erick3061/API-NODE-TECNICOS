@@ -31,7 +31,7 @@
 
 
     <title>
-      CONSULTAS_SISTEMA_MONITORING-WORKS
+      Server
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        CONSULTAS_SISTEMA_MONITORING-WORKS
+        Server
       </h1>
       
 
@@ -113,6 +113,15 @@
 <header>
     
         
+        <h2>
+        
+        Server
+        
+        </h2>
+        
+        
+            <div class="class-description">Clase servidor</div>
+        
     
 </header>
 
@@ -122,100 +131,28 @@
     
         
 
-        
     
+        <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="Server">
+        <a href="#Server">#</a>
+        <span class="type-signature"></span>new Server<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Constructor de la clase
     </div>
 
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="getUsersMon">
-    <a href="#getUsersMon">#</a>
-    <span class="type-signature">(route) </span>getUsersMon<span class="type-signature"></span>
-</h4>
 
 
 
 
-<div class="description">
-    <h5>Route:</h5>
-                            <table class="params">
-                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
-                            <tr>
-                            <td class="type">GET</td>
-                            <td class="name last">/api/sys/getUsersMon</td>
-                            </tr>
-                            </table>
-                            Obtiene todos los usuarios y contraseñas de los monitoristas de Mw
-                            <h5>Header Parameters:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">x-token</td>
-            <td class="type">String</td>
-            
-            
-            <td class="description last">Requiere Json Web Token generado al iniciar sesión</td>
-          </tr>
-          </table>
-                            <h5>Response:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Attributes</th>
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">response</td>
-            <td class="type">Object</td>
-            <td class="attributes"></td>
-            
-            <td class="description last"></td>
-          </tr><tr>
-            <td class="name">response.status</td>
-            <td class="type">Boolean</td>
-            <td class="attributes"></td>
-            
-            <td class="description last">Estado de la petición</td>
-          </tr><tr>
-            <td class="name">response.errors</td>
-            <td class="type">Array</td>
-            <td class="attributes">optional</td>
-            
-            <td class="description last">Errores en la petición</td>
-          </tr><tr>
-            <td class="name">response.data</td>
-            <td class="type">Object</td>
-            <td class="attributes">optional</td>
-            
-            <td class="description last">Datos en caso de respuesta satisfactoria</td>
-          </tr>
-          </table>
-</div>
+
 
 
 
@@ -255,7 +192,7 @@
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="querys_querysSistemaMW.js.html">querys/querysSistemaMW.js</a>, <a href="querys_querysSistemaMW.js.html#line19">line 19</a>
+                <a href="models_server.js.html">models/server.js</a>, <a href="models_server.js.html#line31">line 31</a>
             </li></ul></dd>
         </div>
     
@@ -274,9 +211,450 @@
 
 
 
-        
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
     
 
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="connectDB">
+        <a href="#connectDB">#</a>
+        <span class="type-signature"></span>connectDB<span class="signature">(intent)</span><span class="type-signature"></span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Realiza la conexón a la base de datos TECNCOS
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>intent</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">número de intentos</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="models_server.js.html">models/server.js</a>, <a href="models_server.js.html#line61">line 61</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="listen">
+        <a href="#listen">#</a>
+        <span class="type-signature"></span>listen<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Método que manda a correr el servidor
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="models_server.js.html">models/server.js</a>, <a href="models_server.js.html#line110">line 110</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="middlewares">
+        <a href="#middlewares">#</a>
+        <span class="type-signature"></span>middlewares<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Middlewares
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="models_server.js.html">models/server.js</a>, <a href="models_server.js.html#line83">line 83</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="routes">
+        <a href="#routes">#</a>
+        <span class="type-signature"></span>routes<span class="signature">()</span><span class="type-signature"></span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Rutasvalidas pra el servidor
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="models_server.js.html">models/server.js</a>, <a href="models_server.js.html#line101">line 101</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
     
 
     

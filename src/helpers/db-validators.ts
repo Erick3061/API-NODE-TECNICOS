@@ -5,7 +5,7 @@ import { BAPEnterprice, ExistPerson, optionsUpdateEnterprice, optionsUpdatePerso
 import moment from 'moment';
 interface PropsRole { id: number, name: string, user?: string };
 
-/**@module HELPERS */
+/**@module HELPERS_DB_VALIDACIONES */
 
 /**
  * @description Verifica si no existe la empresa

@@ -255,7 +255,7 @@ export const UserAccess = async (props: { id_user: string | null, insert?: { nam
 }
 
 /**
- * 
+ * Proceso que agrega un técnico a un servicio activo
  * @param {String} id_service id del servicio. (Debe ser un servicio activo )
  * @param {String} id_technical id del técnico. (Debe ser un técnico disponible; no asignado a un servicio).
  * @returns {Promise<{ isInserted: boolean } | { isInserted: boolean, error: string }>}
@@ -275,7 +275,7 @@ export const AddTechnicalService = async (id_service: string, id_technical: stri
 
 /**
  * Agrega una persona a la base de datos
- * @param person 
+ * @param {Object<{  name: string, lastname: string, email: string | null, password: string, phoneNumber: string | null, employeeNumber: string, enterprice: Object<{ id: number, shortName: string }>, role: Object<{ id: number, name: string, user: string }> }>} person 
  * @returns {Promise<{ error: { status: number, msg: string }, isInserted: undefined } | { isInserted: { status: number }, error: undefined }>}
  */
 export const addPersonBD = async (person: bodyPerson) => {
@@ -303,6 +303,12 @@ export const addPersonBD = async (person: bodyPerson) => {
     } else return { error: { status: 400, msg: `Error al generar identificador unico Intente de nuevo` } };
 }
 
+/**
+ * Elimina un técnico de un servicio activo activo
+ * @param {String} id_service id del servicio
+ * @param {String} id_technical id del técnico
+ * @returns {Promise<string | boolean>}
+ */
 export const DeleteTechnicaltoService = async (id_service: string, id_technical: string) => {
     return await pool1.request()
         .input('id_service', TYPES.VarChar(40), id_service)
@@ -312,6 +318,11 @@ export const DeleteTechnicaltoService = async (id_service: string, id_technical:
         .catch(err => ` ${err}`);
 }
 
+/**
+ * Verifica si existe el número de empleado
+ * @param {Object<{id_enterprice: number, employeeNumber: string, personExclude: string| undefined }>} param0 
+ * @returns {Promise<string | boolean>}
+ */
 export const ExistEployeeNumber = async ({ employeeNumber, id_enterprice, personExclude }: { id_enterprice: number, employeeNumber: string, personExclude?: string }) => {
     try {
         //true: existe el numero de empleado para esa empresa
@@ -326,6 +337,11 @@ export const ExistEployeeNumber = async ({ employeeNumber, id_enterprice, person
     }
 }
 
+/**
+ * Obtiene todas o una empresa
+ * @param {Object<{enterprice: Object<{ id_enterprice:number, shortName:string}>| undefined, shortName: string| undefined}>} param0 
+ * @returns {Promise<string | IRecordSet<any>>}
+ */
 export const GetEnterprices = async ({ enterprice, shortName }: { enterprice?: { id_enterprice: number, shortName: string }, shortName?: string }) => {
     if (shortName && enterprice) return `Solo se debe mandar una opción de busqueda`;
     let query: string =
@@ -340,6 +356,12 @@ export const GetEnterprices = async ({ enterprice, shortName }: { enterprice?: {
     }
 }
 
+/**
+ * Obtiene las personas registradas en la base de datos por rol o todos: 850827
+ * @param {number} role 1:Técnicos, 2:Monitoristas, 3:Encargados de técnicos, 850827: Todos 
+ * @param {boolean| undefined} isActive si queremos que se encuentren solo los activos: true de lo contrario: false, 
+ * @returns {Promise<string | IRecordSet<Person>>}
+ */
 export const GetPersons = async (role: number, isActive?: boolean) => {
     let query: string = '';
     if (role === 850827) {
@@ -368,6 +390,11 @@ export const GetPersons = async (role: number, isActive?: boolean) => {
     }
 }
 
+/**
+ * Obtiene los datos generales de una persona
+ * @param { Object<{ id: string| undefined, role: number| undefined, email: string| undefined, user: string| undefined, inactive: 'INACTIVO'| undefined }>} param0 
+ * @returns {Promise<string | Person>}
+ */
 export const GetPersonGeneral = async ({ id, role, email, user, inactive }: { id?: string, role?: number, email?: string, user?: string, inactive?: 'INACTIVO' }) => {
     try {
         const { recordset: Person }: IResult<Person> = await pool1.request().query(
@@ -387,6 +414,11 @@ export const GetPersonGeneral = async ({ id, role, email, user, inactive }: { id
     } catch (error) { return `${error}` }
 }
 
+/**
+ * Obtiene los roles que desempeña una persona
+ * @param {Object<{ role: Object<{ id_role:number, name:string}>| undefined, id_role: number| undefined }>} param0 
+ * @returns {Promise<string | IRecordSet<Role>>} 
+ */
 export const GetRoles = async ({ id_role, role }: { role?: { id_role: number, name: string }, id_role?: number }) => {
     try {
         if (id_role && role) throw (`Parametros erroneos, solo se puede consultar un solo paramatro a la vez`)
@@ -398,6 +430,10 @@ export const GetRoles = async ({ id_role, role }: { role?: { id_role: number, na
     }
 }
 
+/**
+ * Obtiene el indice siguiente de un servicio 
+ * @returns { Promise<string | number>}
+ */
 export const GetIndexService = async () => {
     try {
         const { recordset }: IResult<{ idx: number }> = await pool1.request().query(`select count(*) as idx from Service`);
@@ -407,6 +443,10 @@ export const GetIndexService = async () => {
     }
 }
 
+/**
+ * Obtiene los técnicos disponibles 
+ * @returns {Promise<string | Person[]>}
+ */
 export const GetDisponibleTechnical = async () => {
     const technicals = await GetPersons(1, true);
     if (typeof (technicals) === 'string')
@@ -420,6 +460,11 @@ export const GetDisponibleTechnical = async () => {
     return DisponibleTechnical;
 }
 
+/**
+ * Obtiene todos o un tipo de servicio
+ * @param {Object<{id_type: number| undefined, name: string| undefined}>} param0 
+ * @returns {Promise< string| Array<{id_Type: number, name: string}>>}
+ */
 export const GetTypes = async ({ id_type, name }: { id_type?: number, name?: string }) => {
     const query: string =
         (id_type && name) ? `select * from TypeService where id_type = ${id_type} and name = '${name}'`
@@ -434,6 +479,11 @@ export const GetTypes = async ({ id_type, name }: { id_type?: number, name?: str
     }
 }
 
+/**
+ * Obtiene los técnicos que estan en un servicio activo
+ * @param {string | undefined} id_service  id del servicio 
+ * @returns {Promise<string | IRecordSet<Person>>}
+ */
 export const GetTechnicalsInServiceActive = async (id_service?: string) => {
     try {
         const { recordset: Technicals }: IResult<Person> = await pool1.request()
@@ -454,6 +504,11 @@ export const GetTechnicalsInServiceActive = async (id_service?: string) => {
     }
 }
 
+/**
+ * Proceso que reorna un técnico si pertenece a un servicio activo
+ * @param {string} id_technical id del técnico 
+ * @returns {Promise<string | Person>}
+ */
 export const ExistTechnicalInService = async (id_technical: string) => {
     try {
         const { recordset: Technical }: IResult<Person> = await pool1.request()
@@ -474,6 +529,11 @@ export const ExistTechnicalInService = async (id_technical: string) => {
     }
 }
 
+/**
+ * Proceso que retorna un servicio o todos los servios activos o inactivos
+ * @param {Object<{ service: Object<{ service: Object<{ id_service: string, selected: boolean| undefined}>| undefined }>| undefined}>} param0 si service = undefined: Retorna todos los servicios activos si manda el id solo regresa el servicio seleccionado, y si se selecciona selected regresa un servicio que ya no este activo. 
+ * @returns {Promise<string| Array<Service>>}
+ */
 export const GetActiveServices = async ({ service }: { service?: { id_service: string, selected?: boolean } }) => {
     const query: string = (service) ? `Select * from Service where id_service = '${service.id_service}' ${(service.selected) ? '' : ` and isActive = 'true'`} ` : `Select * from Service where isActive = 'true'`;
     try {
@@ -486,6 +546,11 @@ export const GetActiveServices = async ({ service }: { service?: { id_service: s
     }
 }
 
+/**
+ * Todos los técnicos en servicio
+ * @param {string} id_technical id del técnico 
+ * @returns {Promise<string | Service>} 
+ */
 export const GetTechnicalInService = async (id_technical: string) => {
     try {
         const { recordset: Technical }: IResult<Service> = await pool1.request()
@@ -506,6 +571,11 @@ export const GetTechnicalInService = async (id_technical: string) => {
     }
 }
 
+/**
+ * Actualiza la información de un servicio
+ * @param { Object<{id_service: string, prop: string, interno: boolean, selected: boolean| undefined}>} updateService 
+ * @returns{ Promise<string | true | { service: Service, technicals: IRecordSet<Person> } | { service: Service, technicals: never[] }>}  
+ */
 export const UpdateService = async ({ id_service, prop, interno, selected }: updateService) => {
     return await pool1.request()
         .input('id_service', TYPES.VarChar(40), id_service)
@@ -531,6 +601,11 @@ export const UpdateService = async ({ id_service, prop, interno, selected }: upd
         .catch(err => { return ` ${err}`; });
 }
 
+/**
+ * Actualiza la información de un técnico
+ * @param {Object<{ id_service: string, id_person: string, prop: string}>} updateTechnical 
+ * @returns {Promise<string | boolean>}
+ */
 export const UpdateTechnical = async ({ id_service, id_person, prop }: updateTechnical) => {
     return await pool1.request()
         .input('id_service', TYPES.VarChar(40), id_service)
@@ -540,6 +615,11 @@ export const UpdateTechnical = async ({ id_service, id_person, prop }: updateTec
         .catch(err => { return `${err}`; });
 }
 
+/**
+ * Actualiza la informacón de una persona
+ * @param {Object<{ id_person:string , prop: string| undefined, data: updatePersonData | undefined }>} updatePersonProps 
+ * @returns {Promise<string | boolean>} 
+ */
 export const UpdatePerson = async ({ id_person, prop, data }: updatePersonProps) => {
     if (id_person && prop && data) return `formato de propiedades invalidas`;
     if (id_person && data) {
@@ -577,6 +657,11 @@ export const UpdatePerson = async ({ id_person, prop, data }: updatePersonProps)
     return `Ningun caso sontemplado`;
 }
 
+/**
+ * Obtiene todos los servicios ya sea por técnico ( Que el técnico pertenezca al servicio), por cuenta ( que la cuenta halla sido asignada al servicio) y todos los registrados
+ * @param {Object<{start: string, end: string, technical: string | undefined, account: string | undefined}>} param0 
+ * @returns {Promise<string | IRecordSet<respGetServiceFiltered>>}
+ */
 export const GetServices = async ({ end, start, account, technical }: { start: string, end: string, technical?: string, account?: string }) => {
     if (technical) {
         const person = await GetPersonGeneral({ id: technical });
@@ -613,6 +698,11 @@ export const GetServices = async ({ end, start, account, technical }: { start: s
     return recordset;
 }
 
+/**
+ * Obtiene toda la inforción de un servicio culminado por id
+ * @param {Object<{id_service: string}>} param0 
+ * @returns {Promise<string | { binnacle: IRecordSet<Binnacle>, comments: IRecordSet<Comment>}>}
+ */
 export const GetService = async ({ id_service }: { id_service: string }) => {
     try {
 

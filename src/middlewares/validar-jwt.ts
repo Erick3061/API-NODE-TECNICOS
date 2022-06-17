@@ -4,6 +4,13 @@ import { rError } from '../controller/errorController';
 import { SECRETORPPRIVATEKEY } from '../helpers/generar-jwt';
 import { GetPersonGeneral } from '../querys/querysTecnicos';
 
+/**
+ * Hace la validacón del JWT 
+ * @param {Request} req 
+ * @param {Response} resp 
+ * @param {NextFunction} next 
+ * @returns {Promise<Response<any, Record<string, any>> | undefined>}
+ */
 export const validarJWT = async (req: Request, resp: Response, next: NextFunction) => {
     const token = req.header('x-token');
     if (!token)

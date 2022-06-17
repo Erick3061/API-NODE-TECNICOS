@@ -5,24 +5,56 @@ import { mkdir } from 'node:fs';
 import { readdir, unlink, rmdir } from 'node:fs/promises';
 import { propsUpLoadFile, responseLoadedFile } from '../rules/interfaces';
 
+/**@module FILES */
+
+/**
+ * Verifica si existe un directorio dentro de la ruta mandada
+ * @param {string} directory ruta a verificar 
+ * @returns {Promise<boolean>}
+ */
 export const existDirectory = async (directory: string) => {
     return await new Promise((resolve: (value: boolean) => void, reject: (reason?: boolean) => void) => {
         access(directory, err => (err) ? reject(false) : resolve(true));
     }).then(resp => resp).catch(err => false);
 }
 
+/**
+ * Crea un folder en el directorio mandado
+ * @param {string} directory directorio mandada
+ * @returns { Promise<boolean> }
+ */
 export const createFolder = async (directory: string) => {
     return await new Promise((resolve: (value: boolean) => void, reject: (reason?: string) => void) => {
         mkdir(directory, { recursive: true }, (err) => { (err) ? reject(`Directorio [ ${directory} ] no creado`) : resolve(true) });
     }).then(() => true).catch(err => { console.log(`--> createFolder`, err); return false });
 }
 
+/**
+ * Obtiene los nombres y extensión de los archivos del directorio mandado
+ * @param {string} directory directorio mandado
+ * @returns {Promise<string | string[]>}
+ */
 export const getFiles = async (directory: string) => await readdir(directory).then(files => files).catch(err => { console.log(`-->getFiles`, err); return `${err}` });
 
+/**
+ * Elimina el archivo mandado con extensión
+ * @param {string} directoryFile directorio mandado
+ * @returns {Promise<string | boolean>}
+ */
 export const deleteFile = async (directoryFile: string) => await unlink(directoryFile).then(() => true).catch(err => `${err}`);
 
+/**
+ * Elimina el directorio mandado junto con los archivos y carpetas que se encuentran dentro de el 
+ * @param {string} folder directrio dek filder mandado
+ * @returns {Promise<string | boolean>}
+ */
 export const deleteDirectory = async (folder: string) => await rmdir(folder, { recursive: true }).then(() => true).catch(err => `${err}`);
 
+/**
+ * Sube un archivo con la sig extensón de archivos 'png', 'jpg', 'jpeg'
+ * @param {Object<{ files: fileUpload.FileArray, validExtensions: string[], carpeta:string, type: "Service" | "Person" | "Enterprice"  }>} param0 
+ * @returns { Promise<string | responseLoadedFile>}
+ */
 export const upLoadFile = async ({ files, validExtensions = ['png', 'jpg', 'jpeg'], carpeta = '', type }: propsUpLoadFile) => {
 
     return await new Promise(async (resolve: (value: responseLoadedFile) => void, reject: (reason?: string) => void) => {

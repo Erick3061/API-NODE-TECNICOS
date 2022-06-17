@@ -31,7 +31,7 @@
 
 
     <title>
-      CONSULTAS_SISTEMA_MONITORING-WORKS
+      helpers/files.js
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        CONSULTAS_SISTEMA_MONITORING-WORKS
+        helpers/files.js
       </h1>
       
 
@@ -106,185 +106,134 @@
 
 
 
-
-<section>
-
-
-<header>
     
-        
-    
-</header>
-
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="getUsersMon">
-    <a href="#getUsersMon">#</a>
-    <span class="type-signature">(route) </span>getUsersMon<span class="type-signature"></span>
-</h4>
-
-
-
-
-<div class="description">
-    <h5>Route:</h5>
-                            <table class="params">
-                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
-                            <tr>
-                            <td class="type">GET</td>
-                            <td class="name last">/api/sys/getUsersMon</td>
-                            </tr>
-                            </table>
-                            Obtiene todos los usuarios y contraseñas de los monitoristas de Mw
-                            <h5>Header Parameters:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">x-token</td>
-            <td class="type">String</td>
-            
-            
-            <td class="description last">Requiere Json Web Token generado al iniciar sesión</td>
-          </tr>
-          </table>
-                            <h5>Response:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Attributes</th>
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">response</td>
-            <td class="type">Object</td>
-            <td class="attributes"></td>
-            
-            <td class="description last"></td>
-          </tr><tr>
-            <td class="name">response.status</td>
-            <td class="type">Boolean</td>
-            <td class="attributes"></td>
-            
-            <td class="description last">Estado de la petición</td>
-          </tr><tr>
-            <td class="name">response.errors</td>
-            <td class="type">Array</td>
-            <td class="attributes">optional</td>
-            
-            <td class="description last">Errores en la petición</td>
-          </tr><tr>
-            <td class="name">response.data</td>
-            <td class="type">Object</td>
-            <td class="attributes">optional</td>
-            
-            <td class="description last">Datos en caso de respuesta satisfactoria</td>
-          </tr>
-          </table>
-</div>
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="querys_querysSistemaMW.js.html">querys/querysSistemaMW.js</a>, <a href="querys_querysSistemaMW.js.html#line19">line 19</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
+var __awaiter = (this &amp;&amp; this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this &amp;&amp; this.__importDefault) || function (mod) {
+    return (mod &amp;&amp; mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.upLoadFile = exports.deleteDirectory = exports.deleteFile = exports.getFiles = exports.createFolder = exports.existDirectory = void 0;
+const uuid_1 = require("uuid");
+const path_1 = __importDefault(require("path"));
+const fs_1 = require("fs");
+const node_fs_1 = require("node:fs");
+const promises_1 = require("node:fs/promises");
+/**@module FILES */
+/**
+ * Verifica si existe un directorio dentro de la ruta mandada
+ * @param {string} directory ruta a verificar
+ * @returns {Promise&lt;boolean>}
+ */
+const existDirectory = (directory) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield new Promise((resolve, reject) => {
+        (0, fs_1.access)(directory, err => (err) ? reject(false) : resolve(true));
+    }).then(resp => resp).catch(err => false);
+});
+exports.existDirectory = existDirectory;
+/**
+ * Crea un folder en el directorio mandado
+ * @param {string} directory directorio mandada
+ * @returns { Promise&lt;boolean> }
+ */
+const createFolder = (directory) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield new Promise((resolve, reject) => {
+        (0, node_fs_1.mkdir)(directory, { recursive: true }, (err) => { (err) ? reject(`Directorio [ ${directory} ] no creado`) : resolve(true); });
+    }).then(() => true).catch(err => { console.log(`--> createFolder`, err); return false; });
+});
+exports.createFolder = createFolder;
+/**
+ * Obtiene los nombres y extensión de los archivos del directorio mandado
+ * @param {string} directory directorio mandado
+ * @returns {Promise&lt;string | string[]>}
+ */
+const getFiles = (directory) => __awaiter(void 0, void 0, void 0, function* () { return yield (0, promises_1.readdir)(directory).then(files => files).catch(err => { console.log(`-->getFiles`, err); return `${err}`; }); });
+exports.getFiles = getFiles;
+/**
+ * Elimina el archivo mandado con extensión
+ * @param {string} directoryFile directorio mandado
+ * @returns {Promise&lt;string | boolean>}
+ */
+const deleteFile = (directoryFile) => __awaiter(void 0, void 0, void 0, function* () { return yield (0, promises_1.unlink)(directoryFile).then(() => true).catch(err => `${err}`); });
+exports.deleteFile = deleteFile;
+/**
+ * Elimina el directorio mandado junto con los archivos y carpetas que se encuentran dentro de el
+ * @param {string} folder directrio dek filder mandado
+ * @returns {Promise&lt;string | boolean>}
+ */
+const deleteDirectory = (folder) => __awaiter(void 0, void 0, void 0, function* () { return yield (0, promises_1.rmdir)(folder, { recursive: true }).then(() => true).catch(err => `${err}`); });
+exports.deleteDirectory = deleteDirectory;
+/**
+ * Sube un archivo con la sig extensón de archivos 'png', 'jpg', 'jpeg'
+ * @param {Object&lt;{ files: fileUpload.FileArray, validExtensions: string[], carpeta:string, type: "Service" | "Person" | "Enterprice"  }>} param0
+ * @returns { Promise&lt;string | responseLoadedFile>}
+ */
+const upLoadFile = ({ files, validExtensions = ['png', 'jpg', 'jpeg'], carpeta = '', type }) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield new Promise((resolve, reject) => __awaiter(void 0, void 0, void 0, function* () {
+        const numberFiles = 3;
+        const { file } = files;
+        if (Array.isArray(file))
+            return reject('Error de archivo...  revisar');
+        const uploads = path_1.default.join(__dirname, `../../uploads`, type, carpeta);
+        const cutName = file.name.split('.');
+        const extension = cutName[cutName.length - 1];
+        if (!validExtensions.includes(extension))
+            return reject(`La extensión ${extension} no es permitida - ${validExtensions}`);
+        const idFile = `${(0, uuid_1.v4)()}.${extension}`;
+        if (!(yield (0, exports.existDirectory)(uploads))) {
+            if (yield (0, exports.createFolder)(uploads)) {
+                return file.mv(path_1.default.join(uploads, idFile), (err) => {
+                    if (err)
+                        return reject(`Error: ${err}`);
+                    return resolve({ nameFile: idFile, directoryFile: uploads, fullDirectory: `/files/getImg?type=${type}&amp;id=${carpeta}&amp;img=${idFile}` });
+                });
+            }
+            else
+                return reject(`Error al crear el directorio ${uploads}`);
+        }
+        else {
+            if (type === 'Service') {
+                const files = yield (0, exports.getFiles)(uploads);
+                if (Array.isArray(files) &amp;&amp; files.length &lt; 3) {
+                    return file.mv(path_1.default.join(uploads, idFile), (err) => {
+                        if (err)
+                            return reject(`Error: ${err}`);
+                        return resolve({ nameFile: idFile, directoryFile: uploads, fullDirectory: `/files/getImg?type=${type}&amp;id=${carpeta}&amp;img=${idFile}` });
+                    });
+                }
+                return reject(`No puedes subir mas imágenes, Solo se permiten ${numberFiles} archivos por servicio`);
+            }
+            if (type === 'Person' || type === 'Enterprice') {
+                const files = yield (0, exports.getFiles)(uploads);
+                if (Array.isArray(files))
+                    for (const file of files) {
+                        yield (0, exports.deleteFile)(path_1.default.join(uploads, file));
+                    }
+                ;
+                return file.mv(path_1.default.join(uploads, idFile), (err) => {
+                    if (err)
+                        return reject(`Error: ${err}`);
+                    return resolve({ nameFile: idFile, directoryFile: uploads, fullDirectory: `/files/getImg?type=${type}&amp;id=${carpeta}&amp;img=${idFile}` });
+                });
+            }
+            return reject(`Propiedad no contemplada`);
+        }
+    })).then(resp => resp).catch(err => `${err}`);
+});
+exports.upLoadFile = upLoadFile;
+//# sourceMappingURL=files.js.map</code></pre>
+        </article>
+    </section>
 
 
 

@@ -19,6 +19,9 @@ import { createServer } from 'http';
 import Task from './task';
 import { json } from 'express';
 
+/**
+ *Clase servidor
+ */
 class Server {
 
     private app: Application;
@@ -28,7 +31,6 @@ class Server {
     public Con2: boolean = false;
     public Task: Task | undefined;
     private server: http.Server | https.Server;
-
     private apiPaths = {
         adminRoutes: '/api/admin',
         authRoutes: '/api/auth',
@@ -36,6 +38,9 @@ class Server {
         filesRoutes: '/api/files',
     };
 
+    /**
+     * Constructor de la clase
+     */
     constructor() {
         this.app = express();
         this.port = process.env.PORT || '3007';
@@ -51,6 +56,10 @@ class Server {
         this.connectDB(0);
     }
 
+    /**
+     * Realiza la conexón a la base de datos TECNCOS
+     * @param {number} intent número de intentos 
+     */
     async connectDB(intent: number) {
         pool1.connect()
             .then(async () => {
@@ -69,6 +78,9 @@ class Server {
             });
     }
 
+    /**
+     * Middlewares
+     */
     middlewares() {
         // CORS
         this.app.use(cors());
@@ -85,6 +97,9 @@ class Server {
         }));
     }
 
+    /**
+     * Rutasvalidas pra el servidor
+     */
     routes() {
         this.app.use(this.apiPaths.adminRoutes, adminRoutes);
         this.app.use(this.apiPaths.authRoutes, authRoutes);
@@ -92,6 +107,9 @@ class Server {
         this.app.use(this.apiPaths.filesRoutes, filesRoutes);
     }
 
+    /**
+     * Método que manda a correr el servidor
+     */
     listen() {
         console.log(this.mode);
         this.server.listen(this.port, () => {

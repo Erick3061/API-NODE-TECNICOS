@@ -31,7 +31,7 @@
 
 
     <title>
-      CONSULTAS_SISTEMA_MONITORING-WORKS
+      FILES
     </title>
 
     <!--[if lt IE 9]>
@@ -98,7 +98,7 @@
     <div id="main" class="main-content">
       
       <h1 id='page-title' class="page-title">
-        CONSULTAS_SISTEMA_MONITORING-WORKS
+        FILES
       </h1>
       
 
@@ -137,87 +137,86 @@
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<h4 class="name" id="getUsersMon">
-    <a href="#getUsersMon">#</a>
-    <span class="type-signature">(route) </span>getUsersMon<span class="type-signature"></span>
-</h4>
+
+    
+
+    <h4 class="name" id="~createFolder">
+        <a href="#~createFolder">#</a>
+        <span class="type-signature">(inner) </span>createFolder<span class="signature">(directory)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Crea un folder en el directorio mandado
+    </div>
 
 
 
 
-<div class="description">
-    <h5>Route:</h5>
-                            <table class="params">
-                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
-                            <tr>
-                            <td class="type">GET</td>
-                            <td class="name last">/api/sys/getUsersMon</td>
-                            </tr>
-                            </table>
-                            Obtiene todos los usuarios y contraseñas de los monitoristas de Mw
-                            <h5>Header Parameters:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>directory</code></td>
+            
+
+            <td class="type">
+            
                 
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">x-token</td>
-            <td class="type">String</td>
-            
-            
-            <td class="description last">Requiere Json Web Token generado al iniciar sesión</td>
-          </tr>
-          </table>
-                            <h5>Response:</h5>
-          <table class="params">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Attributes</th>
-                
-                <th class="last">Description</th>
-              </tr>
-            </thead>
-            <tr>
-            <td class="name">response</td>
-            <td class="type">Object</td>
-            <td class="attributes"></td>
-            
-            <td class="description last"></td>
-          </tr><tr>
-            <td class="name">response.status</td>
-            <td class="type">Boolean</td>
-            <td class="attributes"></td>
-            
-            <td class="description last">Estado de la petición</td>
-          </tr><tr>
-            <td class="name">response.errors</td>
-            <td class="type">Array</td>
-            <td class="attributes">optional</td>
-            
-            <td class="description last">Errores en la petición</td>
-          </tr><tr>
-            <td class="name">response.data</td>
-            <td class="type">Object</td>
-            <td class="attributes">optional</td>
-            
-            <td class="description last">Datos en caso de respuesta satisfactoria</td>
-          </tr>
-          </table>
-</div>
+<span class="param-type">string</span>
 
 
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">directorio mandada</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
 
 
 
@@ -255,7 +254,7 @@
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="querys_querysSistemaMW.js.html">querys/querysSistemaMW.js</a>, <a href="querys_querysSistemaMW.js.html#line19">line 19</a>
+                <a href="helpers_files.js.html">helpers/files.js</a>, <a href="helpers_files.js.html#line38">line 38</a>
             </li></ul></dd>
         </div>
     
@@ -274,9 +273,853 @@
 
 
 
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
         
+            
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;boolean></span>
+
+
+    </dd>
+</dl>
+
+            
+    </div>
+
+
+
+
+        
+            
+
     
 
+    <h4 class="name" id="~deleteDirectory">
+        <a href="#~deleteDirectory">#</a>
+        <span class="type-signature">(inner) </span>deleteDirectory<span class="signature">(folder)</span><span class="type-signature"> &rarr; {Promise.&lt;(string|boolean)>}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Elimina el directorio mandado junto con los archivos y carpetas que se encuentran dentro de el
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>folder</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">directrio dek filder mandado</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="helpers_files.js.html">helpers/files.js</a>, <a href="helpers_files.js.html#line63">line 63</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(string|boolean)></span>
+
+
+    </dd>
+</dl>
+
+            
+    </div>
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~deleteFile">
+        <a href="#~deleteFile">#</a>
+        <span class="type-signature">(inner) </span>deleteFile<span class="signature">(directoryFile)</span><span class="type-signature"> &rarr; {Promise.&lt;(string|boolean)>}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Elimina el archivo mandado con extensión
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>directoryFile</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">directorio mandado</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="helpers_files.js.html">helpers/files.js</a>, <a href="helpers_files.js.html#line56">line 56</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(string|boolean)></span>
+
+
+    </dd>
+</dl>
+
+            
+    </div>
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~existDirectory">
+        <a href="#~existDirectory">#</a>
+        <span class="type-signature">(inner) </span>existDirectory<span class="signature">(directory)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Verifica si existe un directorio dentro de la ruta mandada
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>directory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">ruta a verificar</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="helpers_files.js.html">helpers/files.js</a>, <a href="helpers_files.js.html#line27">line 27</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;boolean></span>
+
+
+    </dd>
+</dl>
+
+            
+    </div>
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~getFiles">
+        <a href="#~getFiles">#</a>
+        <span class="type-signature">(inner) </span>getFiles<span class="signature">(directory)</span><span class="type-signature"> &rarr; {Promise.&lt;(string|Array.&lt;string>)>}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Obtiene los nombres y extensión de los archivos del directorio mandado
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>directory</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">directorio mandado</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="helpers_files.js.html">helpers/files.js</a>, <a href="helpers_files.js.html#line49">line 49</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(string|Array.&lt;string>)></span>
+
+
+    </dd>
+</dl>
+
+            
+    </div>
+
+
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="~upLoadFile">
+        <a href="#~upLoadFile">#</a>
+        <span class="type-signature">(inner) </span>upLoadFile<span class="signature">(param0)</span><span class="type-signature"> &rarr; {Promise.&lt;(string|responseLoadedFile)>}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        Sube un archivo con la sig extensón de archivos 'png', 'jpg', 'jpeg'
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>param0</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object.&lt;{files: fileUpload.FileArray, validExtensions: Array.&lt;string>, carpeta:string, type: ("Service"|"Person"|"Enterprice")}></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="helpers_files.js.html">helpers/files.js</a>, <a href="helpers_files.js.html#line70">line 70</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise.&lt;(string|responseLoadedFile)></span>
+
+
+    </dd>
+</dl>
+
+            
+    </div>
+
+
+
+
+        
     
 
     
