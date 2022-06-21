@@ -64,6 +64,7 @@ class Server {
         pool1.connect()
             .then(async () => {
                 this.Con1 = true;
+                this.Task = new Task();
                 console.log('Conexion exitosa TECNICOS');
             })
             .catch(() => {
