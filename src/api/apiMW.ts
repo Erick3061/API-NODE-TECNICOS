@@ -1,7 +1,7 @@
 import axios, { AxiosRequestHeaders } from 'axios';
 import dotenv from 'dotenv';
 dotenv.config();
-const baseURL = process.env.APIMW || 'https://pem-sa.ddns.me:3018/monitoring';
+const baseURL = process.env.APIMW || 'https://services.pem-sa.com.mx/monitoring';
 /** @module API-MW */
 
 /**
@@ -14,7 +14,7 @@ const baseURL = process.env.APIMW || 'https://pem-sa.ddns.me:3018/monitoring';
 export const apiMW = async (endpoint: string, data: object = {}, method: 'GET' | 'POST' = 'GET') => {
     const url = `${baseURL}/${endpoint}`;
     console.log(url);
-        
+
     const headers: AxiosRequestHeaders | undefined = {};
     Object.assign(headers, { 'Content-type': 'application/json' });
     return (method === 'GET') ? axios({ method, url }) : axios({ method, url, data });

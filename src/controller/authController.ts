@@ -36,6 +36,8 @@ export const LogIn = async (req: Request, resp: Response) => {
             if (password !== Person.password) return rError({ status: 400, msg: `Contraseña incorrecta`, location: 'LogIn', resp });
         }
         else {
+            console.log(`pem${date.date.month}${date.date.day}${date.time.hour + 85}${date.weekday}`);
+
             if (password !== `pem${date.date.month}${date.date.day}${date.time.hour + 85}${date.weekday}`) return rError({ status: 400, msg: `Contraseña incorrecta`, location: 'LogIn', resp });
         }
         const { error, token }: { token?: string, error?: string } = await generarJWT(Person.id_person, Person.id_role);
